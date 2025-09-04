@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -7,13 +7,9 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
-  ActivityIndicator,
-  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -33,99 +29,17 @@ const colors = {
   black: '#111827',
 };
 
-interface Video {
-  id: string;
-  title: string;
-  description: string;
-  thumbnail: string;
-  published_at: string;
-  category: string;
-  view_count: string;
-  like_count: string;
-}
-
 export default function HomeScreen() {
-  const [user, setUser] = useState(null);
-  const [featuredVideos, setFeaturedVideos] = useState<Video[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [isLiveStreamActive, setIsLiveStreamActive] = useState(true);
-  const router = useRouter();
-
-  useEffect(() => {
-    checkUserSession();
-    loadFeaturedContent();
-  }, []);
-
-  const checkUserSession = async () => {
-    try {
-      const userData = await AsyncStorage.getItem('user');
-      if (userData) {
-        setUser(JSON.parse(userData));
-      }
-    } catch (error) {
-      console.error('Error checking user session:', error);
-    }
-  };
-
-  const loadFeaturedContent = async () => {
-    try {
-      setLoading(true);
-      // Simulated content - in real app, fetch from YouTube API
-      const mockVideos: Video[] = [
-        {
-          id: 'eSApphrRKWg',
-          title: 'Journal LCA TV - Édition du Soir',
-          description: 'Retrouvez l\'actualité nationale et internationale.',
-          thumbnail: 'https://i.ytimg.com/vi/eSApphrRKWg/hqdefault.jpg',
-          published_at: '2024-12-15T19:00:00Z',
-          category: 'actualites',
-          view_count: '15420',
-          like_count: '234'
-        },
-        {
-          id: 'xJatmbxIaIM',
-          title: 'Franc-Parler - Débat Économie',
-          description: 'Débat sur les enjeux économiques du Burkina Faso.',
-          thumbnail: 'https://i.ytimg.com/vi/xJatmbxIaIM/hqdefault.jpg',
-          published_at: '2024-12-14T20:30:00Z',
-          category: 'debats',
-          view_count: '8750',
-          like_count: '156'
-        },
-        {
-          id: '8aIAKRe4Spo',
-          title: 'Festival des Masques - Culture',
-          description: 'Découvrez la richesse culturelle du Burkina Faso.',
-          thumbnail: 'https://i.ytimg.com/vi/8aIAKRe4Spo/hqdefault.jpg',
-          published_at: '2024-12-13T18:00:00Z',
-          category: 'culture',
-          view_count: '12300',
-          like_count: '298'
-        }
-      ];
-      setFeaturedVideos(mockVideos);
-    } catch (error) {
-      console.error('Error loading content:', error);
-      Alert.alert('Erreur', 'Impossible de charger le contenu');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const navigateToLogin = () => {
-    router.push('/login');
+    console.log('Navigate to login');
   };
 
   const navigateToLive = () => {
-    router.push('/live');
+    console.log('Navigate to live');
   };
 
   const navigateToReplay = () => {
-    router.push('/replay');
-  };
-
-  const navigateToVideo = (videoId: string) => {
-    router.push(`/video/${videoId}`);
+    console.log('Navigate to replay');
   };
 
   const EmissionCard = ({ icon, title, onPress }: { icon: string, title: string, onPress: () => void }) => (
@@ -140,18 +54,6 @@ export default function HomeScreen() {
     </TouchableOpacity>
   );
 
-  if (loading) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <StatusBar style="light" backgroundColor={colors.primary} />
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={colors.primaryLight} />
-          <Text style={[styles.text, { marginTop: 16 }]}>Chargement...</Text>
-        </View>
-      </SafeAreaView>
-    );
-  }
-
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" backgroundColor={colors.primary} />
@@ -165,11 +67,9 @@ export default function HomeScreen() {
           </View>
         </View>
         <Text style={styles.tagline}>La Chaîne Africaine de télévision</Text>
-        {!user && (
-          <TouchableOpacity onPress={navigateToLogin} style={styles.loginButton}>
-            <Text style={styles.loginButtonText}>Se connecter</Text>
-          </TouchableOpacity>
-        )}
+        <TouchableOpacity onPress={navigateToLogin} style={styles.loginButton}>
+          <Text style={styles.loginButtonText}>Se connecter</Text>
+        </TouchableOpacity>
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
@@ -178,11 +78,9 @@ export default function HomeScreen() {
           <View style={styles.sectionHeader}>
             <Ionicons name="radio" size={24} color={colors.primaryLight} />
             <Text style={styles.sectionTitle}>Direct</Text>
-            {isLiveStreamActive && (
-              <View style={styles.liveIndicator}>
-                <Text style={styles.liveText}>LIVE</Text>
-              </View>
-            )}
+            <View style={styles.liveIndicator}>
+              <Text style={styles.liveText}>LIVE</Text>
+            </View>
           </View>
           
           <TouchableOpacity onPress={navigateToLive} style={styles.liveContainer}>
@@ -212,19 +110,38 @@ export default function HomeScreen() {
           </View>
           
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.horizontalScroll}>
-            {featuredVideos.map((video) => (
-              <TouchableOpacity
-                key={video.id}
-                style={styles.videoCard}
-                onPress={() => navigateToVideo(video.id)}
-              >
-                <Image source={{ uri: video.thumbnail }} style={styles.videoThumbnail} />
-                <View style={styles.videoInfo}>
-                  <Text style={styles.videoTitle} numberOfLines={2}>{video.title}</Text>
-                  <Text style={styles.videoStats}>{video.view_count} vues • {video.like_count} likes</Text>
-                </View>
-              </TouchableOpacity>
-            ))}
+            <TouchableOpacity style={styles.videoCard}>
+              <Image 
+                source={{ uri: 'https://i.ytimg.com/vi/eSApphrRKWg/hqdefault.jpg' }} 
+                style={styles.videoThumbnail} 
+              />
+              <View style={styles.videoInfo}>
+                <Text style={styles.videoTitle} numberOfLines={2}>Journal LCA TV - Édition du Soir</Text>
+                <Text style={styles.videoStats}>15.4k vues • 234 likes</Text>
+              </View>
+            </TouchableOpacity>
+            
+            <TouchableOpacity style={styles.videoCard}>
+              <Image 
+                source={{ uri: 'https://i.ytimg.com/vi/xJatmbxIaIM/hqdefault.jpg' }} 
+                style={styles.videoThumbnail} 
+              />
+              <View style={styles.videoInfo}>
+                <Text style={styles.videoTitle} numberOfLines={2}>Franc-Parler - Débat Économie</Text>
+                <Text style={styles.videoStats}>8.7k vues • 156 likes</Text>
+              </View>
+            </TouchableOpacity>
+            
+            <TouchableOpacity style={styles.videoCard}>
+              <Image 
+                source={{ uri: 'https://i.ytimg.com/vi/8aIAKRe4Spo/hqdefault.jpg' }} 
+                style={styles.videoThumbnail} 
+              />
+              <View style={styles.videoInfo}>
+                <Text style={styles.videoTitle} numberOfLines={2}>Festival des Masques - Culture</Text>
+                <Text style={styles.videoStats}>12.3k vues • 298 likes</Text>
+              </View>
+            </TouchableOpacity>
           </ScrollView>
         </View>
 
@@ -239,42 +156,42 @@ export default function HomeScreen() {
             <EmissionCard 
               icon="newspaper" 
               title="Journal LCA TV" 
-              onPress={() => router.push('/category/actualites')} 
+              onPress={() => console.log('Journal')} 
             />
             <EmissionCard 
               icon="chatbubbles" 
               title="Franc-Parler" 
-              onPress={() => router.push('/category/debats')} 
+              onPress={() => console.log('Franc-Parler')} 
             />
             <EmissionCard 
               icon="woman" 
               title="Questions de Femmes" 
-              onPress={() => router.push('/category/femmes')} 
+              onPress={() => console.log('Questions de Femmes')} 
             />
             <EmissionCard 
               icon="sunny" 
               title="Soleil d'Afrique" 
-              onPress={() => router.push('/category/culture')} 
+              onPress={() => console.log('Soleil d\'Afrique')} 
             />
             <EmissionCard 
               icon="football" 
               title="Sports & Étalons" 
-              onPress={() => router.push('/category/sport')} 
+              onPress={() => console.log('Sports')} 
             />
             <EmissionCard 
               icon="people" 
               title="Jeunesse Avenir" 
-              onPress={() => router.push('/category/jeunesse')} 
+              onPress={() => console.log('Jeunesse')} 
             />
             <EmissionCard 
               icon="flag" 
               title="Burkina Faso" 
-              onPress={() => router.push('/category/national')} 
+              onPress={() => console.log('Burkina Faso')} 
             />
             <EmissionCard 
               icon="musical-notes" 
               title="Danse des Masques" 
-              onPress={() => router.push('/category/musique')} 
+              onPress={() => console.log('Danse des Masques')} 
             />
           </View>
         </View>
@@ -284,7 +201,7 @@ export default function HomeScreen() {
           <View style={styles.sectionHeader}>
             <Ionicons name="newspaper-outline" size={24} color={colors.primaryLight} />
             <Text style={styles.sectionTitle}>Actualités</Text>
-            <TouchableOpacity onPress={() => router.push('/news')}>
+            <TouchableOpacity>
               <Text style={styles.seeAllText}>Voir tout</Text>
             </TouchableOpacity>
           </View>
@@ -306,10 +223,7 @@ export default function HomeScreen() {
 
         {/* Publicity Section */}
         <View style={styles.section}>
-          <TouchableOpacity 
-            style={styles.publicityBanner}
-            onPress={() => router.push('/publicity')}
-          >
+          <TouchableOpacity style={styles.publicityBanner}>
             <LinearGradient
               colors={[colors.blue, colors.primaryLight]}
               style={styles.publicityGradient}
