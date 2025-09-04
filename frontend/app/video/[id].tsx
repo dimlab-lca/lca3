@@ -456,6 +456,26 @@ const styles = StyleSheet.create({
     position: 'relative',
     backgroundColor: colors.black,
   },
+  videoPlaceholder: {
+    height: 220,
+    width: '100%',
+    position: 'relative',
+    backgroundColor: colors.black,
+  },
+  placeholderImage: {
+    width: '100%',
+    height: '100%',
+  },
+  videoOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.3)',
+  },
   playerControls: {
     position: 'absolute',
     bottom: 20,
