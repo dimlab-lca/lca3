@@ -152,49 +152,34 @@ export default function LiveScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* Video Player */}
+      {/* Video Player Placeholder */}
       <View style={styles.playerContainer}>
-        {loading && (
-          <View style={styles.loadingOverlay}>
-            <ActivityIndicator size="large" color={colors.primaryLight} />
-            <Text style={styles.loadingText}>Chargement du direct...</Text>
-          </View>
-        )}
-        
-        <YoutubePlayer
-          ref={playerRef}
-          height={250}
-          width={screenWidth}
-          play={playing}
-          videoId={LIVE_VIDEO_ID}
-          onChangeState={onStateChange}
-          onReady={onReady}
-          onError={onError}
-          webViewStyle={styles.webView}
-          initialPlayerParams={{
-            loop: false,
-            controls: false, // We'll use custom controls
-            modestbranding: true,
-            rel: false,
-            showinfo: false,
-          }}
-        />
-        
-        {!loading && (
-          <View style={styles.playerControls}>
+        <View style={styles.videoPlaceholder}>
+          <Image
+            source={{ uri: 'https://i.ytimg.com/vi/ixQEmhTbvTI/maxresdefault.jpg' }}
+            style={styles.placeholderImage}
+            resizeMode="cover"
+          />
+          <LinearGradient
+            colors={['transparent', 'rgba(0,0,0,0.7)']}
+            style={styles.videoOverlay}
+          >
             <TouchableOpacity onPress={togglePlay} style={styles.playButton}>
               <Ionicons 
                 name={playing ? "pause" : "play"} 
-                size={32} 
+                size={48} 
                 color={colors.white} 
               />
             </TouchableOpacity>
-            
-            <TouchableOpacity onPress={toggleFullscreen} style={styles.fullscreenBtn}>
-              <Ionicons name="expand" size={24} color={colors.white} />
-            </TouchableOpacity>
-          </View>
-        )}
+            <Text style={styles.liveLabel}>EN DIRECT</Text>
+          </LinearGradient>
+        </View>
+        
+        <View style={styles.playerControls}>
+          <TouchableOpacity onPress={toggleFullscreen} style={styles.fullscreenBtn}>
+            <Ionicons name="expand" size={24} color={colors.white} />
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Stream Info */}
