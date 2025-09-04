@@ -1,0 +1,1437 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Welcome Slider Section -->
+<div class="welcome-slider-container">
+    <div class="welcome-slider">
+        <div class="slider-wrapper">
+            <div class="slide active" data-slide="1">
+                <div class="slide-content">
+                    <div class="slide-image">
+                        <img src="{{ url_for('static', filename='images/LOGO LCA.png') }}" alt="LCA TV - Bienvenue" onerror="this.src='/lca/static/images/LOGO LCA.png'">
+                        <div class="slide-overlay"></div>
+                    </div>
+                    <div class="slide-text">
+                        <h2>Bienvenue sur LCA TV</h2>
+                        <p>Votre chaîne de référence au Burkina Faso pour l'information, la culture et le divertissement authentique</p>
+                        <a href="{{ url_for('about') }}" class="slide-btn">Découvrir LCA TV</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slide" data-slide="2">
+                <div class="slide-content">
+                    <div class="slide-image">
+                        <img src="{{ url_for('static', filename='images/FRANC PARLER (TOUS LES MERCREDIS A 20H 40).png') }}" alt="Franc Parler - Débats" onerror="this.src='/lca/static/images/FRANC PARLER (TOUS LES MERCREDIS A 20H 40).png'">
+                        <div class="slide-overlay"></div>
+                    </div>
+                    <div class="slide-text">
+                        <h2>Franc Parler</h2>
+                        <p>Tous les mercredis à 20h40 - Débats d'actualité et discussions ouvertes sur les enjeux de société</p>
+                        <a href="{{ url_for('emissions') }}" class="slide-btn">Voir l'Émission</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slide" data-slide="3">
+                <div class="slide-content">
+                    <div class="slide-image">
+                        <img src="{{ url_for('static', filename='images/7 AFRIQUE (TOUS LES DIMANCHES A 13H 00).png') }}" alt="7 Afrique - Magazine" onerror="this.src='/lca/static/images/7 AFRIQUE (TOUS LES DIMANCHES A 13H 00).png'">
+                        <div class="slide-overlay"></div>
+                    </div>
+                    <div class="slide-text">
+                        <h2>7 Afrique</h2>
+                        <p>Tous les dimanches à 13h00 - Découvrez l'Afrique sous tous ses aspects : culture, économie, société</p>
+                        <a href="{{ url_for('emissions') }}" class="slide-btn">Regarder 7 Afrique</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slide" data-slide="4">
+                <div class="slide-content">
+                    <div class="slide-image">
+                        <img src="{{ url_for('static', filename='images/QUESTIONS DE FEMMES (TOUS LES LUNDIS A 20H 40).png') }}" alt="Questions de Femmes" onerror="this.src='/lca/static/images/QUESTIONS DE FEMMES (TOUS LES LUNDIS A 20H 40).png'">
+                        <div class="slide-overlay"></div>
+                    </div>
+                    <div class="slide-text">
+                        <h2>Questions de Femmes</h2>
+                        <p>Tous les lundis à 20h40 - Une émission dédiée aux femmes, leurs défis et leurs succès</p>
+                        <a href="{{ url_for('emissions') }}" class="slide-btn">Voir l'Émission</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slide" data-slide="5">
+                <div class="slide-content">
+                    <div class="slide-image">
+                        <img src="{{ url_for('static', filename='images/SOLEIL D_AFRIQUE (DU LUNDI AU VENDREDI A 11H 00).png') }}" alt="Soleil d'Afrique" onerror="this.src='/lca/static/images/SOLEIL D_AFRIQUE (DU LUNDI AU VENDREDI A 11H 00).png'">
+                        <div class="slide-overlay"></div>
+                    </div>
+                    <div class="slide-text">
+                        <h2>Soleil d'Afrique</h2>
+                        <p>Du lundi au vendredi à 11h00 - Musique, culture et divertissement africain authentique</p>
+                        <a href="{{ url_for('emissions') }}" class="slide-btn">Écouter Soleil d'Afrique</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slider Navigation -->
+        <div class="slider-nav">
+            <button class="nav-btn prev-btn" onclick="changeSlide(-1)">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="nav-btn next-btn" onclick="changeSlide(1)">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+        
+        <!-- Slider Dots -->
+        <div class="slider-dots">
+            <span class="dot active" onclick="currentSlide(1)"></span>
+            <span class="dot" onclick="currentSlide(2)"></span>
+            <span class="dot" onclick="currentSlide(3)"></span>
+            <span class="dot" onclick="currentSlide(4)"></span>
+            <span class="dot" onclick="currentSlide(5)"></span>
+        </div>
+    </div>
+</div>
+
+<div class="home-layout">
+    <div class="content-left">
+        <h1 style="font-size: 32px; color: #28a745; margin-bottom: 10px; text-align: center;">LCA TV - En Direct</h1>
+        <p style="color: #666; margin-bottom: 30px; text-align: center; font-size: 16px;">Votre chaîne de référence au Burkina Faso</p>
+        
+        <div class="video-player" style="background: #000; border-radius: 8px; overflow: hidden; position: relative; padding-bottom: 56.25%; height: 0; margin-bottom: 30px;">
+            <div style="position: absolute; top: 10px; left: 10px; background: #e74c3c; color: white; padding: 8px 12px; border-radius: 4px; font-weight: bold; font-size: 12px; z-index: 10;">
+                EN DIRECT
+            </div>
+            <div style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 8px 12px; border-radius: 4px; font-size: 12px; z-index: 10;" id="viewer-count">
+                2440 spectateurs
+            </div>
+            <iframe 
+                src="https://www.youtube.com/embed/ixQEmhTbvTI?autoplay=1&mute=0&controls=1&rel=0&modestbranding=1" 
+                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+                frameborder="0" 
+                allowfullscreen
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+            </iframe>
+        </div>
+
+        <div class="current-program" style="background: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 40px;">
+            <h3 style="color: #28a745; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-clock"></i>
+                Actuellement à l'antenne
+            </h3>
+            <div style="background: #e74c3c; color: white; padding: 8px 15px; border-radius: 4px; font-weight: bold; display: inline-block; margin-bottom: 10px;">
+                20:00 - 21:00
+            </div>
+            <div style="font-size: 18px; color: #333; margin: 10px 0 5px 0; font-weight: 600;">
+                Journal du Soir
+            </div>
+            <p>Toute l'actualité nationale et internationale avec nos journalistes</p>
+        </div>
+
+        <!-- Programmes Populaires Section -->
+        <div style="margin-bottom: 50px;">
+            <h2 style="font-size: 2rem; color: #333; text-align: center; margin-bottom: 30px; font-weight: bold;">
+                Programmes Populaires
+                <div style="width: 60px; height: 4px; background: #28a745; margin: 10px auto; border-radius: 2px;"></div>
+            </h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 30px;">
+                <!-- Row 1 -->
+                {% for video in featured_videos %}
+                <div class="program-card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.1); transition: transform 0.3s ease; cursor: pointer;" data-video-id="{{ video.id }}">
+                    <div style="position: relative; height: 180px; background: #f0f0f0; overflow: hidden;">
+                        <img src="{{ video.thumbnail }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; background: rgba(231, 76, 60, 0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem;">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div style="padding: 15px;">
+                        <div style="background: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; display: inline-block; margin-bottom: 8px;">{{ video.published_at[:10] }}</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">{{ video.category|title }}</div>
+                        <div style="color: #666; font-size: 14px; font-style: italic;">"{{ video.title[:30] }}..."</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Guide de Programme Section -->
+        <div style="margin-bottom: 40px;">
+            <h2 style="font-size: 2rem; color: #333; text-align: center; margin-bottom: 30px; font-weight: bold;">
+                Aujourd'hui sur LCA TV - lundi 14 juillet 2025
+                <div style="width: 60px; height: 4px; background: #4472c4; margin: 10px auto; border-radius: 2px;"></div>
+            </h2>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
+                <!-- DÉBATS & SOCIÉTÉ -->
+                <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 8px 25px rgba(0,0,0,0.1);">
+                    <h3 style="color: #333; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-size: 1.2rem;">
+                        <div style="width: 12px; height: 12px; background: #28a745; border-radius: 50%;"></div>
+                        DÉBATS & SOCIÉTÉ
+                    </h3>
+                    
+                    <div style="border-left: 4px solid #28a745; padding-left: 20px; margin-bottom: 20px;">
+                        <div style="background: #28a745; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block; margin-bottom: 10px;">10:00</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Question de Femme</div>
+                        <div style="color: #4472c4; font-size: 14px; font-style: italic;">"L'entrepreneuriat féminin"</div>
+                    </div>
+
+                    <div style="border-left: 4px solid #28a745; padding-left: 20px; margin-bottom: 20px;">
+                        <div style="background: #28a745; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block; margin-bottom: 10px;">14:30</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Franc Parler</div>
+                        <div style="color: #4472c4; font-size: 14px; font-style: italic;">"La jeunesse africaine"</div>
+                    </div>
+
+                    <div style="border-left: 4px solid #28a745; padding-left: 20px;">
+                        <div style="background: #28a745; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block; margin-bottom: 10px;">21:00</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Le Grand Débat</div>
+                        <div style="color: #4472c4; font-size: 14px; font-style: italic;">"Économie post-pandémie"</div>
+                    </div>
+                </div>
+
+                <!-- MUSIQUE & CULTURE -->
+                <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 8px 25px rgba(0,0,0,0.1);">
+                    <h3 style="color: #333; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-size: 1.2rem;">
+                        <div style="width: 12px; height: 12px; background: #28a745; border-radius: 50%;"></div>
+                        MUSIQUE & CULTURE
+                    </h3>
+                    
+                    <div style="border-left: 4px solid #28a745; padding-left: 20px; margin-bottom: 20px;">
+                        <div style="background: #28a745; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block; margin-bottom: 10px;">13:00</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Hits africains</div>
+                        <div style="color: #4472c4; font-size: 14px; font-style: italic;">"Top 10 du mois"</div>
+                    </div>
+
+                    <div style="border-left: 4px solid #28a745; padding-left: 20px; margin-bottom: 20px;">
+                        <div style="background: #28a745; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block; margin-bottom: 10px;">15:00</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Soleil d'Afrique</div>
+                        <div style="color: #4472c4; font-size: 14px; font-style: italic;">"Artiste du mois"</div>
+                    </div>
+
+                    <div style="border-left: 4px solid #28a745; padding-left: 20px;">
+                        <div style="background: #28a745; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block; margin-bottom: 10px;">20:00</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Concert Live</div>
+                        <div style="color: #4472c4; font-size: 14px; font-style: italic;">"Musiques urbaines"</div>
+                    </div>
+                </div>
+
+                <!-- ACTUALITÉS & INFO -->
+                <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 8px 25px rgba(0,0,0,0.1);">
+                    <h3 style="color: #333; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-size: 1.2rem;">
+                        <div style="width: 12px; height: 12px; background: #28a745; border-radius: 50%;"></div>
+                        ACTUALITÉS & INFO
+                    </h3>
+                    
+                    <div style="border-left: 4px solid #28a745; padding-left: 20px; margin-bottom: 20px;">
+                        <div style="background: #28a745; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block; margin-bottom: 10px;">07:30</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Journal du Matin</div>
+                        <div style="color: #4472c4; font-size: 14px; font-style: italic;">"L'actualité du jour"</div>
+                    </div>
+
+                    <div style="border-left: 4px solid #28a745; padding-left: 20px; margin-bottom: 20px;">
+                        <div style="background: #28a745; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block; margin-bottom: 10px;">12:00</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Journal de Midi</div>
+                        <div style="color: #4472c4; font-size: 14px; font-style: italic;">"Point sur l'actualité"</div>
+                    </div>
+
+                    <div style="border-left: 4px solid #28a745; padding-left: 20px; margin-bottom: 20px;">
+                        <div style="background: #28a745; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block; margin-bottom: 10px;">19:00</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Journal du Soir</div>
+                        <div style="color: #4472c4; font-size: 14px; font-style: italic;">"Édition principale"</div>
+                    </div>
+
+                    <div style="border-left: 4px solid #28a745; padding-left: 20px;">
+                        <div style="background: #28a745; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block; margin-bottom: 10px;">15:30</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Flash Info</div>
+                        <div style="color: #4472c4; font-size: 14px; font-style: italic;">"Dernières nouvelles"</div>
+                    </div>
+                </div>
+
+                <!-- DOCUMENTAIRES -->
+                <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 8px 25px rgba(0,0,0,0.1);">
+                    <h3 style="color: #333; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-size: 1.2rem;">
+                        <div style="width: 12px; height: 12px; background: #4472c4; border-radius: 50%;"></div>
+                        DOCUMENTAIRES
+                    </h3>
+                    
+                    <div style="border-left: 4px solid #4472c4; padding-left: 20px; margin-bottom: 20px;">
+                        <div style="background: #4472c4; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block; margin-bottom: 10px;">11:30</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">7 Afrique</div>
+                        <div style="color: #4472c4; font-size: 14px; font-style: italic;">"Nigeria - Économie émergente"</div>
+                    </div>
+
+                    <div style="border-left: 4px solid #4472c4; padding-left: 20px; margin-bottom: 20px;">
+                        <div style="background: #4472c4; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block; margin-bottom: 10px;">14:00</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Nature africaine</div>
+                        <div style="color: #4472c4; font-size: 14px; font-style: italic;">"Forêts d'Afrique centrale"</div>
+                    </div>
+
+                    <div style="border-left: 4px solid #4472c4; padding-left: 20px; margin-bottom: 20px;">
+                        <div style="background: #4472c4; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block; margin-bottom: 10px;">16:30</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Découverte Afrique</div>
+                        <div style="color: #4472c4; font-size: 14px; font-style: italic;">"Côte atlantique"</div>
+                    </div>
+
+                    <div style="border-left: 4px solid #4472c4; padding-left: 20px;">
+                        <div style="background: #4472c4; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block; margin-bottom: 10px;">22:30</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Spécial Environnement</div>
+                        <div style="color: #4472c4; font-size: 14px; font-style: italic;">"Développement durable"</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <h2 style="background: #28a745; color: white; padding: 15px 20px; margin: 0; font-size: 18px; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-clock"></i>
+                Prochains Programmes
+            </h2>
+            
+            <div style="padding: 20px;">
+                <div style="margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 15px;">
+                    <div style="background: #4472c4; color: white; padding: 8px 15px; border-radius: 4px; font-weight: bold; font-size: 16px; margin-bottom: 10px; display: inline-block;">07:30</div>
+                    <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Journal du Matin</div>
+                    <div style="font-size: 14px; color: #666; line-height: 1.4;">Réveil avec l'actualité, météo et revue de presse internationale</div>
+                </div>
+
+                <div style="margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 15px;">
+                    <div style="background: #4472c4; color: white; padding: 8px 15px; border-radius: 4px; font-weight: bold; font-size: 16px; margin-bottom: 10px; display: inline-block;">09:00</div>
+                    <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Météo Africa</div>
+                    <div style="font-size: 14px; color: #666; line-height: 1.4;">Prévisions météorologiques pour l'Afrique de l'Ouest</div>
+                </div>
+
+                <div style="margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 15px;">
+                    <div style="background: #4472c4; color: white; padding: 8px 15px; border-radius: 4px; font-weight: bold; font-size: 16px; margin-bottom: 10px; display: inline-block;">10:00</div>
+                    <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Question de Femme</div>
+                    <div style="font-size: 14px; color: #666; line-height: 1.4;">L'entrepreneuriat féminin au Burkina Faso</div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <div style="background: #4472c4; color: white; padding: 8px 15px; border-radius: 4px; font-weight: bold; font-size: 16px; margin-bottom: 10px; display: inline-block;">12:00</div>
+                    <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Journal de Midi</div>
+                    <div style="font-size: 14px; color: #666; line-height: 1.4;">Point d'actualité de la mi-journée avec nos correspondants</div>
+                </div>
+
+                <button style="background: #4472c4; color: white; border: none; padding: 12px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; font-size: 14px;">
+                    Voir la grille complète
+                </button>
+            </div>
+        </div>
+
+        <!-- Enhanced Advertisement Spaces -->
+        <div class="ad-space-container" style="margin-top: 30px;">
+            <!-- Premium Ad Space -->
+            <div class="ad-space premium" style="margin-bottom: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden;">
+                <div class="ad-header" style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="font-size: 12px; font-weight: bold; text-transform: uppercase;">Premium • Zone 1</div>
+                    <div style="font-size: 10px; opacity: 0.8;">300x250</div>
+                </div>
+                <div class="ad-content" style="height: 250px; background: #f8f9fa; border: 2px dashed #dee2e6; display: flex; align-items: center; justify-content: center; color: #6c757d; position: relative;">
+                    <div style="text-align: center;">
+                        <i class="fas fa-crown" style="font-size: 2rem; margin-bottom: 10px; color: #e74c3c;"></i>
+                        <div style="font-weight: bold;">Espace Premium</div>
+                        <div style="font-size: 12px; margin-top: 5px;">Disponible</div>
+                    </div>
+                    {% if session.user %}
+                    <button class="ad-manage-btn" onclick="manageAdSpace('premium-1')" style="position: absolute; top: 10px; right: 10px; background: #28a745; color: white; border: none; padding: 5px 10px; border-radius: 4px; font-size: 11px; cursor: pointer;">
+                        <i class="fas fa-cog"></i> Gérer
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Standard Ad Space -->
+            <div class="ad-space standard" style="margin-bottom: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden;">
+                <div class="ad-header" style="background: linear-gradient(135deg, #4472c4, #3451a3); color: white; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="font-size: 12px; font-weight: bold; text-transform: uppercase;">Standard • Zone 2</div>
+                    <div style="font-size: 10px; opacity: 0.8;">300x200</div>
+                </div>
+                <div class="ad-content" style="height: 200px; background: #f8f9fa; border: 2px dashed #dee2e6; display: flex; align-items: center; justify-content: center; color: #6c757d; position: relative;">
+                    <div style="text-align: center;">
+                        <i class="fas fa-ad" style="font-size: 1.8rem; margin-bottom: 10px; color: #4472c4;"></i>
+                        <div style="font-weight: bold;">Espace Standard</div>
+                        <div style="font-size: 12px; margin-top: 5px;">Disponible</div>
+                    </div>
+                    {% if session.user %}
+                    <button class="ad-manage-btn" onclick="manageAdSpace('standard-1')" style="position: absolute; top: 10px; right: 10px; background: #28a745; color: white; border: none; padding: 5px 10px; border-radius: 4px; font-size: 11px; cursor: pointer;">
+                        <i class="fas fa-cog"></i> Gérer
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Banner Ad Space -->
+            <div class="ad-space banner" style="margin-bottom: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden;">
+                <div class="ad-header" style="background: linear-gradient(135deg, #28a745, #1e5a2e); color: white; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="font-size: 12px; font-weight: bold; text-transform: uppercase;">Banner • Zone 3</div>
+                    <div style="font-size: 10px; opacity: 0.8;">300x100</div>
+                </div>
+                <div class="ad-content" style="height: 100px; background: #f8f9fa; border: 2px dashed #dee2e6; display: flex; align-items: center; justify-content: center; color: #6c757d; position: relative;">
+                    <div style="text-align: center;">
+                        <i class="fas fa-rectangle-ad" style="font-size: 1.5rem; margin-bottom: 5px; color: #28a745;"></i>
+                        <div style="font-weight: bold; font-size: 14px;">Banner</div>
+                        <div style="font-size: 11px; margin-top: 2px;">Disponible</div>
+                    </div>
+                    {% if session.user %}
+                    <button class="ad-manage-btn" onclick="manageAdSpace('banner-1')" style="position: absolute; top: 5px; right: 5px; background: #28a745; color: white; border: none; padding: 3px 8px; border-radius: 3px; font-size: 10px; cursor: pointer;">
+                        <i class="fas fa-cog"></i> Gérer
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Ad Pricing Info -->
+            <div style="background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px;">
+                <h4 style="color: #333; margin-bottom: 10px; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-info-circle" style="color: #4472c4;"></i>
+                    Tarifs Publicitaires
+                </h4>
+                <div style="font-size: 12px; line-height: 1.4;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <span style="color: #e74c3c; font-weight: bold;">Premium:</span>
+                        <span>50,000 FCFA/mois</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <span style="color: #4472c4; font-weight: bold;">Standard:</span>
+                        <span>30,000 FCFA/mois</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span style="color: #28a745; font-weight: bold;">Banner:</span>
+                        <span>15,000 FCFA/mois</span>
+                    </div>
+                    <a href="{{ url_for('publicite') }}" style="background: #4472c4; color: white; padding: 8px 12px; border-radius: 4px; text-decoration: none; font-size: 11px; display: inline-block; width: 100%; text-align: center;">
+                        <i class="fas fa-external-link-alt"></i> Voir tous les tarifs
+                    </a>
+                </div>
+            </div>
+
+            <!-- Contact for Advertising -->
+            <div style="background: linear-gradient(135deg, #1e5a2e, #2d5a3d); color: white; border-radius: 8px; padding: 15px; text-align: center;">
+                <h4 style="margin-bottom: 10px; font-size: 14px;">
+                    <i class="fas fa-handshake"></i> Publicité sur LCA TV
+                </h4>
+                <p style="font-size: 12px; margin-bottom: 15px; opacity: 0.9;">
+                    Touchez plus de 100,000 téléspectateurs quotidiens
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <a href="tel:+22625364578" style="background: rgba(255,255,255,0.2); color: white; padding: 8px 12px; border-radius: 4px; text-decoration: none; font-size: 11px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <i class="fas fa-phone"></i> +226 25 36 45 78
+                    </a>
+                    <a href="mailto:pub@lcatv.bf" style="background: rgba(255,255,255,0.2); color: white; padding: 8px 12px; border-radius: 4px; text-decoration: none; font-size: 11px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <i class="fas fa-envelope"></i> pub@lcatv.bf
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Welcome Slider Styles */
+.welcome-slider-container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #1e5a2e 0%, #2d5a3d 100%);
+}
+
+.welcome-slider {
+    position: relative;
+    max-width: 1400px;
+    margin: 0 auto;
+    height: 500px;
+    overflow: hidden;
+}
+
+.slider-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+    display: flex;
+    align-items: center;
+}
+
+.slide.active {
+    opacity: 1;
+}
+
+.slide-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    width: 100%;
+    height: 100%;
+    padding: 0 40px;
+    align-items: center;
+}
+
+.slide-image {
+    position: relative;
+    height: 100%;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+.slide-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s ease;
+}
+
+.slide.active .slide-image img {
+    transform: scale(1.05);
+}
+
+.slide-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(30, 90, 46, 0.3), rgba(45, 90, 61, 0.1));
+}
+
+.slide-text {
+    color: white;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
+.slide-text h2 {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    line-height: 1.2;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    animation: slideInFromLeft 0.8s ease-out;
+}
+
+.slide-text p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    line-height: 1.6;
+    opacity: 0.9;
+    animation: slideInFromLeft 0.8s ease-out 0.2s both;
+}
+
+.slide-btn {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 20px rgba(231, 76, 60, 0.3);
+    animation: slideInFromLeft 0.8s ease-out 0.4s both;
+    align-self: flex-start;
+}
+
+.slide-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 25px rgba(231, 76, 60, 0.4);
+    background: linear-gradient(135deg, #c0392b, #a93226);
+}
+
+.slide-btn::after {
+    content: '→';
+    margin-left: 5px;
+    transition: transform 0.3s ease;
+}
+
+.slide-btn:hover::after {
+    transform: translateX(5px);
+}
+
+/* Slider Navigation */
+.slider-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+    pointer-events: none;
+}
+
+.nav-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    pointer-events: all;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.nav-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.nav-btn:active {
+    transform: scale(0.95);
+}
+
+/* Slider Dots */
+.slider-dots {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+}
+
+.dot {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+.dot.active {
+    background: white;
+    transform: scale(1.2);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.dot:hover {
+    background: rgba(255, 255, 255, 0.7);
+    transform: scale(1.1);
+}
+
+/* Animations */
+@keyframes slideInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInFromRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Slider Responsive Design */
+@media (max-width: 1024px) {
+    .welcome-slider {
+        height: 450px;
+    }
+    
+    .slide-content {
+        gap: 30px;
+        padding: 0 30px;
+    }
+    
+    .slide-text h2 {
+        font-size: 2.5rem;
+    }
+    
+    .slide-text p {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .welcome-slider {
+        height: 400px;
+    }
+    
+    .slide-content {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 20px;
+        text-align: center;
+    }
+    
+    .slide-image {
+        height: 200px;
+        order: 2;
+    }
+    
+    .slide-text {
+        padding: 20px;
+        order: 1;
+    }
+    
+    .slide-text h2 {
+        font-size: 2rem;
+        margin-bottom: 15px;
+    }
+    
+    .slide-text p {
+        font-size: 1rem;
+        margin-bottom: 20px;
+    }
+    
+    .slide-btn {
+        padding: 12px 25px;
+        font-size: 1rem;
+        align-self: center;
+    }
+    
+    .nav-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+    }
+    
+    .slider-nav {
+        padding: 0 15px;
+    }
+    
+    .slider-dots {
+        bottom: 20px;
+        gap: 10px;
+    }
+    
+    .dot {
+        width: 12px;
+        height: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .welcome-slider {
+        height: 350px;
+    }
+    
+    .slide-content {
+        padding: 15px;
+    }
+    
+    .slide-text {
+        padding: 15px;
+    }
+    
+    .slide-text h2 {
+        font-size: 1.5rem;
+    }
+    
+    .slide-text p {
+        font-size: 0.9rem;
+    }
+    
+    .slide-btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+    
+    .nav-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    .slider-nav {
+        padding: 0 10px;
+    }
+}
+
+/* Landscape Mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    .welcome-slider {
+        height: 300px;
+    }
+    
+    .slide-content {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+    
+    .slide-image {
+        height: 100%;
+        order: 1;
+    }
+    
+    .slide-text {
+        order: 2;
+        text-align: left;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .slide {
+        transition: none;
+    }
+    
+    .slide-image img {
+        transition: none;
+    }
+    
+    .slide-text h2,
+    .slide-text p,
+    .slide-btn {
+        animation: none;
+    }
+    
+    .nav-btn,
+    .dot,
+    .slide-btn {
+        transition: none;
+    }
+}
+
+/* Home Layout Responsive Design */
+.home-layout {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 30px;
+    margin-top: 0;
+}
+
+.content-left {
+    min-width: 0; /* Prevents grid overflow */
+}
+
+.sidebar {
+    min-width: 0; /* Prevents grid overflow */
+}
+
+.program-card {
+    transition: transform 0.3s ease;
+}
+
+.program-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Video Player Responsive */
+.video-player {
+    background: #000;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    margin-bottom: 30px;
+}
+
+.video-player iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Program Guide Grid */
+.program-guide-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+/* Featured Videos Grid */
+.featured-videos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+/* Tablet Styles */
+@media (max-width: 1024px) {
+    .home-layout {
+        grid-template-columns: 1fr 300px;
+        gap: 20px;
+    }
+    
+    .program-guide-grid {
+        gap: 20px;
+    }
+    
+    .featured-videos-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+    .home-layout {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .sidebar {
+        order: -1; /* Move sidebar to top on mobile */
+    }
+    
+    .program-guide-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .featured-videos-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .program-card {
+        margin-bottom: 15px;
+    }
+    
+    /* Adjust video player for mobile */
+    .video-player {
+        margin-bottom: 20px;
+    }
+    
+    /* Adjust current program section */
+    .current-program {
+        padding: 15px !important;
+        margin-bottom: 30px !important;
+    }
+    
+    /* Adjust program guide cards */
+    .program-guide-grid > div {
+        padding: 20px !important;
+    }
+    
+    /* Adjust sidebar */
+    .sidebar > div {
+        margin-bottom: 20px;
+    }
+    
+    /* Responsive text sizes */
+    h1 {
+        font-size: 24px !important;
+    }
+    
+    h2 {
+        font-size: 1.5rem !important;
+    }
+    
+    h3 {
+        font-size: 1.1rem !important;
+    }
+}
+
+/* Small Mobile Styles */
+@media (max-width: 480px) {
+    .home-layout {
+        gap: 15px;
+    }
+    
+    .featured-videos-grid {
+        gap: 10px;
+    }
+    
+    .program-guide-grid {
+        gap: 15px;
+    }
+    
+    .program-guide-grid > div {
+        padding: 15px !important;
+    }
+    
+    .current-program {
+        padding: 12px !important;
+        margin-bottom: 20px !important;
+    }
+    
+    /* Smaller text on very small screens */
+    h1 {
+        font-size: 20px !important;
+    }
+    
+    h2 {
+        font-size: 1.3rem !important;
+    }
+    
+    .video-player {
+        border-radius: 6px;
+    }
+    
+    /* Adjust program times and content */
+    .program-guide-grid div[style*="padding: 6px 12px"] {
+        padding: 4px 8px !important;
+        font-size: 12px !important;
+    }
+    
+    .program-guide-grid div[style*="font-size: 14px"] {
+        font-size: 12px !important;
+    }
+}
+
+/* Landscape Mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    .home-layout {
+        grid-template-columns: 1fr 280px;
+    }
+    
+    .sidebar {
+        order: 0; /* Keep sidebar on right in landscape */
+    }
+    
+    .program-guide-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+    
+    .featured-videos-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+    .program-card:hover {
+        transform: none;
+    }
+    
+    .program-card:active {
+        transform: scale(0.98);
+    }
+    
+    /* Larger touch targets */
+    .program-card {
+        min-height: 48px;
+    }
+    
+    button {
+        min-height: 48px;
+        min-width: 48px;
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .program-card {
+        border: 2px solid #000;
+    }
+    
+    .video-player {
+        border: 2px solid #000;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .program-card {
+        transition: none;
+    }
+    
+    .program-card:hover {
+        transform: none;
+    }
+}
+
+/* Print styles */
+@media print {
+    .sidebar {
+        display: none;
+    }
+    
+    .home-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .video-player {
+        display: none;
+    }
+    
+    .program-card {
+        break-inside: avoid;
+        border: 1px solid #ccc;
+        margin-bottom: 1rem;
+    }
+}
+</style>
+
+<script>
+// Slider functionality
+let currentSlideIndex = 1;
+let slideInterval;
+
+function showSlide(n) {
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+    
+    if (n > slides.length) currentSlideIndex = 1;
+    if (n < 1) currentSlideIndex = slides.length;
+    
+    // Hide all slides
+    slides.forEach(slide => slide.classList.remove('active'));
+    dots.forEach(dot => dot.classList.remove('active'));
+    
+    // Show current slide
+    if (slides[currentSlideIndex - 1]) {
+        slides[currentSlideIndex - 1].classList.add('active');
+    }
+    if (dots[currentSlideIndex - 1]) {
+        dots[currentSlideIndex - 1].classList.add('active');
+    }
+}
+
+function changeSlide(n) {
+    currentSlideIndex += n;
+    showSlide(currentSlideIndex);
+    resetSlideInterval();
+}
+
+function currentSlide(n) {
+    currentSlideIndex = n;
+    showSlide(currentSlideIndex);
+    resetSlideInterval();
+}
+
+function nextSlide() {
+    currentSlideIndex++;
+    showSlide(currentSlideIndex);
+}
+
+function resetSlideInterval() {
+    clearInterval(slideInterval);
+    slideInterval = setInterval(nextSlide, 5000); // Auto-advance every 5 seconds
+}
+
+// Initialize slider
+document.addEventListener('DOMContentLoaded', function() {
+    showSlide(currentSlideIndex);
+    resetSlideInterval();
+    
+    // Pause auto-advance on hover
+    const slider = document.querySelector('.welcome-slider');
+    if (slider) {
+        slider.addEventListener('mouseenter', () => clearInterval(slideInterval));
+        slider.addEventListener('mouseleave', resetSlideInterval);
+    }
+    
+    // Touch/swipe support for mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    slider.addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].screenX;
+    });
+    
+    slider.addEventListener('touchend', function(e) {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    });
+    
+    function handleSwipe() {
+        const swipeThreshold = 50;
+        const diff = touchStartX - touchEndX;
+        
+        if (Math.abs(diff) > swipeThreshold) {
+            if (diff > 0) {
+                // Swipe left - next slide
+                changeSlide(1);
+            } else {
+                // Swipe right - previous slide
+                changeSlide(-1);
+            }
+        }
+    }
+});
+
+// Simulate viewer count changes
+function updateViewerCount() {
+    const viewerCount = document.getElementById('viewer-count');
+    if (viewerCount) {
+        const baseCount = 2440;
+        const variation = Math.floor(Math.random() * 100) - 50;
+        const newCount = baseCount + variation;
+        viewerCount.textContent = `${newCount} spectateurs`;
+    }
+}
+
+// Update viewer count every 30 seconds
+setInterval(updateViewerCount, 30000);
+
+// Function to open video in new tab
+function openVideo(videoId) {
+    if (videoId && videoId !== 'undefined' && videoId !== '') {
+        console.log('Opening video:', videoId);
+        window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank');
+    } else {
+        console.error('Invalid video ID:', videoId);
+        alert('Désolé, cette vidéo n\'est pas disponible pour le moment.');
+    }
+}
+
+// Add click functionality to program cards
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, setting up video cards...');
+    
+    const programCards = document.querySelectorAll('.program-card');
+    console.log('Found', programCards.length, 'program cards');
+    
+    programCards.forEach((card, index) => {
+        const videoId = card.dataset.videoId;
+        console.log(`Card ${index + 1} video ID:`, videoId);
+        
+        card.addEventListener('click', function() {
+            openVideo(videoId);
+        });
+        
+        // Add hover effects
+        card.addEventListener('mouseenter', function() {
+            const playButton = this.querySelector('.fas.fa-play').parentElement;
+            if (playButton) {
+                playButton.style.transform = 'translate(-50%, -50%) scale(1.1)';
+                playButton.style.opacity = '1';
+            }
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            const playButton = this.querySelector('.fas.fa-play').parentElement;
+            if (playButton) {
+                playButton.style.transform = 'translate(-50%, -50%) scale(1)';
+                playButton.style.opacity = '0.9';
+            }
+        });
+    });
+    
+    // Debug: Log featured videos data
+    {% if featured_videos %}
+    console.log('Featured videos data:');
+    {% for video in featured_videos %}
+    console.log('Video {{ loop.index }}:', {
+        id: '{{ video.id }}',
+        title: '{{ video.title|replace("'", "\\'") }}',
+        thumbnail: '{{ video.thumbnail }}'
+    });
+    {% endfor %}
+    {% else %}
+    console.log('No featured videos found');
+    {% endif %}
+});
+
+// Ad Space Management Function
+function manageAdSpace(adSpaceId) {
+    // Create modal for ad space management
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+    `;
+    
+    const modalContent = document.createElement('div');
+    modalContent.style.cssText = `
+        background: white;
+        border-radius: 12px;
+        padding: 30px;
+        max-width: 500px;
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+    `;
+    
+    modalContent.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="margin: 0; color: #333;">Gérer l'espace publicitaire</h3>
+            <button onclick="this.closest('.modal').remove()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666;">&times;</button>
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #333;">Nom du client:</label>
+            <input type="text" id="clientName" placeholder="Nom de l'entreprise" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #333;">Contact:</label>
+            <input type="email" id="clientEmail" placeholder="email@exemple.com" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #333;">Téléphone:</label>
+            <input type="tel" id="clientPhone" placeholder="+226 XX XX XX XX" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #333;">Type de publicité:</label>
+            <select id="adType" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                <option value="image">Image/Banner</option>
+                <option value="video">Vidéo</option>
+                <option value="html">HTML/Animation</option>
+            </select>
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #333;">Fichier publicitaire:</label>
+            <input type="file" id="adFile" accept="image/*,video/*,.html" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+            <small style="color: #666; font-size: 12px;">Formats acceptés: JPG, PNG, GIF, MP4, HTML</small>
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #333;">URL de destination:</label>
+            <input type="url" id="adUrl" placeholder="https://www.exemple.com" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #333;">Durée de la campagne:</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <input type="date" id="startDate" style="padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                <input type="date" id="endDate" style="padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+            </div>
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #333;">Notes:</label>
+            <textarea id="adNotes" placeholder="Instructions spéciales, commentaires..." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; height: 80px; resize: vertical;"></textarea>
+        </div>
+        
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+            <button onclick="this.closest('.modal').remove()" style="background: #6c757d; color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer;">
+                Annuler
+            </button>
+            <button onclick="saveAdSpace('${adSpaceId}')" style="background: #28a745; color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer;">
+                <i class="fas fa-save"></i> Enregistrer
+            </button>
+        </div>
+    `;
+    
+    modal.className = 'modal';
+    modal.appendChild(modalContent);
+    document.body.appendChild(modal);
+    
+    // Close modal when clicking outside
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            modal.remove();
+        }
+    });
+}
+
+function saveAdSpace(adSpaceId) {
+    const clientName = document.getElementById('clientName').value;
+    const clientEmail = document.getElementById('clientEmail').value;
+    const clientPhone = document.getElementById('clientPhone').value;
+    const adType = document.getElementById('adType').value;
+    const adFile = document.getElementById('adFile').files[0];
+    const adUrl = document.getElementById('adUrl').value;
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+    const adNotes = document.getElementById('adNotes').value;
+    
+    if (!clientName || !clientEmail || !startDate || !endDate) {
+        alert('Veuillez remplir tous les champs obligatoires.');
+        return;
+    }
+    
+    // Create FormData for file upload
+    const formData = new FormData();
+    formData.append('adSpaceId', adSpaceId);
+    formData.append('clientName', clientName);
+    formData.append('clientEmail', clientEmail);
+    formData.append('clientPhone', clientPhone);
+    formData.append('adType', adType);
+    formData.append('adUrl', adUrl);
+    formData.append('startDate', startDate);
+    formData.append('endDate', endDate);
+    formData.append('adNotes', adNotes);
+    
+    if (adFile) {
+        formData.append('adFile', adFile);
+    }
+    
+    // Simulate saving (in real implementation, send to server)
+    console.log('Saving ad space:', adSpaceId, {
+        clientName,
+        clientEmail,
+        clientPhone,
+        adType,
+        adUrl,
+        startDate,
+        endDate,
+        adNotes,
+        fileName: adFile ? adFile.name : null
+    });
+    
+    // Show success message
+    alert(`Espace publicitaire ${adSpaceId} assigné à ${clientName} avec succès!`);
+    
+    // Update the ad space display
+    updateAdSpaceDisplay(adSpaceId, clientName, startDate, endDate);
+    
+    // Close modal
+    document.querySelector('.modal').remove();
+}
+
+function updateAdSpaceDisplay(adSpaceId, clientName, startDate, endDate) {
+    // Find the ad space element and update it
+    const adSpaces = document.querySelectorAll('.ad-space');
+    adSpaces.forEach(adSpace => {
+        const manageBtn = adSpace.querySelector(`[onclick*="${adSpaceId}"]`);
+        if (manageBtn) {
+            const adContent = adSpace.querySelector('.ad-content');
+            adContent.innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <i class="fas fa-check-circle" style="font-size: 2rem; margin-bottom: 10px; color: #28a745;"></i>
+                    <div style="font-weight: bold; color: #28a745;">Assigné</div>
+                    <div style="font-size: 12px; margin-top: 5px; color: #333;">${clientName}</div>
+                    <div style="font-size: 11px; color: #666;">${startDate} - ${endDate}</div>
+                </div>
+                <button class="ad-manage-btn" onclick="manageAdSpace('${adSpaceId}')" style="position: absolute; top: 10px; right: 10px; background: #4472c4; color: white; border: none; padding: 5px 10px; border-radius: 4px; font-size: 11px; cursor: pointer;">
+                    <i class="fas fa-edit"></i> Modifier
+                </button>
+            `;
+        }
+    });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,1219 @@
+{% extends "base.html" %}
+
+{% block title %}Émissions & Magazines - LCA TV{% endblock %}
+
+{% block content %}
+<div style="margin-top: 0;">
+    <!-- Beautiful Hero Section with slider1 background -->
+    <div class="hero-section">
+        <div class="hero-background">
+            <img src="{{ url_for('static', filename='images/slider1.jpg') }}" alt="Émissions LCA TV" 
+                 onerror="this.src='/lca/static/images/slider1.jpg'">
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-badge">
+                    <i class="fas fa-tv"></i>
+                    <span>ÉMISSIONS PHARES</span>
+                </div>
+                <h1>Émissions & Magazines</h1>
+                <p>Découvrez nos programmes de référence qui font la différence au Burkina Faso. Une programmation riche et variée pour tous les goûts.</p>
+                <div class="hero-buttons">
+                    <a href="#emissions-phares" class="btn-primary">
+                        <i class="fas fa-play"></i>
+                        Découvrir nos Émissions
+                    </a>
+                    <a href="/live" class="btn-secondary">
+                        <i class="fas fa-broadcast-tower"></i>
+                        Regarder en Direct
+                    </a>
+                </div>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number">15+</div>
+                    <div class="stat-label">Émissions Phares</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">100K+</div>
+                    <div class="stat-label">Téléspectateurs</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Diffusion Continue</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Magazine Section with slider2 background -->
+    <div class="magazine-section">
+        <div class="magazine-background">
+            <img src="{{ url_for('static', filename='images/slider2.jpg') }}" alt="Magazines LCA TV" 
+                 onerror="this.src='/lca/static/images/slider2.jpg'">
+            <div class="magazine-overlay"></div>
+        </div>
+        <div class="magazine-content">
+            <div class="section-header">
+                <h2>Nos Magazines Spécialisés</h2>
+                <p>Des programmes d'approfondissement pour mieux comprendre notre société</p>
+            </div>
+            <div class="magazine-grid">
+                <div class="magazine-card">
+                    <div class="magazine-icon">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <h3>7 Afrique</h3>
+                    <p>Magazine hebdomadaire sur l'actualité africaine</p>
+                    <div class="magazine-time">Dimanche 13h00</div>
+                </div>
+                <div class="magazine-card">
+                    <div class="magazine-icon">
+                        <i class="fas fa-venus"></i>
+                    </div>
+                    <h3>Questions de Femmes</h3>
+                    <p>Émission dédiée aux femmes burkinabè</p>
+                    <div class="magazine-time">Lundi 20h40</div>
+                </div>
+                <div class="magazine-card">
+                    <div class="magazine-icon">
+                        <i class="fas fa-sun"></i>
+                    </div>
+                    <h3>Soleil d'Afrique</h3>
+                    <p>Musique et culture africaine authentique</p>
+                    <div class="magazine-time">Lundi-Vendredi 11h00</div>
+                </div>
+                <div class="magazine-card">
+                    <div class="magazine-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>Franc Parler</h3>
+                    <p>Débats citoyens sans tabou</p>
+                    <div class="magazine-time">Mercredi 20h40</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Categories Filter -->
+    <div class="categories-section">
+        <div class="container">
+            <h2>Explorez par Catégorie</h2>
+            <div class="categories-grid">
+                <a href="/videos/category/actualites" class="category-card actualites">
+                    <div class="category-icon">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <h3>Actualités</h3>
+                    <p>Journal, Flash Info, Reportages</p>
+                    <div class="category-arrow">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </a>
+
+                <a href="/videos/category/debats" class="category-card debats">
+                    <div class="category-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>Débats</h3>
+                    <p>Franc-Parler, Discussions, Analyses</p>
+                    <div class="category-arrow">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </a>
+
+                <a href="/videos/category/culture" class="category-card culture">
+                    <div class="category-icon">
+                        <i class="fas fa-mask"></i>
+                    </div>
+                    <h3>Culture</h3>
+                    <p>Traditions, Arts, Patrimoine</p>
+                    <div class="category-arrow">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </a>
+
+                <a href="/videos/category/sport" class="category-card sport">
+                    <div class="category-icon">
+                        <i class="fas fa-futbol"></i>
+                    </div>
+                    <h3>Sport</h3>
+                    <p>Étalons, Compétitions, Analyses</p>
+                    <div class="category-arrow">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </a>
+
+                <a href="/videos/category/jeunesse" class="category-card jeunesse">
+                    <div class="category-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3>Jeunesse</h3>
+                    <p>Éducation, Formation, Avenir</p>
+                    <div class="category-arrow">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </a>
+
+                <a href="/videos/category/economie" class="category-card economie">
+                    <div class="category-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Économie</h3>
+                    <p>Business, Développement, Marchés</p>
+                    <div class="category-arrow">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Émissions Phares Section -->
+    <div id="emissions-phares" class="emissions-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Nos Émissions Phares</h2>
+                <p>Des programmes de qualité qui marquent l'actualité burkinabè</p>
+            </div>
+            
+            <div class="emissions-grid">
+                <!-- Journal LCA TV -->
+                <div class="emission-card featured">
+                    <div class="emission-header journal">
+                        <div class="emission-icon">
+                            <i class="fas fa-newspaper"></i>
+                        </div>
+                        <div class="emission-badge">QUOTIDIEN</div>
+                    </div>
+                    <div class="emission-content">
+                        <h3>Journal LCA TV</h3>
+                        <p>L'information de référence au Burkina Faso. Retrouvez chaque jour l'essentiel de l'actualité nationale et internationale.</p>
+                        <div class="emission-schedule">
+                            <i class="fas fa-clock"></i>
+                            <span>7h30 • 13h • 19h</span>
+                        </div>
+                        <a href="/journal" class="emission-btn">
+                            <i class="fas fa-play"></i>
+                            Voir les Journaux
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Franc-Parler -->
+                <div class="emission-card">
+                    <div class="emission-header debat">
+                        <div class="emission-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <div class="emission-badge">HEBDOMADAIRE</div>
+                    </div>
+                    <div class="emission-content">
+                        <h3>Franc-Parler</h3>
+                        <p>Le débat citoyen sans tabou. Une émission qui donne la parole aux citoyens sur les sujets qui les préoccupent.</p>
+                        <div class="emission-schedule">
+                            <i class="fas fa-clock"></i>
+                            <span>Mercredi 20h40</span>
+                        </div>
+                        <a href="/videos/category/debats" class="emission-btn">
+                            <i class="fas fa-play"></i>
+                            Voir les Débats
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 7 Afrique -->
+                <div class="emission-card">
+                    <div class="emission-header magazine">
+                        <div class="emission-icon">
+                            <i class="fas fa-globe-africa"></i>
+                        </div>
+                        <div class="emission-badge">HEBDOMADAIRE</div>
+                    </div>
+                    <div class="emission-content">
+                        <h3>7 Afrique</h3>
+                        <p>Découvrez l'Afrique sous tous ses aspects : culture, économie, société. Un magazine complet sur notre continent.</p>
+                        <div class="emission-schedule">
+                            <i class="fas fa-clock"></i>
+                            <span>Dimanche 13h00</span>
+                        </div>
+                        <a href="/videos/category/culture" class="emission-btn">
+                            <i class="fas fa-play"></i>
+                            Regarder 7 Afrique
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Questions de Femmes -->
+                <div class="emission-card">
+                    <div class="emission-header femmes">
+                        <div class="emission-icon">
+                            <i class="fas fa-venus"></i>
+                        </div>
+                        <div class="emission-badge">HEBDOMADAIRE</div>
+                    </div>
+                    <div class="emission-content">
+                        <h3>Questions de Femmes</h3>
+                        <p>Une émission dédiée aux femmes, leurs défis et leurs succès. L'entrepreneuriat féminin à l'honneur.</p>
+                        <div class="emission-schedule">
+                            <i class="fas fa-clock"></i>
+                            <span>Lundi 20h40</span>
+                        </div>
+                        <a href="/videos/category/societe" class="emission-btn">
+                            <i class="fas fa-play"></i>
+                            Voir l'Émission
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Soleil d'Afrique -->
+                <div class="emission-card">
+                    <div class="emission-header musique">
+                        <div class="emission-icon">
+                            <i class="fas fa-sun"></i>
+                        </div>
+                        <div class="emission-badge">QUOTIDIEN</div>
+                    </div>
+                    <div class="emission-content">
+                        <h3>Soleil d'Afrique</h3>
+                        <p>Musique, culture et divertissement africain authentique. Du lundi au vendredi pour égayer vos journées.</p>
+                        <div class="emission-schedule">
+                            <i class="fas fa-clock"></i>
+                            <span>Lundi-Vendredi 11h00</span>
+                        </div>
+                        <a href="/videos/category/culture" class="emission-btn">
+                            <i class="fas fa-play"></i>
+                            Écouter Soleil d'Afrique
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Étalons du Faso -->
+                <div class="emission-card">
+                    <div class="emission-header sport">
+                        <div class="emission-icon">
+                            <i class="fas fa-futbol"></i>
+                        </div>
+                        <div class="emission-badge">BIHEBDOMADAIRE</div>
+                    </div>
+                    <div class="emission-content">
+                        <h3>Étalons du Faso</h3>
+                        <p>Toute l'actualité sportive burkinabè avec un focus sur nos Étalons. Matchs, analyses et interviews exclusives.</p>
+                        <div class="emission-schedule">
+                            <i class="fas fa-clock"></i>
+                            <span>Mardi & Vendredi 19h30</span>
+                        </div>
+                        <a href="/videos/category/sport" class="emission-btn">
+                            <i class="fas fa-play"></i>
+                            Voir le Sport
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toutes les Vidéos Section -->
+    <div class="videos-section">
+        <div class="container">
+            <div class="section-header-with-button">
+                <div>
+                    <h2>Toutes nos Émissions</h2>
+                    <p>Retrouvez l'intégralité de nos programmes</p>
+                </div>
+                <a href="/videos" class="btn-primary">
+                    <i class="fas fa-th-large"></i>
+                    Voir Tout
+                </a>
+            </div>
+
+            {% if videos %}
+            <div class="videos-grid">
+                {% for video in videos[:12] %}
+                <div class="video-card" data-video-id="{{ video.id }}" onclick="window.open('https://www.youtube.com/watch?v={{ video.id }}', '_blank')">
+                    <div class="video-thumbnail">
+                        <img src="{{ video.thumbnail }}" alt="{{ video.title }}" loading="lazy">
+                        <div class="play-overlay">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <div class="category-badge">{{ video.category }}</div>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">{{ video.title }}</h3>
+                        <p class="video-description">{{ video.description[:120] }}{% if video.description|length > 120 %}...{% endif %}</p>
+                        <div class="video-meta">
+                            <span><i class="fas fa-calendar"></i> {{ video.published_at[:10] }}</span>
+                            {% if video.view_count %}
+                            <span><i class="fas fa-eye"></i> {{ "{:,}".format(video.view_count|int) }} vues</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="no-content">
+                <i class="fas fa-video"></i>
+                <h3>Aucune émission disponible</h3>
+                <p>Les émissions seront bientôt disponibles. Revenez plus tard !</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Restez Connectés avec LCA TV</h2>
+                <p>Ne manquez aucune de nos émissions ! Suivez-nous pour être informé des dernières actualités et programmes.</p>
+                <div class="cta-buttons">
+                    <a href="/live" class="btn-primary">
+                        <i class="fas fa-broadcast-tower"></i>
+                        Regarder en Direct
+                    </a>
+                    <a href="/videos" class="btn-secondary">
+                        <i class="fas fa-video"></i>
+                        Toutes les Vidéos
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Container */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Hero Section with slider1 background */
+.hero-section {
+    position: relative;
+    height: 100vh;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.hero-background img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(30, 90, 46, 0.8), rgba(45, 90, 61, 0.6));
+    z-index: 2;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+
+.hero-text {
+    color: white;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 30px;
+    backdrop-filter: blur(10px);
+}
+
+.hero-text h1 {
+    font-size: 4rem;
+    font-weight: bold;
+    margin-bottom: 25px;
+    line-height: 1.1;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.hero-text p {
+    font-size: 1.3rem;
+    line-height: 1.6;
+    margin-bottom: 40px;
+    opacity: 0.95;
+    max-width: 600px;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.btn-primary, .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 32px;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    box-shadow: 0 8px 25px rgba(231, 76, 60, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(231, 76, 60, 0.4);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border-color: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-3px);
+}
+
+.hero-stats {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+}
+
+.stat-item {
+    text-align: center;
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 30px 20px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.stat-number {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #fff, #f0f0f0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.stat-label {
+    font-size: 1rem;
+    opacity: 0.9;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Magazine Section with slider2 background */
+.magazine-section {
+    position: relative;
+    padding: 100px 0;
+    overflow: hidden;
+}
+
+.magazine-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.magazine-background img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.magazine-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(68, 114, 196, 0.9), rgba(52, 81, 163, 0.8));
+    z-index: 2;
+}
+
+.magazine-content {
+    position: relative;
+    z-index: 3;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+    color: white;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.section-header h2 {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.section-header p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.magazine-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.magazine-card {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 40px 30px;
+    border-radius: 20px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.magazine-card:hover {
+    transform: translateY(-10px);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.magazine-icon {
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 25px;
+    font-size: 2rem;
+}
+
+.magazine-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.magazine-card p {
+    margin-bottom: 20px;
+    opacity: 0.9;
+    line-height: 1.5;
+}
+
+.magazine-time {
+    background: rgba(231, 76, 60, 0.8);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+/* Categories Section */
+.categories-section {
+    background: #f8f9fa;
+    padding: 80px 0;
+}
+
+.categories-section h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 60px;
+    font-weight: bold;
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.category-card {
+    background: white;
+    padding: 40px 30px;
+    border-radius: 20px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.category-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    transition: all 0.3s ease;
+}
+
+.category-card.actualites::before { background: #28a745; }
+.category-card.debats::before { background: #e74c3c; }
+.category-card.culture::before { background: #f39c12; }
+.category-card.sport::before { background: #9b59b6; }
+.category-card.jeunesse::before { background: #3498db; }
+.category-card.economie::before { background: #1abc9c; }
+
+.category-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.category-card:hover::before {
+    height: 100%;
+    opacity: 0.05;
+}
+
+.category-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
+    font-size: 1.8rem;
+    color: white;
+}
+
+.category-card.actualites .category-icon { background: #28a745; }
+.category-card.debats .category-icon { background: #e74c3c; }
+.category-card.culture .category-icon { background: #f39c12; }
+.category-card.sport .category-icon { background: #9b59b6; }
+.category-card.jeunesse .category-icon { background: #3498db; }
+.category-card.economie .category-icon { background: #1abc9c; }
+
+.category-card h3 {
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    color: #333;
+    font-weight: bold;
+}
+
+.category-card p {
+    color: #666;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.category-arrow {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.category-card:hover .category-arrow {
+    opacity: 1;
+    transform: translateX(5px);
+}
+
+/* Emissions Section */
+.emissions-section {
+    background: white;
+    padding: 80px 0;
+}
+
+.emissions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 30px;
+}
+
+.emission-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    border: 1px solid #f0f0f0;
+}
+
+.emission-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+}
+
+.emission-card.featured {
+    border: 2px solid #28a745;
+    position: relative;
+}
+
+.emission-card.featured::before {
+    content: 'PHARE';
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #28a745;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    z-index: 2;
+}
+
+.emission-header {
+    padding: 30px;
+    color: white;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.emission-header.journal { background: linear-gradient(135deg, #28a745, #20693e); }
+.emission-header.debat { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+.emission-header.magazine { background: linear-gradient(135deg, #f39c12, #e67e22); }
+.emission-header.femmes { background: linear-gradient(135deg, #e91e63, #c2185b); }
+.emission-header.musique { background: linear-gradient(135deg, #ff9800, #f57c00); }
+.emission-header.sport { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+
+.emission-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.emission-badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.emission-content {
+    padding: 30px;
+}
+
+.emission-content h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #333;
+    font-weight: bold;
+}
+
+.emission-content p {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.emission-schedule {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #888;
+    margin-bottom: 25px;
+    font-size: 0.9rem;
+}
+
+.emission-btn {
+    background: #4472c4;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.emission-btn:hover {
+    background: #3451a3;
+    transform: translateY(-2px);
+}
+
+/* Videos Section */
+.videos-section {
+    background: #f8f9fa;
+    padding: 80px 0;
+}
+
+.section-header-with-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 50px;
+}
+
+.section-header-with-button h2 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.section-header-with-button p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.videos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 30px;
+}
+
+.video-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.video-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.video-thumbnail {
+    position: relative;
+    overflow: hidden;
+}
+
+.video-thumbnail img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.video-card:hover .video-thumbnail img {
+    transform: scale(1.1);
+}
+
+.play-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(40, 167, 69, 0.9);
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.video-card:hover .play-overlay {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+.category-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(40, 167, 69, 0.9);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.video-info {
+    padding: 20px;
+}
+
+.video-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+    line-height: 1.4;
+}
+
+.video-description {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.video-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.no-content {
+    text-align: center;
+    padding: 80px 20px;
+    color: #666;
+}
+
+.no-content i {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    opacity: 0.3;
+}
+
+.no-content h3 {
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+}
+
+/* CTA Section */
+.cta-section {
+    background: linear-gradient(135deg, #28a745, #20693e);
+    color: white;
+    padding: 80px 0;
+    text-align: center;
+}
+
+.cta-content h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.cta-content p {
+    font-size: 1.2rem;
+    margin-bottom: 40px;
+    opacity: 0.9;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.cta-section .btn-primary {
+    background: white;
+    color: #28a745;
+}
+
+.cta-section .btn-primary:hover {
+    background: #f8f9fa;
+}
+
+.cta-section .btn-secondary {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .hero-content {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        text-align: center;
+    }
+    
+    .hero-text h1 {
+        font-size: 3rem;
+    }
+    
+    .hero-stats {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+    
+    .section-header-with-button {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+        height: 80vh;
+        min-height: 500px;
+    }
+    
+    .hero-text h1 {
+        font-size: 2.5rem;
+    }
+    
+    .hero-text p {
+        font-size: 1.1rem;
+    }
+    
+    .hero-buttons {
+        justify-content: center;
+    }
+    
+    .btn-primary, .btn-secondary {
+        padding: 14px 28px;
+        font-size: 1rem;
+    }
+    
+    .hero-stats {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .stat-number {
+        font-size: 2.5rem;
+    }
+    
+    .section-header h2 {
+        font-size: 2rem;
+    }
+    
+    .magazine-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .categories-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .emissions-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .videos-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .cta-content h2 {
+        font-size: 2rem;
+    }
+    
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-text h1 {
+        font-size: 2rem;
+    }
+    
+    .hero-text p {
+        font-size: 1rem;
+    }
+    
+    .btn-primary, .btn-secondary {
+        padding: 12px 24px;
+        font-size: 0.9rem;
+    }
+    
+    .section-header h2 {
+        font-size: 1.8rem;
+    }
+    
+    .magazine-card, .category-card, .emission-card {
+        padding: 30px 20px;
+    }
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Animation for elements coming into view */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.magazine-card, .category-card, .emission-card, .video-card {
+    animation: fadeInUp 0.6s ease-out;
+}
+</style>
+{% endblock %}

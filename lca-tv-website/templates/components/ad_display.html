@@ -1,0 +1,289 @@
+<!-- Composant d'affichage des publicités -->
+<!-- Usage: {% include 'components/ad_display.html' with context %} -->
+
+{% macro render_ad_space(location, ads, default_width=300, default_height=250) %}
+    {% if ads and location in ads and ads[location] %}
+        {% for ad in ads[location] %}
+            <div class="ad-space ad-{{ location }}" 
+                 style="width: {{ ad.width or default_width }}px; height: {{ ad.height or default_height }}px; margin: 10px 0;">
+                
+                {% if ad.content_type == 'image' and ad.image_url %}
+                    <!-- Publicité Image -->
+                    {% if ad.target_url %}
+                        <a href="{{ url_for('ad_click', ad_id=ad.id) }}" target="_blank" rel="noopener">
+                            <img src="{{ ad.image_url }}" 
+                                 alt="{{ ad.title }}" 
+                                 style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px; cursor: pointer;"
+                                 title="{{ ad.title }} - {{ ad.client_name }}">
+                        </a>
+                    {% else %}
+                        <img src="{{ ad.image_url }}" 
+                             alt="{{ ad.title }}" 
+                             style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;"
+                             title="{{ ad.title }} - {{ ad.client_name }}">
+                    {% endif %}
+                
+                {% elif ad.content_type == 'html' and ad.html_content %}
+                    <!-- Publicité HTML -->
+                    <div class="ad-html-content" 
+                         style="width: 100%; height: 100%; overflow: hidden; border-radius: 5px;">
+                        {{ ad.html_content | safe }}
+                    </div>
+                
+                {% else %}
+                    <!-- Publicité par défaut -->
+                    <div class="ad-placeholder" 
+                         style="width: 100%; height: 100%; background: linear-gradient(135deg, #f8f9fa, #e9ecef); 
+                                border: 2px dashed #dee2e6; border-radius: 5px; display: flex; 
+                                align-items: center; justify-content: center; text-align: center; color: #6c757d;">
+                        <div>
+                            <i class="fas fa-ad" style="font-size: 2rem; margin-bottom: 10px; opacity: 0.5;"></i>
+                            <div style="font-size: 0.9rem; font-weight: 500;">{{ ad.title }}</div>
+                            <div style="font-size: 0.8rem; opacity: 0.7;">{{ ad.client_name }}</div>
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <!-- Informations de debug (visible seulement en mode développement) -->
+                {% if config.DEBUG %}
+                    <div style="font-size: 0.7rem; color: #6c757d; margin-top: 2px; text-align: center;">
+                        ID: {{ ad.id }} | {{ ad.impressions }} vues | {{ ad.clicks }} clics
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <!-- Espace publicitaire vide -->
+        {% if config.DEBUG %}
+            <div class="ad-space-empty ad-{{ location }}" 
+                 style="width: {{ default_width }}px; height: {{ default_height }}px; margin: 10px 0;
+                        background: #f8f9fa; border: 2px dashed #dee2e6; border-radius: 5px; 
+                        display: flex; align-items: center; justify-content: center; color: #6c757d;">
+                <div style="text-align: center;">
+                    <i class="fas fa-plus-circle" style="font-size: 1.5rem; margin-bottom: 5px; opacity: 0.5;"></i>
+                    <div style="font-size: 0.8rem;">Espace {{ location }}</div>
+                    <div style="font-size: 0.7rem; opacity: 0.7;">{{ default_width }}x{{ default_height }}</div>
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+{% endmacro %}
+
+<!-- Styles CSS pour les publicités -->
+<style>
+.ad-space {
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ad-space:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+.ad-space img {
+    transition: transform 0.3s ease;
+}
+
+.ad-space:hover img {
+    transform: scale(1.02);
+}
+
+/* Styles spécifiques par emplacement */
+.ad-header {
+    margin: 0 auto;
+    display: block;
+}
+
+.ad-sidebar {
+    margin: 15px 0;
+    float: right;
+    clear: both;
+}
+
+.ad-footer {
+    margin: 20px auto;
+    display: block;
+    clear: both;
+}
+
+.ad-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.ad-banner {
+    margin: 20px auto;
+    display: block;
+}
+
+.ad-interstitial {
+    margin: 30px auto;
+    display: block;
+    clear: both;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .ad-header {
+        width: 320px !important;
+        height: 50px !important;
+    }
+    
+    .ad-sidebar {
+        float: none;
+        margin: 15px auto;
+        display: block;
+    }
+    
+    .ad-banner {
+        width: 320px !important;
+        height: 100px !important;
+    }
+}
+
+/* Animation pour les publicités popup */
+.ad-popup {
+    animation: popupFadeIn 0.5s ease-out;
+}
+
+@keyframes popupFadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+/* Bouton de fermeture pour les popups */
+.ad-popup::after {
+    content: '×';
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 25px;
+    height: 25px;
+    background: #dc3545;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    z-index: 10000;
+}
+
+.ad-popup:hover::after {
+    background: #c82333;
+}
+</style>
+
+<!-- JavaScript pour la gestion des publicités -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Gestion des popups publicitaires
+    const popupAds = document.querySelectorAll('.ad-popup');
+    
+    popupAds.forEach(function(popup) {
+        // Afficher le popup après 3 secondes
+        setTimeout(function() {
+            popup.style.display = 'block';
+        }, 3000);
+        
+        // Fermer le popup en cliquant sur le bouton de fermeture
+        popup.addEventListener('click', function(e) {
+            if (e.target === popup || e.target.matches('::after')) {
+                popup.style.display = 'none';
+            }
+        });
+        
+        // Fermer automatiquement après 10 secondes
+        setTimeout(function() {
+            popup.style.display = 'none';
+        }, 13000);
+    });
+    
+    // Tracking des impressions (déjà géré côté serveur, mais on peut ajouter du JS pour plus de précision)
+    const allAds = document.querySelectorAll('.ad-space[data-ad-id]');
+    
+    allAds.forEach(function(ad) {
+        // Observer quand la publicité entre dans le viewport
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    // La publicité est visible, on peut tracker l'impression
+                    console.log('Ad viewed:', entry.target.dataset.adId);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.5 // 50% de la publicité doit être visible
+        });
+        
+        observer.observe(ad);
+    });
+    
+    // Lazy loading pour les images publicitaires
+    const adImages = document.querySelectorAll('.ad-space img[data-src]');
+    
+    const imageObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                img.src = img.dataset.src;
+                img.removeAttribute('data-src');
+                imageObserver.unobserve(img);
+            }
+        });
+    });
+    
+    adImages.forEach(function(img) {
+        imageObserver.observe(img);
+    });
+});
+
+// Fonction pour fermer manuellement un popup
+function closeAdPopup(adId) {
+    const popup = document.querySelector(`.ad-popup[data-ad-id="${adId}"]`);
+    if (popup) {
+        popup.style.display = 'none';
+    }
+}
+
+// Fonction pour signaler une publicité inappropriée
+function reportAd(adId) {
+    if (confirm('Signaler cette publicité comme inappropriée ?')) {
+        fetch(`/api/report-ad/${adId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                reason: 'inappropriate_content'
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Publicité signalée. Merci pour votre retour.');
+            }
+        })
+        .catch(error => {
+            console.error('Erreur lors du signalement:', error);
+        });
+    }
+}
+</script>

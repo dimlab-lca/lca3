@@ -1,0 +1,318 @@
+{% extends "base.html" %}
+
+{% block title %}Publicité - LCA TV{% endblock %}
+
+{% block content %}
+<div style="display: grid; grid-template-columns: 1fr 350px; gap: 30px; margin-top: 0;">
+    <div class="content-left">
+        <h1 style="font-size: 32px; color: #28a745; margin-bottom: 10px; text-align: center;">Publicité & Partenariats</h1>
+        <p style="color: #666; margin-bottom: 40px; text-align: center; font-size: 16px;">Développez votre visibilité avec LCA TV - La chaîne de référence au Burkina Faso</p>
+        
+        <!-- Hero Section -->
+        <div style="background: linear-gradient(135deg, #28a745, #20693e); color: white; border-radius: 20px; padding: 40px; margin-bottom: 40px; text-align: center; position: relative; overflow: hidden;">
+            <div style="position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: rgba(255,255,255,0.1); border-radius: 50%; opacity: 0.5;"></div>
+            <div style="position: absolute; bottom: -30px; left: -30px; width: 100px; height: 100px; background: rgba(255,255,255,0.1); border-radius: 50%; opacity: 0.3;"></div>
+            <div style="position: relative; z-index: 2;">
+                <div style="width: 100px; height: 100px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 2.5rem;">
+                    <i class="fas fa-bullhorn"></i>
+                </div>
+                <h2 style="font-size: 2.2rem; margin-bottom: 15px; font-weight: bold;">Votre Message, Notre Audience</h2>
+                <p style="font-size: 1.1rem; opacity: 0.9; line-height: 1.6;">Atteignez plus de 2 millions de téléspectateurs quotidiens avec nos solutions publicitaires sur mesure.</p>
+            </div>
+        </div>
+
+        <!-- Nos Solutions -->
+        <div style="margin-bottom: 50px;">
+            <h2 style="font-size: 1.8rem; color: #333; margin-bottom: 30px; font-weight: bold; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-rocket" style="color: #e74c3c;"></i>
+                Nos Solutions Publicitaires
+            </h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px;">
+                <div style="background: white; border-radius: 15px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; border-top: 4px solid #28a745;">
+                    <div style="width: 70px; height: 70px; background: linear-gradient(135deg, #28a745, #20693e); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: white; font-size: 1.8rem;">
+                        <i class="fas fa-tv"></i>
+                    </div>
+                    <h3 style="color: #333; margin-bottom: 15px; font-size: 1.2rem;">Spots TV</h3>
+                    <p style="color: #666; line-height: 1.6; margin-bottom: 15px;">Diffusion de vos spots publicitaires aux heures de grande écoute.</p>
+                    <div style="color: #28a745; font-weight: bold; font-size: 1.1rem;">À partir de 50 000 FCFA</div>
+                </div>
+
+                <div style="background: white; border-radius: 15px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; border-top: 4px solid #4472c4;">
+                    <div style="width: 70px; height: 70px; background: linear-gradient(135deg, #4472c4, #3451a3); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: white; font-size: 1.8rem;">
+                        <i class="fas fa-microphone"></i>
+                    </div>
+                    <h3 style="color: #333; margin-bottom: 15px; font-size: 1.2rem;">Parrainage d'Émissions</h3>
+                    <p style="color: #666; line-height: 1.6; margin-bottom: 15px;">Associez votre marque à nos émissions phares et magazines.</p>
+                    <div style="color: #4472c4; font-weight: bold; font-size: 1.1rem;">À partir de 100 000 FCFA</div>
+                </div>
+
+                <div style="background: white; border-radius: 15px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; border-top: 4px solid #e74c3c;">
+                    <div style="width: 70px; height: 70px; background: linear-gradient(135deg, #e74c3c, #c0392b); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: white; font-size: 1.8rem;">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <h3 style="color: #333; margin-bottom: 15px; font-size: 1.2rem;">Publi-Reportages</h3>
+                    <p style="color: #666; line-height: 1.6; margin-bottom: 15px;">Contenus éditoriaux dédiés à votre entreprise ou produit.</p>
+                    <div style="color: #e74c3c; font-weight: bold; font-size: 1.1rem;">À partir de 75 000 FCFA</div>
+                </div>
+
+                <div style="background: white; border-radius: 15px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; border-top: 4px solid #f39c12;">
+                    <div style="width: 70px; height: 70px; background: linear-gradient(135deg, #f39c12, #e67e22); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: white; font-size: 1.8rem;">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3 style="color: #333; margin-bottom: 15px; font-size: 1.2rem;">Digital & Web</h3>
+                    <p style="color: #666; line-height: 1.6; margin-bottom: 15px;">Bannières sur notre site web et réseaux sociaux.</p>
+                    <div style="color: #f39c12; font-weight: bold; font-size: 1.1rem;">À partir de 25 000 FCFA</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pourquoi LCA TV -->
+        <div style="margin-bottom: 50px;">
+            <h2 style="font-size: 1.8rem; color: #333; margin-bottom: 30px; font-weight: bold; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-star" style="color: #f39c12;"></i>
+                Pourquoi Choisir LCA TV ?
+            </h2>
+            
+            <div style="background: white; border-radius: 15px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;">
+                    <div style="text-align: center;">
+                        <div style="width: 60px; height: 60px; background: #28a745; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; color: white; font-size: 1.5rem;">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h4 style="color: #333; margin-bottom: 10px;">2M+ Téléspectateurs</h4>
+                        <p style="color: #666; font-size: 0.9rem; line-height: 1.5;">Une audience fidèle et engagée à travers tout le Burkina Faso.</p>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <div style="width: 60px; height: 60px; background: #4472c4; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; color: white; font-size: 1.5rem;">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h4 style="color: #333; margin-bottom: 10px;">24h/24 de Diffusion</h4>
+                        <p style="color: #666; font-size: 0.9rem; line-height: 1.5;">Votre message diffusé en continu pour un impact maximum.</p>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <div style="width: 60px; height: 60px; background: #e74c3c; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; color: white; font-size: 1.5rem;">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h4 style="color: #333; margin-bottom: 10px;">ROI Mesurable</h4>
+                        <p style="color: #666; font-size: 0.9rem; line-height: 1.5;">Rapports détaillés sur la performance de vos campagnes.</p>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <div style="width: 60px; height: 60px; background: #f39c12; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; color: white; font-size: 1.5rem;">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <h4 style="color: #333; margin-bottom: 10px;">Accompagnement Personnalisé</h4>
+                        <p style="color: #666; font-size: 0.9rem; line-height: 1.5;">Notre équipe vous accompagne de A à Z dans vos projets.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulaire de Contact -->
+        <div style="background: white; border-radius: 15px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-bottom: 40px;">
+            <h2 style="color: #28a745; margin-bottom: 25px; font-size: 1.5rem; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-envelope"></i>
+                Demandez un Devis Gratuit
+            </h2>
+            
+            <form id="devisForm" style="display: grid; gap: 20px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <label style="display: block; color: #333; font-weight: 600; margin-bottom: 8px;">Entreprise *</label>
+                        <input type="text" name="company" required style="width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border-color 0.3s ease;">
+                    </div>
+                    <div>
+                        <label style="display: block; color: #333; font-weight: 600; margin-bottom: 8px;">Contact *</label>
+                        <input type="text" name="contact" required style="width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border-color 0.3s ease;">
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <label style="display: block; color: #333; font-weight: 600; margin-bottom: 8px;">Email *</label>
+                        <input type="email" name="email" required style="width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border-color 0.3s ease;">
+                    </div>
+                    <div>
+                        <label style="display: block; color: #333; font-weight: 600; margin-bottom: 8px;">Téléphone *</label>
+                        <input type="tel" name="phone" required style="width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border-color 0.3s ease;">
+                    </div>
+                </div>
+                
+                <div>
+                    <label style="display: block; color: #333; font-weight: 600; margin-bottom: 8px;">Type de Publicité</label>
+                    <select name="type" style="width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border-color 0.3s ease;">
+                        <option value="spot">Spot TV</option>
+                        <option value="parrainage">Parrainage d'émission</option>
+                        <option value="reportage">Publi-reportage</option>
+                        <option value="digital">Digital & Web</option>
+                        <option value="package">Package complet</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label style="display: block; color: #333; font-weight: 600; margin-bottom: 8px;">Budget Prévisionnel</label>
+                    <select name="budget" style="width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border-color 0.3s ease;">
+                        <option value="25-50k">25 000 - 50 000 FCFA</option>
+                        <option value="50-100k">50 000 - 100 000 FCFA</option>
+                        <option value="100-250k">100 000 - 250 000 FCFA</option>
+                        <option value="250-500k">250 000 - 500 000 FCFA</option>
+                        <option value="500k+">Plus de 500 000 FCFA</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label style="display: block; color: #333; font-weight: 600; margin-bottom: 8px;">Décrivez votre Projet *</label>
+                    <textarea name="project" required rows="4" style="width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; resize: vertical; transition: border-color 0.3s ease;" placeholder="Décrivez vos objectifs, votre cible, vos attentes..."></textarea>
+                </div>
+                
+                <button type="submit" style="background: linear-gradient(135deg, #28a745, #20693e); color: white; padding: 15px 30px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: transform 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <i class="fas fa-paper-plane"></i>
+                    Demander un Devis Gratuit
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <!-- Contact Commercial -->
+        <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.1); margin-bottom: 25px;">
+            <h3 style="background: #28a745; color: white; padding: 15px 20px; margin: 0; font-size: 16px; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-user-tie"></i>
+                Équipe Commerciale
+            </h3>
+            <div style="padding: 20px;">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #28a745, #20693e); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; color: white; font-size: 2rem;">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <h4 style="color: #333; margin-bottom: 10px;">Service Commercial</h4>
+                    <p style="color: #28a745; font-weight: bold; font-size: 1.1rem;">+226 25 36 45 80</p>
+                    <p style="color: #666; font-size: 0.9rem;">commercial@lcatv.bf</p>
+                </div>
+                
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center;">
+                    <h5 style="color: #333; margin-bottom: 10px;">Horaires</h5>
+                    <p style="color: #666; font-size: 0.9rem; margin: 0;">Lundi - Vendredi<br>8h00 - 17h00</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tarifs Express -->
+        <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.1); margin-bottom: 25px;">
+            <h3 style="background: #4472c4; color: white; padding: 15px 20px; margin: 0; font-size: 16px; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-tags"></i>
+                Tarifs Express
+            </h3>
+            <div style="padding: 20px;">
+                <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
+                    <h5 style="color: #333; font-size: 0.9rem; margin-bottom: 5px;">Spot 30 secondes</h5>
+                    <p style="color: #28a745; font-weight: bold; margin: 0;">50 000 FCFA</p>
+                </div>
+                
+                <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
+                    <h5 style="color: #333; font-size: 0.9rem; margin-bottom: 5px;">Bannière Web (1 mois)</h5>
+                    <p style="color: #4472c4; font-weight: bold; margin: 0;">25 000 FCFA</p>
+                </div>
+                
+                <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
+                    <h5 style="color: #333; font-size: 0.9rem; margin-bottom: 5px;">Parrainage Émission</h5>
+                    <p style="color: #e74c3c; font-weight: bold; margin: 0;">100 000 FCFA</p>
+                </div>
+                
+                <div>
+                    <h5 style="color: #333; font-size: 0.9rem; margin-bottom: 5px;">Package Complet</h5>
+                    <p style="color: #f39c12; font-weight: bold; margin: 0;">Sur devis</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Témoignages -->
+        <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.1); margin-bottom: 25px;">
+            <h3 style="background: #e74c3c; color: white; padding: 15px 20px; margin: 0; font-size: 16px; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-quote-left"></i>
+                Témoignages
+            </h3>
+            <div style="padding: 20px;">
+                <div style="margin-bottom: 20px;">
+                    <p style="color: #666; font-size: 0.9rem; font-style: italic; margin-bottom: 10px;">"Grâce à LCA TV, notre notoriété a augmenté de 300% en 6 mois."</p>
+                    <div style="color: #333; font-weight: bold; font-size: 0.8rem;">- Entreprise SOGEBAF</div>
+                </div>
+                
+                <div>
+                    <p style="color: #666; font-size: 0.9rem; font-style: italic; margin-bottom: 10px;">"Un partenariat professionnel et des résultats concrets."</p>
+                    <div style="color: #333; font-weight: bold; font-size: 0.8rem;">- Orange Burkina</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div style="background: linear-gradient(135deg, #28a745, #20693e); border-radius: 12px; padding: 25px; text-align: center; color: white;">
+            <div style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 1.5rem;">
+                <i class="fas fa-rocket"></i>
+            </div>
+            <h4 style="margin-bottom: 15px;">Prêt à Décoller ?</h4>
+            <p style="font-size: 0.9rem; margin-bottom: 20px; opacity: 0.9;">Contactez-nous dès aujourd'hui pour booster votre visibilité !</p>
+            <button onclick="document.getElementById('devisForm').scrollIntoView()" style="background: white; color: #28a745; border: none; padding: 12px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; width: 100%;">
+                Demander un Devis
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+input:focus, textarea:focus, select:focus {
+    border-color: #28a745 !important;
+    outline: none;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .main-content > div {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+    }
+    
+    form > div:first-child,
+    form > div:nth-child(2) {
+        grid-template-columns: 1fr !important;
+    }
+}
+</style>
+
+<script>
+// Form submission
+document.getElementById('devisForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Get form data
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+    
+    // Simple validation
+    if (!data.company || !data.contact || !data.email || !data.phone || !data.project) {
+        alert('Veuillez remplir tous les champs obligatoires.');
+        return;
+    }
+    
+    // Simulate form submission
+    const button = this.querySelector('button[type="submit"]');
+    const originalText = button.innerHTML;
+    
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi en cours...';
+    button.disabled = true;
+    
+    setTimeout(() => {
+        alert('Demande de devis envoyée avec succès ! Notre équipe commerciale vous contactera dans les 24h.');
+        this.reset();
+        button.innerHTML = originalText;
+        button.disabled = false;
+    }, 2000);
+});
+</script>
+{% endblock %}

@@ -1,0 +1,4 @@
+YOUTUBE_API_KEY=AIzaSyApOC9fHZmVkyZvP48H8PapiFekMn9gsVo
+YOUTUBE_CHANNEL_ID=UCYourChannelIDHere
+FLASK_SECRET_KEY=lca-tv-secret-key-2024
+FLASK_ENV=development

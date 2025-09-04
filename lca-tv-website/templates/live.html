@@ -1,0 +1,366 @@
+{% extends "base.html" %}
+
+{% block title %}En Direct - LCA TV{% endblock %}
+
+{% block content %}
+<div style="margin-top: 0;">
+    <!-- Live Header -->
+    <div style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 30px 0; text-align: center;">
+        <div style="max-width: 1400px; margin: 0 auto; padding: 0 20px;">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px;">
+                <div style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem;">
+                    <i class="fas fa-broadcast-tower"></i>
+                </div>
+                <div>
+                    <h1 style="font-size: 2.5rem; font-weight: bold; margin-bottom: 5px;">Diffusion en Direct</h1>
+                    <p style="font-size: 1.2rem; opacity: 0.9;">LCA TV - La chaîne au cœur de l'Afrique</p>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 30px; font-size: 1.1rem;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="width: 12px; height: 12px; background: white; border-radius: 50%; animation: pulse 2s infinite;"></span>
+                    <span style="font-weight: bold;">EN DIRECT MAINTENANT</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-users"></i>
+                    <span id="viewer-count">Chargement...</span> spectateurs
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video and Chat Layout -->
+    <div style="max-width: 1400px; margin: 40px auto; padding: 0 20px;">
+        <div style="display: grid; grid-template-columns: 1fr 350px; gap: 30px;">
+            <!-- Video Player -->
+            <div style="background: #000; border-radius: 15px; overflow: hidden; position: relative; aspect-ratio: 16/9;">
+                <div style="position: absolute; top: 15px; left: 15px; background: #e74c3c; color: white; padding: 8px 15px; border-radius: 20px; font-weight: bold; font-size: 12px; z-index: 10; display: flex; align-items: center; gap: 8px;">
+                    <span style="width: 8px; height: 8px; background: white; border-radius: 50%; animation: pulse 2s infinite;"></span>
+                    DIRECT
+                </div>
+                
+                <iframe 
+                    id="live-player"
+                    src="https://www.youtube.com/embed/ixQEmhTbvTI?autoplay=1&mute=0&controls=1&rel=0&modestbranding=1" 
+                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
+                    allowfullscreen
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+                </iframe>
+            </div>
+
+            <!-- Chat and Info Sidebar -->
+            <div>
+                <!-- Live Status -->
+                <div style="background: white; border-radius: 15px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-bottom: 25px;">
+                    <h3 style="color: #333; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-info-circle" style="color: #4472c4;"></i>
+                        Informations du Direct
+                    </h3>
+                    
+                    <div id="live-info" style="display: grid; gap: 15px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #f8f9fa; border-radius: 8px;">
+                            <span style="color: #666; font-weight: 600;">Statut:</span>
+                            <span id="live-status" style="background: #28a745; color: white; padding: 4px 12px; border-radius: 15px; font-size: 0.8rem; font-weight: bold;">EN DIRECT</span>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #f8f9fa; border-radius: 8px;">
+                            <span style="color: #666; font-weight: 600;">Spectateurs:</span>
+                            <span id="live-viewers" style="color: #e74c3c; font-weight: bold;">Chargement...</span>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #f8f9fa; border-radius: 8px;">
+                            <span style="color: #666; font-weight: 600;">Durée:</span>
+                            <span id="live-duration" style="color: #4472c4; font-weight: bold;">--:--</span>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px; text-align: center;">
+                        <a href="https://youtu.be/ixQEmhTbvTI" target="_blank" style="background: #e74c3c; color: white; padding: 12px 25px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-weight: 600;">
+                            <i class="fab fa-youtube"></i>
+                            Voir sur YouTube
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Chat Simulation -->
+                <div style="background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-bottom: 25px;">
+                    <div style="background: #28a745; color: white; padding: 15px 20px; display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-comments"></i>
+                        <h3 style="margin: 0; font-size: 1.1rem;">Chat en Direct</h3>
+                    </div>
+                    
+                    <div id="chat-messages" style="height: 300px; overflow-y: auto; padding: 20px;">
+                        <div class="message" style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #f0f0f0;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                                <span style="font-weight: 600; color: #28a745; font-size: 0.9rem;">Marie K.</span>
+                                <span style="font-size: 0.8rem; color: #999;">19:24</span>
+                            </div>
+                            <div style="font-size: 0.9rem; line-height: 1.4; color: #333;">Excellente émission ! 👏</div>
+                        </div>
+                        
+                        <div class="message" style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #f0f0f0;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                                <span style="font-weight: 600; color: #28a745; font-size: 0.9rem;">Jean B.</span>
+                                <span style="font-size: 0.8rem; color: #999;">19:25</span>
+                            </div>
+                            <div style="font-size: 0.9rem; line-height: 1.4; color: #333;">Merci pour ces informations importantes</div>
+                        </div>
+                        
+                        <div class="message" style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #f0f0f0;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                                <span style="font-weight: 600; color: #28a745; font-size: 0.9rem;">Fatou S.</span>
+                                <span style="font-size: 0.8rem; color: #999;">19:26</span>
+                            </div>
+                            <div style="font-size: 0.9rem; line-height: 1.4; color: #333;">Vive LCA TV ! 🇧🇫</div>
+                        </div>
+                    </div>
+                    
+                    <div style="padding: 20px; border-top: 1px solid #eee;">
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="message-input" placeholder="Votre message..." style="flex: 1; padding: 12px 15px; border: 2px solid #eee; border-radius: 25px; outline: none; font-size: 0.9rem;">
+                            <button onclick="sendMessage()" style="background: #28a745; color: white; border: none; padding: 12px 20px; border-radius: 25px; cursor: pointer; font-weight: 600; font-size: 0.9rem;">
+                                Envoyer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Program Schedule -->
+                <div style="background: white; border-radius: 15px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                    <h3 style="color: #333; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-calendar-alt" style="color: #f39c12;"></i>
+                        Programme du Jour
+                    </h3>
+                    
+                    <div style="display: grid; gap: 15px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-left: 4px solid #28a745; background: #f8f9fa;">
+                            <div>
+                                <div style="font-weight: 600; color: #333;">Journal du Matin</div>
+                                <div style="font-size: 0.8rem; color: #666;">Actualités nationales</div>
+                            </div>
+                            <div style="color: #28a745; font-weight: bold;">07:30</div>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-left: 4px solid #e74c3c; background: #fff5f5;">
+                            <div>
+                                <div style="font-weight: 600; color: #333;">En Direct</div>
+                                <div style="font-size: 0.8rem; color: #666;">Émission spéciale</div>
+                            </div>
+                            <div style="color: #e74c3c; font-weight: bold;">LIVE</div>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-left: 4px solid #4472c4; background: #f8f9fa;">
+                            <div>
+                                <div style="font-weight: 600; color: #333;">Journal du Soir</div>
+                                <div style="font-size: 0.8rem; color: #666;">Édition principale</div>
+                            </div>
+                            <div style="color: #4472c4; font-weight: bold;">19:00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional Info Section -->
+    <div style="background: white; margin-top: 40px; padding: 40px 0;">
+        <div style="max-width: 1400px; margin: 0 auto; padding: 0 20px;">
+            <div style="text-align: center; margin-bottom: 40px;">
+                <h2 style="font-size: 2rem; color: #333; margin-bottom: 15px;">Regardez LCA TV en Direct</h2>
+                <p style="color: #666; font-size: 1.1rem; max-width: 600px; margin: 0 auto;">Suivez toute l'actualité burkinabè et internationale avec notre équipe de journalistes professionnels, 24h/24 et 7j/7.</p>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;">
+                <div style="text-align: center; padding: 30px; border-radius: 15px; background: #f8f9fa;">
+                    <div style="width: 70px; height: 70px; background: #28a745; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: white; font-size: 1.8rem;">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <h3 style="color: #333; margin-bottom: 15px;">Actualités</h3>
+                    <p style="color: #666; line-height: 1.6;">Informations nationales et internationales en temps réel</p>
+                </div>
+                
+                <div style="text-align: center; padding: 30px; border-radius: 15px; background: #f8f9fa;">
+                    <div style="width: 70px; height: 70px; background: #4472c4; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: white; font-size: 1.8rem;">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3 style="color: #333; margin-bottom: 15px;">Débats</h3>
+                    <p style="color: #666; line-height: 1.6;">Discussions et analyses avec nos experts</p>
+                </div>
+                
+                <div style="text-align: center; padding: 30px; border-radius: 15px; background: #f8f9fa;">
+                    <div style="width: 70px; height: 70px; background: #e74c3c; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: white; font-size: 1.8rem;">
+                        <i class="fas fa-futbol"></i>
+                    </div>
+                    <h3 style="color: #333; margin-bottom: 15px;">Sport</h3>
+                    <p style="color: #666; line-height: 1.6;">Suivez les Étalons et tout le sport burkinabè</p>
+                </div>
+                
+                <div style="text-align: center; padding: 30px; border-radius: 15px; background: #f8f9fa;">
+                    <div style="width: 70px; height: 70px; background: #f39c12; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: white; font-size: 1.8rem;">
+                        <i class="fas fa-mask"></i>
+                    </div>
+                    <h3 style="color: #333; margin-bottom: 15px;">Culture</h3>
+                    <p style="color: #666; line-height: 1.6;">Découvrez la richesse culturelle du Burkina Faso</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+#message-input:focus {
+    border-color: #28a745 !important;
+}
+
+@media (max-width: 768px) {
+    .main-content > div > div {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+    }
+}
+</style>
+
+<script>
+// Chat functionality
+function sendMessage() {
+    const input = document.getElementById('message-input');
+    const message = input.value.trim();
+    
+    if (message) {
+        const chatMessages = document.getElementById('chat-messages');
+        const time = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+        
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message';
+        messageDiv.style.cssText = 'margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #f0f0f0;';
+        messageDiv.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                <span style="font-weight: 600; color: #28a745; font-size: 0.9rem;">Vous</span>
+                <span style="font-size: 0.8rem; color: #999;">${time}</span>
+            </div>
+            <div style="font-size: 0.9rem; line-height: 1.4; color: #333;">${message}</div>
+        `;
+        
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        input.value = '';
+        
+        // Remove old messages if too many
+        const messages = chatMessages.querySelectorAll('.message');
+        if (messages.length > 10) {
+            messages[0].remove();
+        }
+    }
+}
+
+// Enter key to send message
+document.getElementById('message-input').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        sendMessage();
+    }
+});
+
+// Fetch live stream info
+async function fetchLiveInfo() {
+    try {
+        const response = await fetch('/api/live-status');
+        const liveInfo = await response.json();
+        
+        if (liveInfo) {
+            // Update live status
+            const statusElement = document.getElementById('live-status');
+            if (liveInfo.is_live) {
+                statusElement.textContent = 'EN DIRECT';
+                statusElement.style.background = '#28a745';
+            } else {
+                statusElement.textContent = 'HORS LIGNE';
+                statusElement.style.background = '#6c757d';
+            }
+            
+            // Update viewer count
+            if (liveInfo.concurrent_viewers) {
+                const viewerCount = parseInt(liveInfo.concurrent_viewers).toLocaleString();
+                document.getElementById('viewer-count').textContent = viewerCount;
+                document.getElementById('live-viewers').textContent = viewerCount;
+            } else {
+                document.getElementById('viewer-count').textContent = 'Non disponible';
+                document.getElementById('live-viewers').textContent = 'Non disponible';
+            }
+            
+            // Update duration if available
+            if (liveInfo.actual_start) {
+                const startTime = new Date(liveInfo.actual_start);
+                const now = new Date();
+                const duration = Math.floor((now - startTime) / 1000 / 60); // minutes
+                document.getElementById('live-duration').textContent = duration + ' min';
+            }
+        }
+    } catch (error) {
+        console.error('Error fetching live info:', error);
+        document.getElementById('viewer-count').textContent = 'Non disponible';
+        document.getElementById('live-viewers').textContent = 'Non disponible';
+    }
+}
+
+// Simulate random chat messages
+const sampleUsers = ['Ahmed T.', 'Salimata D.', 'Ibrahim K.', 'Aicha B.', 'Moussa S.', 'Fatima L.', 'Ousmane K.'];
+const sampleMessages = [
+    'Très bonne émission ! 👏',
+    'Merci LCA TV pour ces informations',
+    'Excellent travail journalistique',
+    'Continuez comme ça',
+    'Vive le Burkina Faso ! 🇧🇫',
+    'Bravo à toute l\'équipe',
+    'Information très utile',
+    'Nous vous soutenons',
+    'Qualité audio parfaite',
+    'Merci pour le direct'
+];
+
+function addRandomMessage() {
+    const user = sampleUsers[Math.floor(Math.random() * sampleUsers.length)];
+    const message = sampleMessages[Math.floor(Math.random() * sampleMessages.length)];
+    const time = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+    
+    const chatMessages = document.getElementById('chat-messages');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'message';
+    messageDiv.style.cssText = 'margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #f0f0f0;';
+    messageDiv.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+            <span style="font-weight: 600; color: #28a745; font-size: 0.9rem;">${user}</span>
+            <span style="font-size: 0.8rem; color: #999;">${time}</span>
+        </div>
+        <div style="font-size: 0.9rem; line-height: 1.4; color: #333;">${message}</div>
+    `;
+    
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    
+    // Remove old messages if too many
+    const messages = chatMessages.querySelectorAll('.message');
+    if (messages.length > 10) {
+        messages[0].remove();
+    }
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    // Fetch live info immediately
+    fetchLiveInfo();
+    
+    // Auto-scroll chat to bottom
+    const chatMessages = document.getElementById('chat-messages');
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    
+    // Set up intervals
+    setInterval(fetchLiveInfo, 30000); // Update live info every 30 seconds
+    setInterval(addRandomMessage, Math.random() * 20000 + 15000); // Add random messages every 15-35 seconds
+});
+</script>
+{% endblock %}

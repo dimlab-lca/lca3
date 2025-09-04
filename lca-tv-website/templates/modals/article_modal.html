@@ -1,0 +1,353 @@
+<!-- Article Management Modal -->
+<div id="article-modal" class="modal">
+    <div class="modal-content large">
+        <div class="modal-header">
+            <h3 id="article-modal-title">Nouvel Article</h3>
+            <button class="modal-close" onclick="closeModal('article-modal')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <form id="article-form" onsubmit="saveArticle(event)">
+            <div class="modal-body">
+                <div class="form-section">
+                    <h4>Informations de base</h4>
+                    <div class="form-group">
+                        <label for="article-title">Titre *</label>
+                        <input type="text" id="article-title" name="title" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="article-category">Catégorie *</label>
+                            <select id="article-category" name="category" required>
+                                <option value="">Sélectionner une catégorie</option>
+                                <option value="actualites">Actualités</option>
+                                <option value="politique">Politique</option>
+                                <option value="economie">Économie</option>
+                                <option value="sport">Sport</option>
+                                <option value="culture">Culture</option>
+                                <option value="societe">Société</option>
+                                <option value="international">International</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="article-status">Statut</label>
+                            <select id="article-status" name="status">
+                                <option value="draft">Brouillon</option>
+                                <option value="published">Publié</option>
+                                <option value="scheduled">Programmé</option>
+                                <option value="archived">Archivé</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="article-excerpt">Extrait</label>
+                        <textarea id="article-excerpt" name="excerpt" rows="3" placeholder="Résumé court de l'article..."></textarea>
+                        <small>Résumé qui apparaîtra dans les listes d'articles</small>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h4>Image à la une</h4>
+                    <div class="image-upload-area" id="featured-image-area">
+                        <div class="upload-placeholder">
+                            <i class="fas fa-image"></i>
+                            <p>Cliquez pour sélectionner une image ou glissez-déposez</p>
+                            <input type="file" id="featured-image" name="featured_image" accept="image/*" style="display: none;">
+                        </div>
+                        <div class="image-preview" id="image-preview" style="display: none;">
+                            <img id="preview-img" src="" alt="Preview">
+                            <button type="button" class="remove-image" onclick="removeFeaturedImage()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h4>Contenu de l'article</h4>
+                    <div class="editor-toolbar">
+                        <button type="button" class="editor-btn" onclick="formatText('bold')">
+                            <i class="fas fa-bold"></i>
+                        </button>
+                        <button type="button" class="editor-btn" onclick="formatText('italic')">
+                            <i class="fas fa-italic"></i>
+                        </button>
+                        <button type="button" class="editor-btn" onclick="formatText('underline')">
+                            <i class="fas fa-underline"></i>
+                        </button>
+                        <div class="toolbar-separator"></div>
+                        <button type="button" class="editor-btn" onclick="formatText('insertUnorderedList')">
+                            <i class="fas fa-list-ul"></i>
+                        </button>
+                        <button type="button" class="editor-btn" onclick="formatText('insertOrderedList')">
+                            <i class="fas fa-list-ol"></i>
+                        </button>
+                        <div class="toolbar-separator"></div>
+                        <button type="button" class="editor-btn" onclick="insertLink()">
+                            <i class="fas fa-link"></i>
+                        </button>
+                        <button type="button" class="editor-btn" onclick="insertImage()">
+                            <i class="fas fa-image"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="editor-container">
+                        <div id="article-editor" class="rich-editor" contenteditable="true" placeholder="Rédigez votre article ici..."></div>
+                        <textarea id="article-content" name="content" style="display: none;"></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h4>Options avancées</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="article-author">Auteur</label>
+                            <input type="text" id="article-author" name="author" value="{{ session.user }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="publish-date">Date de publication</label>
+                            <input type="datetime-local" id="publish-date" name="published_at">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="article-tags">Tags</label>
+                        <input type="text" id="article-tags" name="tags" placeholder="tag1, tag2, tag3">
+                        <small>Séparez les tags par des virgules</small>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <label>
+                            <input type="checkbox" id="article-featured" name="is_featured">
+                            Article à la une
+                        </label>
+                        <label>
+                            <input type="checkbox" id="article-breaking" name="is_breaking">
+                            Actualité urgente
+                        </label>
+                        <label>
+                            <input type="checkbox" id="allow-comments" name="allow_comments" checked>
+                            Autoriser les commentaires
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h4>SEO</h4>
+                    <div class="form-group">
+                        <label for="meta-description">Meta Description</label>
+                        <textarea id="meta-description" name="meta_description" rows="2" placeholder="Description pour les moteurs de recherche..."></textarea>
+                        <small>Recommandé: 150-160 caractères</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="article-slug">URL (slug)</label>
+                        <input type="text" id="article-slug" name="slug" placeholder="mon-article-url">
+                        <small>Laissez vide pour générer automatiquement</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeModal('article-modal')">
+                    Annuler
+                </button>
+                <button type="button" class="btn-secondary" onclick="saveArticleDraft()">
+                    <i class="fas fa-save"></i> Sauvegarder brouillon
+                </button>
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-paper-plane"></i> Publier
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+.image-upload-area {
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.image-upload-area:hover {
+    border-color: #28a745;
+    background: #f8f9fa;
+}
+
+.upload-placeholder {
+    color: #666;
+}
+
+.upload-placeholder i {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #ccc;
+}
+
+.upload-placeholder p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.image-preview {
+    position: relative;
+    display: inline-block;
+}
+
+.image-preview img {
+    max-width: 200px;
+    max-height: 150px;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.remove-image {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+}
+
+.editor-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 10px;
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+}
+
+.editor-btn {
+    background: none;
+    border: none;
+    padding: 6px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #666;
+    transition: all 0.3s ease;
+}
+
+.editor-btn:hover {
+    background: #e9ecef;
+    color: #333;
+}
+
+.editor-btn.active {
+    background: #28a745;
+    color: white;
+}
+
+.toolbar-separator {
+    width: 1px;
+    height: 20px;
+    background: #ddd;
+    margin: 0 5px;
+}
+
+.editor-container {
+    position: relative;
+}
+
+.rich-editor {
+    min-height: 300px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 0 0 6px 6px;
+    background: white;
+    outline: none;
+    line-height: 1.6;
+    font-family: inherit;
+}
+
+.rich-editor:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.2);
+}
+
+.rich-editor[placeholder]:empty::before {
+    content: attr(placeholder);
+    color: #999;
+    font-style: italic;
+}
+
+.rich-editor h1, .rich-editor h2, .rich-editor h3 {
+    margin: 20px 0 10px 0;
+    color: #333;
+}
+
+.rich-editor p {
+    margin: 10px 0;
+}
+
+.rich-editor ul, .rich-editor ol {
+    margin: 10px 0;
+    padding-left: 30px;
+}
+
+.rich-editor blockquote {
+    margin: 15px 0;
+    padding: 10px 20px;
+    border-left: 4px solid #28a745;
+    background: #f8f9fa;
+    font-style: italic;
+}
+
+.rich-editor img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+    margin: 10px 0;
+}
+
+.rich-editor a {
+    color: #28a745;
+    text-decoration: underline;
+}
+
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: normal;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .editor-toolbar {
+        flex-wrap: wrap;
+    }
+    
+    .rich-editor {
+        min-height: 200px;
+    }
+}
+</style>

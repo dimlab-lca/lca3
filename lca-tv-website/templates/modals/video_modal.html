@@ -1,0 +1,282 @@
+<!-- Video Management Modal -->
+<div id="video-modal" class="modal">
+    <div class="modal-content large">
+        <div class="modal-header">
+            <h3 id="video-modal-title">Ajouter une Vidéo</h3>
+            <button class="modal-close" onclick="closeModal('video-modal')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <form id="video-form" onsubmit="saveVideo(event)">
+            <div class="modal-body">
+                <div class="form-section">
+                    <h4>Source de la Vidéo</h4>
+                    <div class="video-source-tabs">
+                        <button type="button" class="source-tab active" data-source="youtube" onclick="switchVideoSource('youtube')">
+                            <i class="fab fa-youtube"></i> YouTube
+                        </button>
+                        <button type="button" class="source-tab" data-source="upload" onclick="switchVideoSource('upload')">
+                            <i class="fas fa-upload"></i> Upload
+                        </button>
+                        <button type="button" class="source-tab" data-source="manual" onclick="switchVideoSource('manual')">
+                            <i class="fas fa-edit"></i> Manuel
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- YouTube Source -->
+                <div id="youtube-source" class="source-content active">
+                    <div class="form-group">
+                        <label for="youtube-url">URL YouTube *</label>
+                        <input type="url" id="youtube-url" name="youtube_url" placeholder="https://www.youtube.com/watch?v=...">
+                        <button type="button" class="btn-secondary" onclick="fetchYouTubeInfo()" style="margin-top: 10px;">
+                            <i class="fas fa-download"></i> Récupérer les informations
+                        </button>
+                    </div>
+                    
+                    <div id="youtube-preview" class="youtube-preview" style="display: none;">
+                        <div class="preview-thumbnail">
+                            <img id="preview-thumbnail" src="" alt="Thumbnail">
+                        </div>
+                        <div class="preview-info">
+                            <h5 id="preview-title"></h5>
+                            <p id="preview-description"></p>
+                            <small id="preview-duration"></small>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Upload Source -->
+                <div id="upload-source" class="source-content">
+                    <div class="form-group">
+                        <label for="video-file">Fichier Vidéo *</label>
+                        <input type="file" id="video-file" name="video_file" accept="video/*">
+                        <small>Formats supportés: MP4, WebM, AVI (max 500MB)</small>
+                    </div>
+                    
+                    <div class="upload-progress" id="upload-progress" style="display: none;">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                        <span id="progress-text">0%</span>
+                    </div>
+                </div>
+                
+                <!-- Manual Source -->
+                <div id="manual-source" class="source-content">
+                    <div class="form-group">
+                        <label for="video-url">URL de la Vidéo *</label>
+                        <input type="url" id="video-url" name="video_url" placeholder="https://example.com/video.mp4">
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h4>Informations de la Vidéo</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="video-title">Titre *</label>
+                            <input type="text" id="video-title" name="title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="video-category">Catégorie *</label>
+                            <select id="video-category" name="category" required>
+                                <option value="">Sélectionner une catégorie</option>
+                                <option value="actualites">Actualités</option>
+                                <option value="debats">Débats</option>
+                                <option value="culture">Culture</option>
+                                <option value="sport">Sport</option>
+                                <option value="jeunesse">Jeunesse</option>
+                                <option value="economie">Économie</option>
+                                <option value="politique">Politique</option>
+                                <option value="sante">Santé</option>
+                                <option value="societe">Société</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="video-description">Description</label>
+                        <textarea id="video-description" name="description" rows="4" placeholder="Description de la vidéo..."></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="video-duration">Durée</label>
+                            <input type="text" id="video-duration" name="duration" placeholder="00:15:30">
+                            <small>Format: HH:MM:SS</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="published-date">Date de publication</label>
+                            <input type="datetime-local" id="published-date" name="published_at">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="video-thumbnail">Miniature personnalisée</label>
+                        <input type="file" id="video-thumbnail" name="thumbnail" accept="image/*">
+                        <small>Laissez vide pour utiliser la miniature automatique</small>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h4>Options</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="video-status">Statut</label>
+                            <select id="video-status" name="status">
+                                <option value="published">Publié</option>
+                                <option value="draft">Brouillon</option>
+                                <option value="private">Privé</option>
+                                <option value="scheduled">Programmé</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="checkbox-group">
+                                <label>
+                                    <input type="checkbox" id="video-featured" name="is_featured">
+                                    Vidéo à la une
+                                </label>
+                                <label>
+                                    <input type="checkbox" id="video-live" name="is_live">
+                                    Diffusion en direct
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="video-tags">Tags</label>
+                        <input type="text" id="video-tags" name="tags" placeholder="tag1, tag2, tag3">
+                        <small>Séparez les tags par des virgules</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeModal('video-modal')">
+                    Annuler
+                </button>
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-save"></i> Sauvegarder
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+.video-source-tabs {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 20px;
+}
+
+.source-tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    background: white;
+    color: #666;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.source-tab:hover,
+.source-tab.active {
+    background: #28a745;
+    color: white;
+    border-color: #28a745;
+}
+
+.source-content {
+    display: none;
+}
+
+.source-content.active {
+    display: block;
+}
+
+.youtube-preview {
+    display: flex;
+    gap: 15px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+.preview-thumbnail {
+    flex-shrink: 0;
+}
+
+.preview-thumbnail img {
+    width: 120px;
+    height: 68px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.preview-info {
+    flex: 1;
+}
+
+.preview-info h5 {
+    margin: 0 0 8px 0;
+    color: #333;
+    font-size: 1rem;
+}
+
+.preview-info p {
+    margin: 0 0 8px 0;
+    color: #666;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.preview-info small {
+    color: #888;
+    font-size: 0.8rem;
+}
+
+.upload-progress {
+    margin-top: 15px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #e9ecef;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #28a745;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: normal;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+</style>

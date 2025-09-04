@@ -1,0 +1,1154 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Welcome Slider Section with Working Auto-Play --<div class="welcome-slider-container">
+    <div class="welcome-slider" id="mainSlider">
+        <div class="slider-wrapper">
+            <div class="slide active" data-slide="1">
+                <div class="slide-content">
+                    <div class="slide-image">
+                        <img src="{{ url_for('static', filename='images/slider/LOGO LCA.png') }}" alt="LCA TV - Bienvenue" onerror="this.src='{{ url_for('static', filename='images/slider1.jpg') }}'">
+                        <div class="slide-overlay"></div>
+                    </div>
+                    <div class="slide-text">
+                        <h2>Bienvenue sur LCA TV</h2>
+                        <p>Votre chaîne de référence au Burkina Faso pour l'information, la culture et le divertissement authentique</p>
+                        <a href="{{ url_for('about') }}" class="slide-btn">Découvrir LCA TV</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slide" data-slide="2">
+                <div class="slide-content">
+                    <div class="slide-image">
+                        <img src="{{ url_for('static', filename='images/slider/FRANC PARLER (TOUS LES MERCREDIS A 20H 40).png') }}" alt="Actualités & Débats" onerror="this.src='{{ url_for('static', filename='images/slider2.jpg') }}'">
+                        <div class="slide-overlay"></div>
+                    </div>
+                    <div class="slide-text">
+                        <h2>Actualités & Débats</h2>
+                        <p>Suivez l'actualité burkinabè et participez aux débats citoyens qui façonnent notre société</p>
+                        <a href="{{ url_for('journal') }}" class="slide-btn">Voir le Journal</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slide" data-slide="3">
+                <div class="slide-content">
+                    <div class="slide-image">
+                        <img src="{{ url_for('static', filename='images/slider/CULTUR_AILES (TOUS LES DIMANCHES A 16H 30).png') }}" alt="Culture & Divertissement" onerror="this.src='{{ url_for('static', filename='images/slider3.jpg') }}'">
+                        <div class="slide-overlay"></div>
+                    </div>
+                    <div class="slide-text">
+                        <h2>Culture & Divertissement</h2>
+                        <p>Découvrez la richesse culturelle du Burkina Faso à travers nos programmes de divertissement</p>
+                        <a href="{{ url_for('emissions') }}" class="slide-btn">Voir nos Émissions</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slide" data-slide="4">
+                <div class="slide-content">
+                    <div class="slide-image">
+                        <img src="{{ url_for('static', filename='images/slider/7 AFRIQUE (TOUS LES DIMANCHES A 13H 00).png') }}" alt="Émissions Spéciales" onerror="this.src='{{ url_for('static', filename='images/slider4.jpg') }}'">
+                        <div class="slide-overlay"></div>
+                    </div>
+                    <div class="slide-text">
+                        <h2>Émissions Spéciales</h2>
+                        <p>Des programmes uniques qui explorent les enjeux contemporains de notre société</p>
+                        <a href="{{ url_for('emissions') }}" class="slide-btn">Découvrir</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slide" data-slide="5">
+                <div class="slide-content">
+                    <div class="slide-image">
+                        <img src="{{ url_for('static', filename='images/slider/QUESTIONS DE FEMMES (TOUS LES LUNDIS A 20H 40).png') }}" alt="Programmes Jeunesse" onerror="this.src='{{ url_for('static', filename='images/slider5.jpg') }}'">
+                        <div class="slide-overlay"></div>
+                    </div>
+                    <div class="slide-text">
+                        <h2>Questions de Femmes</h2>
+                        <p>Une émission dédiée aux femmes, leurs défis et leurs succès dans la société burkinabè</p>
+                        <a href="{{ url_for('emissions') }}" class="slide-btn">Voir les Programmes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slider Navigation -->
+        <div class="slider-nav">
+            <button class="nav-btn prev-btn" onclick="LCASlider.changeSlide(-1)">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="nav-btn next-btn" onclick="LCASlider.changeSlide(1)">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+        
+        <!-- Slider Dots -->
+        <div class="slider-dots">
+            <span class="dot active" onclick="LCASlider.goToSlide(1)"></span>
+            <span class="dot" onclick="LCASlider.goToSlide(2)"></span>
+            <span class="dot" onclick="LCASlider.goToSlide(3)"></span>
+            <span class="dot" onclick="LCASlider.goToSlide(4)"></span>
+            <span class="dot" onclick="LCASlider.goToSlide(5)"></span>
+        </div>
+        
+        <!-- Auto-play Progress Bar -->
+        <div class="auto-play-progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <!-- Auto-play Control -->
+        <div class="auto-play-control">
+            <button id="playPauseBtn" onclick="LCASlider.toggleAutoPlay()">
+                <i class="fas fa-pause"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="home-layout">
+    <div class="content-left">
+        <h1 style="font-size: 32px; color: #28a745; margin-bottom: 10px; text-align: center;">LCA TV - En Direct</h1>
+        <p style="color: #666; margin-bottom: 30px; text-align: center; font-size: 16px;">Votre chaîne de référence au Burkina Faso</p>
+        
+        <div class="video-player" style="background: #000; border-radius: 8px; overflow: hidden; position: relative; padding-bottom: 56.25%; height: 0; margin-bottom: 30px;">
+            <div style="position: absolute; top: 10px; left: 10px; background: #e74c3c; color: white; padding: 8px 12px; border-radius: 4px; font-weight: bold; font-size: 12px; z-index: 10;">
+                EN DIRECT
+            </div>
+            <div style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 8px 12px; border-radius: 4px; font-size: 12px; z-index: 10;" id="viewer-count">
+                2440 spectateurs
+            </div>
+            <iframe 
+                src="https://www.youtube.com/embed/ixQEmhTbvTI?autoplay=1&mute=0&controls=1&rel=0&modestbranding=1" 
+                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+                frameborder="0" 
+                allowfullscreen
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+            </iframe>
+        </div>
+
+        <div class="current-program" style="background: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 40px;">
+            <h3 style="color: #28a745; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-clock"></i>
+                Actuellement à l'antenne
+            </h3>
+            <div style="background: #e74c3c; color: white; padding: 8px 15px; border-radius: 4px; font-weight: bold; display: inline-block; margin-bottom: 10px;">
+                20:00 - 21:00
+            </div>
+            <div style="font-size: 18px; color: #333; margin: 10px 0 5px 0; font-weight: 600;">
+                Journal du Soir
+            </div>
+            <p>Toute l'actualité nationale et internationale avec nos journalistes</p>
+        </div>
+
+        <!-- Programmes Populaires Section -->
+        <div style="margin-bottom: 50px;">
+            <h2 style="font-size: 2rem; color: #333; text-align: center; margin-bottom: 30px; font-weight: bold;">
+                Programmes Populaires
+                <div style="width: 60px; height: 4px; background: #28a745; margin: 10px auto; border-radius: 2px;"></div>
+            </h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 30px;">
+                {% for video in featured_videos %}
+                <div class="program-card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.1); transition: transform 0.3s ease; cursor: pointer;" data-video-id="{{ video.id }}">
+                    <div style="position: relative; height: 180px; background: #f0f0f0; overflow: hidden;">
+                        <img src="{{ video.thumbnail }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; background: rgba(231, 76, 60, 0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem;">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div style="padding: 15px;">
+                        <div style="background: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; display: inline-block; margin-bottom: 8px;">{{ video.published_at[:10] }}</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">{{ video.category|title }}</div>
+                        <div style="color: #666; font-size: 14px; font-style: italic;">"{{ video.title[:30] }}..."</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Weekly Program Grid Section -->
+        <div class="program-grid-section" style="margin-bottom: 50px;">
+            <h2 style="font-size: 2rem; color: #333; text-align: center; margin-bottom: 30px; font-weight: bold;">
+                Grille Hebdomadaire des Programmes
+                <div style="width: 60px; height: 4px; background: #1e5a2e; margin: 10px auto; border-radius: 2px;"></div>
+            </h2>
+            
+            <!-- Weekly Program Grid -->
+            <div class="weekly-grid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 15px; margin-bottom: 30px;">
+                <!-- Monday -->
+                <div class="day-column" style="background: linear-gradient(135deg, #1e5a2e, #2d5a3d); color: white; border-radius: 12px; padding: 20px; box-shadow: 0 8px 25px rgba(30, 90, 46, 0.3);">
+                    <div class="day-header" style="text-align: center; margin-bottom: 15px; border-bottom: 2px solid rgba(255,255,255,0.2); padding-bottom: 10px;">
+                        <h3 style="margin: 0; font-size: 1.1rem;">LUNDI</h3>
+                        <p style="margin: 0; opacity: 0.8; font-size: 0.8rem;">{{ "2024-12-16" }}</p>
+                    </div>
+                    <div class="programs">
+                        <div style="margin-bottom: 12px; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">06h00</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">La Lecture du Jour</div>
+                        </div>
+                        <div style="margin-bottom: 12px; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">07h30</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">Journal du Matin</div>
+                        </div>
+                        <div style="margin-bottom: 12px; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">12h05</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">Ndefou</div>
+                        </div>
+                        <div style="margin-bottom: 12px; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">19h00</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">Journal du Soir</div>
+                        </div>
+                        <div style="padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">20h40</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">Questions de Femmes</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tuesday -->
+                <div class="day-column" style="background: linear-gradient(135deg, #1e5a2e, #2d5a3d); color: white; border-radius: 12px; padding: 20px; box-shadow: 0 8px 25px rgba(30, 90, 46, 0.3);">
+                    <div class="day-header" style="text-align: center; margin-bottom: 15px; border-bottom: 2px solid rgba(255,255,255,0.2); padding-bottom: 10px;">
+                        <h3 style="margin: 0; font-size: 1.1rem;">MARDI</h3>
+                        <p style="margin: 0; opacity: 0.8; font-size: 0.8rem;">{{ "2024-12-17" }}</p>
+                    </div>
+                    <div class="programs">
+                        <div style="margin-bottom: 12px; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">06h00</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">La Lecture du Jour</div>
+                        </div>
+                        <div style="margin-bottom: 12px; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">07h30</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">Journal du Matin</div>
+                        </div>
+                        <div style="margin-bottom: 12px; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">11h00</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">Soleil d'Afrique</div>
+                        </div>
+                        <div style="margin-bottom: 12px; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">19h00</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">Journal du Soir</div>
+                        </div>
+                        <div style="padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">21h00</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">Programmes Spéciaux</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wednesday -->
+                <div class="day-column" style="background: linear-gradient(135deg, #1e5a2e, #2d5a3d); color: white; border-radius: 12px; padding: 20px; box-shadow: 0 8px 25px rgba(30, 90, 46, 0.3);">
+                    <div class="day-header" style="text-align: center; margin-bottom: 15px; border-bottom: 2px solid rgba(255,255,255,0.2); padding-bottom: 10px;">
+                        <h3 style="margin: 0; font-size: 1.1rem;">MERCREDI</h3>
+                        <p style="margin: 0; opacity: 0.8; font-size: 0.8rem;">{{ "2024-12-18" }}</p>
+                    </div>
+                    <div class="programs">
+                        <div style="margin-bottom: 12px; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">06h00</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">La Lecture du Jour</div>
+                        </div>
+                        <div style="margin-bottom: 12px; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">07h30</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">Journal du Matin</div>
+                        </div>
+                        <div style="margin-bottom: 12px; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">13h00</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">7 Afrique</div>
+                        </div>
+                        <div style="margin-bottom: 12px; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">19h00</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">Journal du Soir</div>
+                        </div>
+                        <div style="padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">20h40</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">Franc Parler</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thursday -->
+                <div class="day-column" style="background: linear-gradient(135deg, #1e5a2e, #2d5a3d); color: white; border-radius: 12px; padding: 20px; box-shadow: 0 8px 25px rgba(30, 90, 46, 0.3);">
+                    <div class="day-header" style="text-align: center; margin-bottom: 15px; border-bottom: 2px solid rgba(255,255,255,0.2); padding-bottom: 10px;">
+                        <h3 style="margin: 0; font-size: 1.1rem;">JEUDI</h3>
+                        <p style="margin: 0; opacity: 0.8; font-size: 0.8rem;">{{ "2024-12-19" }}</p>
+                    </div>
+                    <div class="programs">
+                        <div style="margin-bottom: 12px; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">06h00</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">La Lecture du Jour</div>
+                        </div>
+                        <div style="margin-bottom: 12px; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">07h30</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">Journal du Matin</div>
+                        </div>
+                        <div style="margin-bottom: 12px; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">11h00</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">Soleil d'Afrique</div>
+                        </div>
+                        <div style="margin-bottom: 12px; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">16h30</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">Cultur'Ailes</div>
+                        </div>
+                        <div style="padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">19h00</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">Journal du Soir</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Friday -->
+                <div class="day-column" style="background: linear-gradient(135deg, #1e5a2e, #2d5a3d); color: white; border-radius: 12px; padding: 20px; box-shadow: 0 8px 25px rgba(30, 90, 46, 0.3);">
+                    <div class="day-header" style="text-align: center; margin-bottom: 15px; border-bottom: 2px solid rgba(255,255,255,0.2); padding-bottom: 10px;">
+                        <h3 style="margin: 0; font-size: 1.1rem;">VENDREDI</h3>
+                        <p style="margin: 0; opacity: 0.8; font-size: 0.8rem;">{{ "2024-12-20" }}</p>
+                    </div>
+                    <div class="programs">
+                        <div style="margin-bottom: 12px; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">06h00</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">La Lecture du Jour</div>
+                        </div>
+                        <div style="margin-bottom: 12px; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">07h30</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">Journal du Matin</div>
+                        </div>
+                        <div style="margin-bottom: 12px; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">11h00</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">Soleil d'Afrique</div>
+                        </div>
+                        <div style="margin-bottom: 12px; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">19h00</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">Journal du Soir</div>
+                        </div>
+                        <div style="padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">21h00</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">Soirée Spéciale</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Saturday -->
+                <div class="day-column" style="background: linear-gradient(135deg, #1e5a2e, #2d5a3d); color: white; border-radius: 12px; padding: 20px; box-shadow: 0 8px 25px rgba(30, 90, 46, 0.3);">
+                    <div class="day-header" style="text-align: center; margin-bottom: 15px; border-bottom: 2px solid rgba(255,255,255,0.2); padding-bottom: 10px;">
+                        <h3 style="margin: 0; font-size: 1.1rem;">SAMEDI</h3>
+                        <p style="margin: 0; opacity: 0.8; font-size: 0.8rem;">{{ "2024-12-21" }}</p>
+                    </div>
+                    <div class="programs">
+                        <div style="margin-bottom: 12px; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">08h00</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">Samedi Bonheur</div>
+                        </div>
+                        <div style="margin-bottom: 12px; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">10h00</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">Programmes Jeunesse</div>
+                        </div>
+                        <div style="margin-bottom: 12px; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">13h00</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">7 Afrique</div>
+                        </div>
+                        <div style="margin-bottom: 12px; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">19h00</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">Journal du Soir</div>
+                        </div>
+                        <div style="padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">20h30</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">Divertissement</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sunday -->
+                <div class="day-column" style="background: linear-gradient(135deg, #1e5a2e, #2d5a3d); color: white; border-radius: 12px; padding: 20px; box-shadow: 0 8px 25px rgba(30, 90, 46, 0.3);">
+                    <div class="day-header" style="text-align: center; margin-bottom: 15px; border-bottom: 2px solid rgba(255,255,255,0.2); padding-bottom: 10px;">
+                        <h3 style="margin: 0; font-size: 1.1rem;">DIMANCHE</h3>
+                        <p style="margin: 0; opacity: 0.8; font-size: 0.8rem;">{{ "2024-12-22" }}</p>
+                    </div>
+                    <div class="programs">
+                        <div style="margin-bottom: 12px; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">09h00</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">Programmes Religieux</div>
+                        </div>
+                        <div style="margin-bottom: 12px; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">13h00</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">7 Afrique</div>
+                        </div>
+                        <div style="margin-bottom: 12px; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">16h30</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">Cultur'Ailes</div>
+                        </div>
+                        <div style="margin-bottom: 12px; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">19h00</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">Journal du Soir</div>
+                        </div>
+                        <div style="padding: 8px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                            <div style="font-weight: bold; font-size: 0.8rem; margin-bottom: 3px;">21h00</div>
+                            <div style="font-size: 0.7rem; opacity: 0.9;">Soirée Culturelle</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="{{ url_for('emissions') }}" style="background: linear-gradient(135deg, #1e5a2e, #2d5a3d); color: white; padding: 15px 30px; border-radius: 50px; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 8px 20px rgba(30, 90, 46, 0.3); transition: all 0.3s ease;">
+                    <i class="fas fa-tv"></i>
+                    Voir toutes les émissions
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Sidebar with Replay Playlist -->
+    <div class="sidebar">
+        <!-- Upcoming Programs -->
+        <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px;">
+            <h2 style="background: #28a745; color: white; padding: 15px 20px; margin: 0; font-size: 18px; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-clock"></i>
+                Prochains Programmes
+            </h2>
+            
+            <div style="padding: 20px;">
+                <div style="margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 15px;">
+                    <div style="background: #4472c4; color: white; padding: 8px 15px; border-radius: 4px; font-weight: bold; font-size: 16px; margin-bottom: 10px; display: inline-block;">07:30</div>
+                    <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Journal du Matin</div>
+                    <div style="font-size: 14px; color: #666; line-height: 1.4;">Réveil avec l'actualité, météo et revue de presse internationale</div>
+                </div>
+
+                <div style="margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 15px;">
+                    <div style="background: #4472c4; color: white; padding: 8px 15px; border-radius: 4px; font-weight: bold; font-size: 16px; margin-bottom: 10px; display: inline-block;">09:00</div>
+                    <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Météo Africa</div>
+                    <div style="font-size: 14px; color: #666; line-height: 1.4;">Prévisions météorologiques pour l'Afrique de l'Ouest</div>
+                </div>
+
+                <button style="background: #4472c4; color: white; border: none; padding: 12px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; font-size: 14px;">
+                    Voir la grille complète
+                </button>
+            </div>
+        </div>
+
+        <!-- Replay Playlist Section -->
+        <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <h2 style="background: #1e5a2e; color: white; padding: 15px 20px; margin: 0; font-size: 18px; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-play-circle"></i>
+                Replay - Dernières Émissions
+            </h2>
+            
+            <div style="padding: 15px;">
+                <!-- Replay Video 1 -->
+                <div class="replay-item" style="display: flex; gap: 12px; margin-bottom: 15px; padding: 10px; border-radius: 8px; background: #f8f9fa; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
+                    <div style="position: relative; width: 80px; height: 60px; border-radius: 6px; overflow: hidden; background: linear-gradient(135deg, #1e5a2e, #2d5a3d); flex-shrink: 0;">
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 1.2rem;">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <div style="position: absolute; bottom: 2px; right: 2px; background: rgba(0,0,0,0.7); color: white; padding: 1px 4px; border-radius: 2px; font-size: 10px;">
+                            15:30
+                        </div>
+                    </div>
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="font-weight: 600; font-size: 13px; margin-bottom: 3px; color: #333; line-height: 1.3;">Journal du Soir - Édition Spéciale</div>
+                        <div style="font-size: 11px; color: #666; margin-bottom: 3px;">Hier • 19:00</div>
+                        <div style="background: #1e5a2e; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: bold; display: inline-block;">JOURNAL</div>
+                    </div>
+                </div>
+
+                <!-- Replay Video 2 -->
+                <div class="replay-item" style="display: flex; gap: 12px; margin-bottom: 15px; padding: 10px; border-radius: 8px; background: #f8f9fa; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
+                    <div style="position: relative; width: 80px; height: 60px; border-radius: 6px; overflow: hidden; background: linear-gradient(135deg, #1e5a2e, #2d5a3d); flex-shrink: 0;">
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 1.2rem;">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <div style="position: absolute; bottom: 2px; right: 2px; background: rgba(0,0,0,0.7); color: white; padding: 1px 4px; border-radius: 2px; font-size: 10px;">
+                            28:45
+                        </div>
+                    </div>
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="font-weight: 600; font-size: 13px; margin-bottom: 3px; color: #333; line-height: 1.3;">Cultur'Ailes - Arts Burkinabè</div>
+                        <div style="font-size: 11px; color: #666; margin-bottom: 3px;">Dimanche • 16:30</div>
+                        <div style="background: #1e5a2e; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: bold; display: inline-block;">CULTURE</div>
+                    </div>
+                </div>
+
+                <!-- Replay Video 3 -->
+                <div class="replay-item" style="display: flex; gap: 12px; margin-bottom: 15px; padding: 10px; border-radius: 8px; background: #f8f9fa; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
+                    <div style="position: relative; width: 80px; height: 60px; border-radius: 6px; overflow: hidden; background: linear-gradient(135deg, #1e5a2e, #2d5a3d); flex-shrink: 0;">
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 1.2rem;">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <div style="position: absolute; bottom: 2px; right: 2px; background: rgba(0,0,0,0.7); color: white; padding: 1px 4px; border-radius: 2px; font-size: 10px;">
+                            42:15
+                        </div>
+                    </div>
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="font-weight: 600; font-size: 13px; margin-bottom: 3px; color: #333; line-height: 1.3;">Franc Parler - Société</div>
+                        <div style="font-size: 11px; color: #666; margin-bottom: 3px;">Mercredi • 20:40</div>
+                        <div style="background: #1e5a2e; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: bold; display: inline-block;">DÉBAT</div>
+                    </div>
+                </div>
+
+                <!-- Replay Video 4 -->
+                <div class="replay-item" style="display: flex; gap: 12px; margin-bottom: 15px; padding: 10px; border-radius: 8px; background: #f8f9fa; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
+                    <div style="position: relative; width: 80px; height: 60px; border-radius: 6px; overflow: hidden; background: linear-gradient(135deg, #1e5a2e, #2d5a3d); flex-shrink: 0;">
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 1.2rem;">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <div style="position: absolute; bottom: 2px; right: 2px; background: rgba(0,0,0,0.7); color: white; padding: 1px 4px; border-radius: 2px; font-size: 10px;">
+                            22:10
+                        </div>
+                    </div>
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="font-weight: 600; font-size: 13px; margin-bottom: 3px; color: #333; line-height: 1.3;">Questions de Femmes</div>
+                        <div style="font-size: 11px; color: #666; margin-bottom: 3px;">Lundi • 20:40</div>
+                        <div style="background: #1e5a2e; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: bold; display: inline-block;">FEMMES</div>
+                    </div>
+                </div>
+
+                <!-- Replay Video 5 -->
+                <div class="replay-item" style="display: flex; gap: 12px; margin-bottom: 15px; padding: 10px; border-radius: 8px; background: #f8f9fa; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
+                    <div style="position: relative; width: 80px; height: 60px; border-radius: 6px; overflow: hidden; background: linear-gradient(135deg, #1e5a2e, #2d5a3d); flex-shrink: 0;">
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 1.2rem;">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <div style="position: absolute; bottom: 2px; right: 2px; background: rgba(0,0,0,0.7); color: white; padding: 1px 4px; border-radius: 2px; font-size: 10px;">
+                            18:45
+                        </div>
+                    </div>
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="font-weight: 600; font-size: 13px; margin-bottom: 3px; color: #333; line-height: 1.3;">Soleil d'Afrique - Spécial</div>
+                        <div style="font-size: 11px; color: #666; margin-bottom: 3px;">Vendredi • 11:00</div>
+                        <div style="background: #1e5a2e; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: bold; display: inline-block;">MUSIQUE</div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 15px;">
+                    <a href="{{ url_for('videos') if url_for('videos') else '#' }}" style="background: #1e5a2e; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 13px; display: inline-flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-video"></i>
+                        Voir tous les replays
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Enhanced Slider Styles with Working Auto-Play */
+.welcome-slider-container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #1e5a2e 0%, #2d5a3d 100%);
+}
+
+.welcome-slider {
+    position: relative;
+    max-width: 1400px;
+    margin: 0 auto;
+    height: 500px;
+    overflow: hidden;
+}
+
+.slider-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+    display: flex;
+    align-items: center;
+}
+
+.slide.active {
+    opacity: 1;
+}
+
+.slide-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    width: 100%;
+    height: 100%;
+    padding: 0 40px;
+    align-items: center;
+}
+
+.slide-image {
+    position: relative;
+    height: 100%;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+.slide-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s ease;
+}
+
+.slide.active .slide-image img {
+    transform: scale(1.05);
+}
+
+.slide-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(30, 90, 46, 0.3), rgba(45, 90, 61, 0.1));
+}
+
+.slide-text {
+    color: white;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
+.slide-text h2 {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    line-height: 1.2;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.slide-text p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    line-height: 1.6;
+    opacity: 0.9;
+}
+
+.slide-btn {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 20px rgba(231, 76, 60, 0.3);
+    align-self: flex-start;
+}
+
+.slide-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 25px rgba(231, 76, 60, 0.4);
+}
+
+/* Slider Navigation */
+.slider-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+    pointer-events: none;
+}
+
+.nav-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    pointer-events: all;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.nav-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+/* Slider Dots */
+.slider-dots {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+}
+
+.dot {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+.dot.active {
+    background: white;
+    transform: scale(1.2);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.dot:hover {
+    background: rgba(255, 255, 255, 0.7);
+    transform: scale(1.1);
+}
+
+/* Auto-play Progress Bar */
+.auto-play-progress {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #e74c3c, #c0392b);
+    width: 0%;
+    border-radius: 2px;
+    transition: width 0.1s linear;
+}
+
+/* Auto-play Control */
+.auto-play-control {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+#playPauseBtn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+#playPauseBtn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+/* Home Layout */
+.home-layout {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 30px;
+    margin-top: 0;
+}
+
+/* Weekly Grid Responsive */
+.weekly-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 15px;
+}
+
+@media (max-width: 1200px) {
+    .weekly-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .day-column:nth-child(n+5) {
+        grid-column: span 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .welcome-slider {
+        height: 400px;
+    }
+    
+    .slide-content {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 20px;
+        text-align: center;
+    }
+    
+    .slide-image {
+        height: 200px;
+        order: 2;
+    }
+    
+    .slide-text {
+        padding: 20px;
+        order: 1;
+    }
+    
+    .slide-text h2 {
+        font-size: 2rem;
+    }
+    
+    .slide-text p {
+        font-size: 1rem;
+    }
+    
+    .auto-play-progress {
+        width: 150px;
+    }
+    
+    .home-layout {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .sidebar {
+        order: -1;
+    }
+    
+    .weekly-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    
+    .day-column {
+        padding: 15px !important;
+    }
+    
+    .day-column h3 {
+        font-size: 1rem !important;
+    }
+    
+    .programs div {
+        padding: 6px !important;
+        margin-bottom: 8px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .weekly-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+}
+
+.program-card:hover {
+    transform: translateY(-5px);
+}
+
+.replay-item:hover {
+    transform: translateX(5px);
+}
+</style>
+
+<script>
+// Enhanced LCA TV Slider with Working Auto-Play
+const LCASlider = {
+    currentSlide: 1,
+    totalSlides: 5,
+    autoPlayInterval: null,
+    progressInterval: null,
+    isPlaying: true,
+    slideDuration: 5000, // 5 seconds
+    progressUpdateInterval: 50, // Update every 50ms
+
+    init() {
+        console.log('Initializing LCA Slider...');
+        this.showSlide(this.currentSlide);
+        this.startAutoPlay();
+        this.setupEventListeners();
+        console.log('LCA Slider initialized successfully');
+    },
+
+    showSlide(n) {
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+        
+        if (n > this.totalSlides) this.currentSlide = 1;
+        if (n < 1) this.currentSlide = this.totalSlides;
+        
+        // Hide all slides
+        slides.forEach(slide => slide.classList.remove('active'));
+        dots.forEach(dot => dot.classList.remove('active'));
+        
+        // Show current slide
+        if (slides[this.currentSlide - 1]) {
+            slides[this.currentSlide - 1].classList.add('active');
+        }
+        if (dots[this.currentSlide - 1]) {
+            dots[this.currentSlide - 1].classList.add('active');
+        }
+        
+        console.log(`Showing slide ${this.currentSlide}`);
+        this.resetProgressBar();
+    },
+
+    nextSlide() {
+        this.currentSlide++;
+        this.showSlide(this.currentSlide);
+    },
+
+    changeSlide(direction) {
+        this.currentSlide += direction;
+        this.showSlide(this.currentSlide);
+        this.restartAutoPlay();
+    },
+
+    goToSlide(n) {
+        this.currentSlide = n;
+        this.showSlide(this.currentSlide);
+        this.restartAutoPlay();
+    },
+
+    startAutoPlay() {
+        if (this.autoPlayInterval) {
+            clearInterval(this.autoPlayInterval);
+        }
+        
+        this.autoPlayInterval = setInterval(() => {
+            this.nextSlide();
+        }, this.slideDuration);
+        
+        this.startProgressBar();
+        this.isPlaying = true;
+        this.updatePlayPauseButton();
+        console.log('Auto-play started');
+    },
+
+    stopAutoPlay() {
+        if (this.autoPlayInterval) {
+            clearInterval(this.autoPlayInterval);
+            this.autoPlayInterval = null;
+        }
+        
+        if (this.progressInterval) {
+            clearInterval(this.progressInterval);
+            this.progressInterval = null;
+        }
+        
+        this.isPlaying = false;
+        this.updatePlayPauseButton();
+        console.log('Auto-play stopped');
+    },
+
+    restartAutoPlay() {
+        if (this.isPlaying) {
+            this.stopAutoPlay();
+            this.startAutoPlay();
+        }
+    },
+
+    toggleAutoPlay() {
+        if (this.isPlaying) {
+            this.stopAutoPlay();
+        } else {
+            this.startAutoPlay();
+        }
+    },
+
+    startProgressBar() {
+        const progressBar = document.getElementById('progressBar');
+        if (!progressBar) return;
+        
+        let progress = 0;
+        const increment = (this.progressUpdateInterval / this.slideDuration) * 100;
+        
+        if (this.progressInterval) {
+            clearInterval(this.progressInterval);
+        }
+        
+        progressBar.style.width = '0%';
+        
+        this.progressInterval = setInterval(() => {
+            progress += increment;
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(this.progressInterval);
+            }
+            progressBar.style.width = progress + '%';
+        }, this.progressUpdateInterval);
+    },
+
+    resetProgressBar() {
+        const progressBar = document.getElementById('progressBar');
+        if (progressBar) {
+            progressBar.style.width = '0%';
+        }
+        
+        if (this.progressInterval) {
+            clearInterval(this.progressInterval);
+        }
+        
+        if (this.isPlaying) {
+            this.startProgressBar();
+        }
+    },
+
+    updatePlayPauseButton() {
+        const btn = document.getElementById('playPauseBtn');
+        if (btn) {
+            const icon = btn.querySelector('i');
+            if (icon) {
+                icon.className = this.isPlaying ? 'fas fa-pause' : 'fas fa-play';
+            }
+        }
+    },
+
+    setupEventListeners() {
+        const slider = document.getElementById('mainSlider');
+        if (!slider) return;
+
+        // Pause on hover
+        slider.addEventListener('mouseenter', () => {
+            if (this.isPlaying) {
+                this.stopAutoPlay();
+                console.log('Auto-play paused on hover');
+            }
+        });
+
+        // Resume on mouse leave
+        slider.addEventListener('mouseleave', () => {
+            if (!this.isPlaying) {
+                this.startAutoPlay();
+                console.log('Auto-play resumed after hover');
+            }
+        });
+
+        // Touch/swipe support
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        slider.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+            this.stopAutoPlay();
+        });
+
+        slider.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            this.handleSwipe();
+            setTimeout(() => {
+                this.startAutoPlay();
+            }, 1000);
+        });
+
+        // Visibility change (pause when tab is not visible)
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                this.stopAutoPlay();
+            } else if (this.isPlaying) {
+                this.startAutoPlay();
+            }
+        });
+    },
+
+    handleSwipe() {
+        const swipeThreshold = 50;
+        const diff = touchStartX - touchEndX;
+        
+        if (Math.abs(diff) > swipeThreshold) {
+            if (diff > 0) {
+                // Swipe left - next slide
+                this.changeSlide(1);
+            } else {
+                // Swipe right - previous slide
+                this.changeSlide(-1);
+            }
+        }
+    }
+};
+
+// Initialize slider when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, initializing slider...');
+    LCASlider.init();
+    
+    // Initialize other functionality
+    setupVideoCards();
+    setupReplayItems();
+    startViewerCountUpdates();
+});
+
+// Video card functionality
+function setupVideoCards() {
+    const programCards = document.querySelectorAll('.program-card');
+    
+    programCards.forEach((card, index) => {
+        const videoId = card.dataset.videoId;
+        
+        card.addEventListener('click', function() {
+            if (videoId && videoId !== 'undefined' && videoId !== '') {
+                window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank');
+            }
+        });
+    });
+}
+
+// Replay items functionality
+function setupReplayItems() {
+    const replayItems = document.querySelectorAll('.replay-item');
+    
+    replayItems.forEach((item, index) => {
+        item.addEventListener('click', function() {
+            // You can add actual video IDs here or link to specific replay videos
+            console.log(`Playing replay item ${index + 1}`);
+            // For now, just show an alert - replace with actual video playback
+            alert('Replay functionality will be implemented with actual video IDs');
+        });
+    });
+}
+
+// Viewer count updates
+function startViewerCountUpdates() {
+    function updateViewerCount() {
+        const viewerCount = document.getElementById('viewer-count');
+        if (viewerCount) {
+            const baseCount = 2440;
+            const variation = Math.floor(Math.random() * 100) - 50;
+            const newCount = baseCount + variation;
+            viewerCount.textContent = `${newCount} spectateurs`;
+        }
+    }
+    
+    setInterval(updateViewerCount, 30000);
+}
+
+// Global functions for backward compatibility
+function changeSlide(direction) {
+    LCASlider.changeSlide(direction);
+}
+
+function currentSlide(n) {
+    LCASlider.goToSlide(n);
+}
+</script>
+{% endblock %}

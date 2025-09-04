@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}LCA TV - La chaîne de référence au Burkina Faso{% endblock %}</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        /* Top Green Bar */
+        .top-bar {
+            background: #2d5a3d;
+            color: white;
+            padding: 8px 0;
+            font-size: 14px;
+        }
+
+        .top-bar-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .contact-info {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .contact-info span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .top-bar-right {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .search-box {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            color: white;
+        }
+
+        .search-box::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .auth-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .auth-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        /* Main Header */
+        .main-header {
+            background: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .logo img {
+            height: 60px;
+            width: auto;
+            max-width: 200px;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Fallback text logo if image fails to load */
+        .logo-fallback {
+            display: none;
+            align-items: center;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: #28a745;
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+            margin-right: 15px;
+        }
+
+        .logo-text h1 {
+            font-size: 28px;
+            font-weight: bold;
+            color: #28a745;
+            margin-bottom: 2px;
+        }
+
+        .logo-text p {
+            font-size: 14px;
+            color: #666;
+            margin: 0;
+        }
+
+        .live-section {
+            text-align: center;
+        }
+
+        .live-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .live-subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .live-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #e74c3c;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .watch-live-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .watch-live-btn:hover {
+            background: #c0392b;
+        }
+
+        /* Navigation */
+        .navigation {
+            background: #1e5a2e;
+            color: white;
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            padding: 0 20px;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            flex: 1;
+        }
+
+        .nav-menu li a {
+            color: white;
+            text-decoration: none;
+            padding: 15px 20px;
+            display: block;
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            transition: background 0.3s ease;
+        }
+
+        .nav-menu li a:hover,
+        .nav-menu li a.active {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .nav-menu li a.dropdown::after {
+            content: ' ▼';
+            font-size: 10px;
+            margin-left: 5px;
+        }
+
+        /* Breaking News */
+        .breaking-news {
+            background: #e74c3c;
+            color: white;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .breaking-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+        }
+
+        .breaking-label {
+            background: #c0392b;
+            padding: 12px 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .breaking-text {
+            flex: 1;
+            padding: 12px 20px;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .breaking-ticker {
+            display: inline-block;
+            animation: ticker 30s linear infinite;
+        }
+
+        @keyframes ticker {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .breaking-time {
+            padding: 12px 20px;
+            font-weight: bold;
+            background: rgba(0,0,0,0.2);
+        }
+
+        /* Program Schedule */
+        .program-schedule {
+            background: #4472c4;
+            color: white;
+            padding: 0;
+        }
+
+        .schedule-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+        }
+
+        .schedule-label {
+            background: #3451a3;
+            padding: 12px 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .schedule-text {
+            flex: 1;
+            padding: 12px 20px;
+            font-size: 14px;
+        }
+
+        .live-badge {
+            background: #e74c3c;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* Videos grid */
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .video-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .video-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .video-thumbnail {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-thumbnail img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .video-card:hover .video-thumbnail img {
+            transform: scale(1.1);
+        }
+
+        .play-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(45, 90, 61, 0.9);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .video-card:hover .play-overlay {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .video-info {
+            padding: 1.5rem;
+        }
+
+        .video-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #2d5a3d;
+            line-height: 1.4;
+        }
+
+        .video-description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .video-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .category-badge {
+            background: linear-gradient(135deg, #2d5a3d 0%, #4472c4 100%);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        /* Categories filter */
+        .categories-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+
+        .category-btn {
+            background: white;
+            border: 2px solid #2d5a3d;
+            color: #2d5a3d;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .category-btn:hover,
+        .category-btn.active {
+            background: #2d5a3d;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(45, 90, 61, 0.3);
+        }
+
+        /* Footer */
+        .footer {
+            background: #2d5a3d;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Mobile-First Responsive Design */
+        
+        /* Mobile Navigation */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 10px;
+            min-width: 48px;
+            min-height: 48px;
+        }
+
+        .nav-menu.mobile-open {
+            display: flex !important;
+            flex-direction: column;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #1e5a2e;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .nav-menu.mobile-open li a {
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Tablet Styles (768px - 1024px) */
+        @media (max-width: 1024px) {
+            .main-content {
+                padding: 0 15px;
+            }
+
+            .videos-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 1.5rem;
+            }
+
+            .header-content {
+                padding: 0 15px;
+            }
+
+            .top-bar-content {
+                padding: 0 15px;
+            }
+
+            .contact-info {
+                gap: 20px;
+            }
+
+            .contact-info span {
+                font-size: 13px;
+            }
+
+            .nav-content {
+                padding: 0 15px;
+            }
+
+            .breaking-content,
+            .schedule-content {
+                padding: 0 15px;
+            }
+        }
+
+        /* Mobile Styles (max-width: 768px) */
+        @media (max-width: 768px) {
+            /* Hide desktop navigation, show mobile button */
+            .nav-menu {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            /* Header adjustments */
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+                padding: 15px;
+            }
+
+            .live-section {
+                order: -1;
+            }
+
+            .watch-live-btn {
+                font-size: 16px;
+                padding: 12px 24px;
+                align-self: center;
+            }
+
+            .logo img {
+                height: 50px;
+            }
+
+            /* Top bar mobile */
+            .top-bar {
+                font-size: 13px;
+            }
+
+            .top-bar-content {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+                padding: 10px 15px;
+            }
+
+            .contact-info {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .contact-info span {
+                font-size: 12px;
+            }
+
+            .top-bar-right {
+                flex-direction: column;
+                gap: 10px;
+                width: 100%;
+            }
+
+            .search-box {
+                width: 100%;
+                max-width: 300px;
+                padding: 8px 12px;
+            }
+
+            .auth-links {
+                justify-content: center;
+            }
+
+            /* Navigation mobile */
+            .nav-content {
+                padding: 0 15px;
+                position: relative;
+            }
+
+            /* Breaking news mobile */
+            .breaking-news {
+                font-size: 13px;
+            }
+
+            .breaking-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .breaking-label {
+                padding: 8px 15px;
+                font-size: 12px;
+            }
+
+            .breaking-text {
+                padding: 8px 15px;
+            }
+
+            .breaking-ticker {
+                animation: none;
+                white-space: normal;
+                text-align: center;
+            }
+
+            .breaking-time {
+                padding: 8px 15px;
+                font-size: 12px;
+            }
+
+            /* Program schedule mobile */
+            .program-schedule {
+                font-size: 13px;
+            }
+
+            .schedule-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+
+            .schedule-label {
+                padding: 8px 15px;
+                font-size: 12px;
+            }
+
+            .schedule-text {
+                padding: 8px 15px;
+                font-size: 12px;
+                line-height: 1.4;
+            }
+
+            .live-badge {
+                align-self: center;
+                font-size: 11px;
+                padding: 6px 12px;
+            }
+
+            /* Videos grid mobile */
+            .videos-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                margin-top: 1.5rem;
+            }
+
+            .video-card {
+                margin-bottom: 1rem;
+            }
+
+            .video-thumbnail img {
+                height: 180px;
+            }
+
+            .video-info {
+                padding: 1.2rem;
+            }
+
+            .video-title {
+                font-size: 1rem;
+            }
+
+            .video-description {
+                font-size: 0.85rem;
+                -webkit-line-clamp: 2;
+            }
+
+            /* Categories filter mobile */
+            .categories-filter {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.5rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .category-btn {
+                width: 100%;
+                max-width: 300px;
+                text-align: center;
+                padding: 0.6rem 1.2rem;
+            }
+
+            /* Main content mobile */
+            .main-content {
+                margin: 20px auto;
+                padding: 0 15px;
+            }
+
+            /* Footer mobile */
+            .footer {
+                padding: 1.5rem 15px;
+                margin-top: 3rem;
+            }
+
+            .footer-content p {
+                font-size: 14px;
+                margin-bottom: 10px;
+            }
+        }
+
+        /* Small Mobile Styles (max-width: 480px) */
+        @media (max-width: 480px) {
+            .top-bar {
+                font-size: 12px;
+            }
+
+            .contact-info span {
+                font-size: 11px;
+            }
+
+            .logo img {
+                height: 40px;
+            }
+
+            .logo-icon {
+                width: 35px;
+                height: 35px;
+                font-size: 12px;
+                margin-right: 10px;
+            }
+
+            .logo-text h1 {
+                font-size: 20px;
+            }
+
+            .logo-text p {
+                font-size: 12px;
+            }
+
+            .live-title {
+                font-size: 14px;
+            }
+
+            .live-subtitle {
+                font-size: 12px;
+            }
+
+            .live-status {
+                font-size: 12px;
+            }
+
+            .watch-live-btn {
+                font-size: 14px;
+                padding: 10px 20px;
+            }
+
+            .nav-menu li a {
+                padding: 12px 15px;
+                font-size: 13px;
+            }
+
+            .breaking-label,
+            .schedule-label {
+                font-size: 11px;
+                padding: 6px 12px;
+            }
+
+            .breaking-text,
+            .schedule-text {
+                font-size: 11px;
+                padding: 6px 12px;
+            }
+
+            .video-info {
+                padding: 1rem;
+            }
+
+            .video-title {
+                font-size: 0.95rem;
+            }
+
+            .video-description {
+                font-size: 0.8rem;
+            }
+
+            .video-meta {
+                font-size: 0.75rem;
+            }
+
+            .category-badge {
+                font-size: 0.7rem;
+                padding: 0.2rem 0.6rem;
+            }
+
+            .main-content {
+                padding: 0 10px;
+                margin: 15px auto;
+            }
+
+            .search-box {
+                padding: 6px 10px;
+                font-size: 14px;
+            }
+        }
+
+        /* Large Desktop Styles (min-width: 1400px) */
+        @media (min-width: 1400px) {
+            .videos-grid {
+                grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+                gap: 2.5rem;
+            }
+
+            .main-content {
+                padding: 0 30px;
+            }
+        }
+
+        /* Landscape Mobile Styles */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .header-content {
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 10px 15px;
+            }
+
+            .live-section {
+                order: 0;
+            }
+
+            .top-bar-content {
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 8px 15px;
+            }
+
+            .contact-info {
+                flex-direction: row;
+                gap: 15px;
+            }
+
+            .top-bar-right {
+                flex-direction: row;
+                gap: 15px;
+                width: auto;
+            }
+
+            .breaking-content,
+            .schedule-content {
+                flex-direction: row;
+                text-align: left;
+            }
+
+            .breaking-ticker {
+                animation: ticker 30s linear infinite;
+                white-space: nowrap;
+            }
+        }
+
+        /* Touch-friendly improvements */
+        @media (hover: none) and (pointer: coarse) {
+            /* Remove hover effects on touch devices */
+            .video-card:hover {
+                transform: none;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            }
+
+            .video-card:active {
+                transform: scale(0.98);
+            }
+
+            .category-btn:hover {
+                transform: none;
+                box-shadow: none;
+            }
+
+            .category-btn:active {
+                transform: scale(0.95);
+            }
+
+            .watch-live-btn:hover {
+                background: #e74c3c;
+            }
+
+            .watch-live-btn:active {
+                background: #c0392b;
+            }
+
+            .nav-menu li a:hover {
+                background: rgba(255,255,255,0.1);
+            }
+
+            .nav-menu li a:active {
+                background: rgba(255,255,255,0.2);
+            }
+
+            /* Always show play overlay on touch devices */
+            .play-overlay {
+                opacity: 0.8;
+            }
+
+            .video-card:active .play-overlay {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.1);
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .top-bar,
+            .navigation,
+            .breaking-news,
+            .program-schedule,
+            .mobile-menu-btn,
+            .watch-live-btn {
+                display: none;
+            }
+
+            .main-header {
+                box-shadow: none;
+                border-bottom: 1px solid #ccc;
+            }
+
+            .video-card {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ccc;
+                margin-bottom: 1rem;
+            }
+
+            .footer {
+                margin-top: 2rem;
+                border-top: 1px solid #ccc;
+            }
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            .video-card {
+                border: 2px solid #000;
+            }
+
+            .category-btn {
+                border-width: 3px;
+            }
+
+            .watch-live-btn {
+                border: 2px solid #fff;
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            .breaking-ticker {
+                animation: none;
+            }
+
+            .live-dot {
+                animation: none;
+            }
+
+            .video-card,
+            .play-overlay,
+            .category-btn,
+            .watch-live-btn {
+                transition: none;
+            }
+
+            .video-thumbnail img {
+                transition: none;
+            }
+        }
+
+        /* Dark mode support (if user prefers) */
+        @media (prefers-color-scheme: dark) {
+            /* Keep the current design as it already has good contrast */
+            /* This is a placeholder for future dark mode implementation */
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <div class="contact-info">
+                <span><i class="fas fa-map-marker-alt"></i> Ouagadougou, Burkina Faso</span>
+                <span><i class="fas fa-envelope"></i> info@lcatv.bf</span>
+                <span><i class="fas fa-phone"></i> +226 25 36 45 78</span>
+            </div>
+            <div class="top-bar-right">
+                <input type="text" class="search-box" placeholder="Rechercher...">
+                <div class="auth-links">
+                    {% if session.user %}
+                        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                        <a href="{{ url_for('logout') }}">Déconnexion ({{ session.user }})</a>
+                    {% else %}
+                        <a href="{{ url_for('admin_login') }}">Se connecter</a>
+                        <a href="#">S'inscrire</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header --<header class="main-header">
+        <div class="header-content">
+            <a href="{{ url_for('home') }}" class="logo">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="LCA TV - Burkina Faso" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="logo-fallback">
+                    <div class="logo-icon">LCA</div>
+                    <div class="logo-text">
+                        <h1>LCA TV</h1>
+                        <p>Burkina Faso</p>
+                    </div>
+                </div>
+            </a>
+            
+            <div class="live-section">
+                <div class="live-title">En Direct</div>
+                <div class="live-subtitle">Votre chaîne de référence</div>
+                <div class="live-status">
+                    <span class="live-dot"></span>
+                    <span id="live-time">LIVE 19:03</span>
+                </div>
+            </div>
+            
+            <a href="{{ url_for('live') }}" class="watch-live-btn">
+                <i class="fas fa-play"></i>
+                Regarder en Direct
+            </a>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="navigation">
+        <div class="nav-content">
+            <ul class="nav-menu">
+                <li><a href="{{ url_for('home') }}" {% if request.endpoint == 'home' %}class="active"{% endif %}>ACCUEIL</a></li>
+                <li><a href="{{ url_for('journal') }}">LE JOURNAL</a></li>
+                <li><a href="{{ url_for('live') }}">EN DIRECT</a></li>
+                <li><a href="{{ url_for('emissions') }}">ÉMISSIONS & MAGAZINES</a></li>
+                <li><a href="{{ url_for('publicite') }}">PUBLICITÉ</a></li>
+                <li><a href="{{ url_for('about') }}">À PROPOS</a></li>
+            </ul>
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Breaking News -->
+    <div class="breaking-news">
+        <div class="breaking-content">
+            <div class="breaking-label">BREAKING NEWS</div>
+            <div class="breaking-text">
+                <div class="breaking-ticker">
+                    LCA TV - La chaîne de référence au Burkina Faso • Restez connectés pour toute l'actualité • 
+                </div>
+            </div>
+            <div class="breaking-time" id="breaking-time">19:03</div>
+        </div>
+    </div>
+
+    <!-- Program Schedule Bar -->
+    <div class="program-schedule">
+        <div class="schedule-content">
+            <div class="schedule-label">
+                <i class="fas fa-tv"></i>
+                PROGRAMME TV
+            </div>
+            <div class="schedule-text">
+                Prochainement : Nouvelle grille de programmes - Téléchargez l'app LCA TV • Téléchargez l'application LCA TV pour ne rien manquer de vos programmes préférés
+            </div>
+            <div class="live-badge">LIVE</div>
+        </div>
+    </div>
+
+    <main class="main-content">
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div style="margin-bottom: 20px;">
+                    {% for category, message in messages %}
+                        <div style="padding: 15px 20px; border-radius: 8px; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; 
+                                    {% if category == 'success' %}background: #d4edda; color: #155724; border: 1px solid #c3e6cb;
+                                    {% elif category == 'error' %}background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;
+                                    {% elif category == 'warning' %}background: #fff3cd; color: #856404; border: 1px solid #ffeaa7;
+                                    {% elif category == 'info' %}background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb;
+                                    {% endif %}">
+                            {% if category == 'success' %}
+                                <i class="fas fa-check-circle"></i>
+                            {% elif category == 'error' %}
+                                <i class="fas fa-exclamation-circle"></i>
+                            {% elif category == 'warning' %}
+                                <i class="fas fa-exclamation-triangle"></i>
+                            {% elif category == 'info' %}
+                                <i class="fas fa-info-circle"></i>
+                            {% endif %}
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 LCA TV - La Chaîne Africaine de Télévision</p>
+            <p>Votre référence pour l'information, la culture et le divertissement au Burkina Faso 🇧🇫</p>
+            <p>Développé avec ❤️ pour l'Afrique</p>
+        </div>
+    </footer>
+
+    <script>
+        // Update time every second
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('fr-FR', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            
+            // Update live time
+            const liveTime = document.getElementById('live-time');
+            if (liveTime) {
+                liveTime.textContent = `LIVE ${timeString}`;
+            }
+            
+            // Update breaking news time
+            const breakingTime = document.getElementById('breaking-time');
+            if (breakingTime) {
+                breakingTime.textContent = timeString;
+            }
+        }
+
+        // Update time immediately and then every second
+        updateTime();
+        setInterval(updateTime, 1000);
+
+        // Enhanced Mobile menu toggle
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+            const nav = document.querySelector('.nav-menu');
+            const icon = this.querySelector('i');
+            
+            nav.classList.toggle('mobile-open');
+            
+            // Toggle hamburger/close icon
+            if (nav.classList.contains('mobile-open')) {
+                icon.className = 'fas fa-times';
+            } else {
+                icon.className = 'fas fa-bars';
+            }
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const nav = document.querySelector('.nav-menu');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            
+            if (!nav.contains(event.target) && !menuBtn.contains(event.target)) {
+                nav.classList.remove('mobile-open');
+                menuBtn.querySelector('i').className = 'fas fa-bars';
+            }
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', function() {
+                const nav = document.querySelector('.nav-menu');
+                const menuBtn = document.querySelector('.mobile-menu-btn');
+                
+                nav.classList.remove('mobile-open');
+                menuBtn.querySelector('i').className = 'fas fa-bars';
+            });
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            const nav = document.querySelector('.nav-menu');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            
+            if (window.innerWidth > 768) {
+                nav.classList.remove('mobile-open');
+                menuBtn.querySelector('i').className = 'fas fa-bars';
+            }
+        });
+
+        // Video card click handlers
+        document.addEventListener('DOMContentLoaded', function() {
+            const videoCards = document.querySelectorAll('.video-card');
+            videoCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const videoId = this.dataset.videoId;
+                    if (videoId) {
+                        window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

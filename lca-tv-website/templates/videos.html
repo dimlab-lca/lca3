@@ -1,0 +1,802 @@
+{% extends "base.html" %}
+
+{% block title %}
+{% if category %}
+    Vidéos {{ category|title }} - LCA TV
+{% else %}
+    Toutes les Vidéos - LCA TV
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div style="margin-top: 0;">
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1>
+                <i class="fas fa-play-circle"></i> 
+                {% if category %}
+                    Vidéos {{ category|title }}
+                {% else %}
+                    Toutes les Vidéos
+                {% endif %}
+            </h1>
+            <p>
+                {% if category %}
+                    Découvrez nos contenus dans la catégorie {{ category|title }}
+                {% else %}
+                    Découvrez tous nos programmes et émissions
+                {% endif %}
+            </p>
+            {% if videos %}
+            <p class="video-count">
+                {{ videos|length }} vidéo{% if videos|length > 1 %}s{% endif %} disponible{% if videos|length > 1 %}s{% endif %}
+            </p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Categories Filter -->
+    <div class="categories-filter-section">
+        <div class="container">
+            <div class="categories-filter">
+                <a href="{{ url_for('videos') }}" class="category-btn {% if not category %}active{% endif %}">
+                    <i class="fas fa-th"></i> Toutes
+                </a>
+                <a href="{{ url_for('videos_by_category', category='actualites') }}" class="category-btn {% if category == 'actualites' %}active{% endif %}">
+                    <i class="fas fa-newspaper"></i> Actualités
+                </a>
+                <a href="{{ url_for('videos_by_category', category='debats') }}" class="category-btn {% if category == 'debats' %}active{% endif %}">
+                    <i class="fas fa-comments"></i> Débats
+                </a>
+                <a href="{{ url_for('videos_by_category', category='culture') }}" class="category-btn {% if category == 'culture' %}active{% endif %}">
+                    <i class="fas fa-mask"></i> Culture
+                </a>
+                <a href="{{ url_for('videos_by_category', category='sport') }}" class="category-btn {% if category == 'sport' %}active{% endif %}">
+                    <i class="fas fa-futbol"></i> Sport
+                </a>
+                <a href="{{ url_for('videos_by_category', category='jeunesse') }}" class="category-btn {% if category == 'jeunesse' %}active{% endif %}">
+                    <i class="fas fa-graduation-cap"></i> Jeunesse
+                </a>
+                <a href="{{ url_for('videos_by_category', category='economie') }}" class="category-btn {% if category == 'economie' %}active{% endif %}">
+                    <i class="fas fa-chart-line"></i> Économie
+                </a>
+                <a href="{{ url_for('videos_by_category', category='politique') }}" class="category-btn {% if category == 'politique' %}active{% endif %}">
+                    <i class="fas fa-landmark"></i> Politique
+                </a>
+                <a href="{{ url_for('videos_by_category', category='sante') }}" class="category-btn {% if category == 'sante' %}active{% endif %}">
+                    <i class="fas fa-heartbeat"></i> Santé
+                </a>
+                <a href="{{ url_for('videos_by_category', category='societe') }}" class="category-btn {% if category == 'societe' %}active{% endif %}">
+                    <i class="fas fa-users"></i> Société
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Videos Grid -->
+    <div class="videos-content">
+        <div class="container">
+            {% if videos %}
+            <div class="videos-grid">
+                {% for video in videos %}
+                <div class="video-card" data-video-id="{{ video.id }}" onclick="openVideo('{{ video.id }}')">
+                    <div class="video-thumbnail">
+                        <img src="{{ video.thumbnail }}" alt="{{ video.title }}" loading="lazy">
+                        <div class="play-overlay">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <div class="category-badge">{{ video.category }}</div>
+                        {% if video.view_count %}
+                        <div class="view-count">
+                            <i class="fas fa-eye"></i> {{ "{:,}".format(video.view_count|int) }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">{{ video.title }}</h3>
+                        <p class="video-description">{{ video.description[:120] }}{% if video.description|length > 120 %}...{% endif %}</p>
+                        <div class="video-meta">
+                            <span><i class="fas fa-calendar"></i> {{ video.published_at[:10] }}</span>
+                            {% if video.channel_title %}
+                            <span><i class="fas fa-tv"></i> {{ video.channel_title }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="no-content">
+                <i class="fas fa-video"></i>
+                <h3>
+                    {% if category %}
+                        Aucune vidéo dans la catégorie "{{ category|title }}"
+                    {% else %}
+                        Aucune vidéo disponible
+                    {% endif %}
+                </h3>
+                <p>
+                    {% if category %}
+                        Revenez plus tard pour découvrir nos nouveaux contenus dans cette catégorie !
+                    {% else %}
+                        Nos programmes seront bientôt disponibles. Revenez plus tard !
+                    {% endif %}
+                </p>
+                <a href="{{ url_for('videos') }}" class="back-btn">
+                    <i class="fas fa-arrow-left"></i>
+                    Voir toutes les vidéos
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+/* Container */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Hero Section - Fully Responsive */
+.hero-section {
+    background: linear-gradient(135deg, #4472c4, #3451a3);
+    color: white;
+    padding: 40px 0;
+    text-align: center;
+}
+
+.hero-content h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.hero-content p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 10px;
+}
+
+.video-count {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-top: 10px;
+}
+
+/* Categories Filter - Fully Responsive */
+.categories-filter-section {
+    background: white;
+    padding: 20px 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.categories-filter {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.category-btn {
+    background: #f8f9fa;
+    color: #333;
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 2px solid #dee2e6;
+    min-height: 44px;
+    min-width: 44px;
+    justify-content: center;
+}
+
+.category-btn:hover {
+    background: #28a745;
+    color: white;
+    border-color: #28a745;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.category-btn.active {
+    background: #28a745;
+    color: white;
+    border-color: #28a745;
+}
+
+/* Videos Content - Fully Responsive */
+.videos-content {
+    background: #f8f9fa;
+    padding: 50px 0;
+    min-height: 60vh;
+}
+
+.videos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 30px;
+}
+
+.video-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.video-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.video-thumbnail {
+    position: relative;
+    overflow: hidden;
+}
+
+.video-thumbnail img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.video-card:hover .video-thumbnail img {
+    transform: scale(1.1);
+}
+
+.play-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(40, 167, 69, 0.9);
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.video-card:hover .play-overlay {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+.category-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(40, 167, 69, 0.9);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.view-count {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.video-info {
+    padding: 20px;
+}
+
+.video-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+    line-height: 1.4;
+}
+
+.video-description {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.video-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    color: #888;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* No Content State */
+.no-content {
+    text-align: center;
+    padding: 80px 20px;
+    color: #666;
+}
+
+.no-content i {
+    font-size: 5rem;
+    margin-bottom: 30px;
+    opacity: 0.3;
+}
+
+.no-content h3 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+}
+
+.no-content p {
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.back-btn {
+    background: #4472c4;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+    background: #3451a3;
+    transform: translateY(-2px);
+}
+
+/* Enhanced Responsive Design */
+@media (max-width: 1024px) {
+    .videos-grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+    }
+    
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+    
+    .categories-filter-section {
+        padding: 15px 0;
+    }
+    
+    .container {
+        padding: 0 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .videos-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .video-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .hero-content h1 {
+        font-size: 1.8rem;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .hero-content p {
+        font-size: 1rem;
+    }
+    
+    .categories-filter {
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .category-btn {
+        width: 90%;
+        max-width: 300px;
+        text-align: center;
+        justify-content: center;
+        padding: 12px 20px;
+        font-size: 0.9rem;
+    }
+    
+    .video-card {
+        margin: 0 auto;
+        max-width: 100%;
+    }
+    
+    .video-thumbnail img {
+        height: 180px;
+    }
+    
+    .video-info {
+        padding: 15px;
+    }
+    
+    .video-title {
+        font-size: 1rem;
+    }
+    
+    .video-description {
+        font-size: 0.85rem;
+    }
+    
+    .no-content {
+        padding: 60px 20px;
+    }
+    
+    .no-content i {
+        font-size: 4rem;
+    }
+    
+    .no-content h3 {
+        font-size: 1.5rem;
+    }
+    
+    .no-content p {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-content h1 {
+        font-size: 1.5rem;
+    }
+    
+    .hero-content p {
+        font-size: 0.9rem;
+    }
+    
+    .categories-filter {
+        gap: 6px;
+    }
+    
+    .category-btn {
+        padding: 10px 16px;
+        font-size: 0.8rem;
+        width: 95%;
+    }
+    
+    .video-thumbnail img {
+        height: 160px;
+    }
+    
+    .video-info {
+        padding: 12px;
+    }
+    
+    .video-title {
+        font-size: 0.95rem;
+    }
+    
+    .video-description {
+        font-size: 0.8rem;
+    }
+    
+    .video-meta {
+        font-size: 0.75rem;
+    }
+    
+    .no-content {
+        padding: 40px 15px;
+    }
+    
+    .no-content i {
+        font-size: 3rem;
+    }
+    
+    .no-content h3 {
+        font-size: 1.3rem;
+    }
+    
+    .no-content p {
+        font-size: 0.9rem;
+    }
+    
+    .container {
+        padding: 0 10px;
+    }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+    .video-card:hover {
+        transform: none;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    
+    .video-card:active {
+        transform: scale(0.98);
+    }
+    
+    .category-btn:hover {
+        transform: none;
+        box-shadow: none;
+    }
+    
+    .category-btn:active {
+        transform: scale(0.95);
+    }
+    
+    .play-overlay {
+        opacity: 0.8;
+    }
+    
+    .video-card:active .play-overlay {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+    
+    .back-btn:hover {
+        transform: none;
+    }
+    
+    .back-btn:active {
+        transform: scale(0.95);
+    }
+}
+
+/* Loading states */
+.video-thumbnail img {
+    background: #f0f0f0;
+}
+
+.video-thumbnail img[src=""], .video-thumbnail img:not([src]) {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Accessibility improvements */
+.category-btn:focus,
+.video-card:focus,
+.back-btn:focus {
+    outline: 2px solid #28a745;
+    outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+    .categories-filter-section {
+        display: none;
+    }
+    
+    .video-card {
+        break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #ccc;
+        margin-bottom: 1rem;
+    }
+    
+    .play-overlay {
+        display: none;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .video-card {
+        border: 2px solid #000;
+    }
+    
+    .category-btn {
+        border-width: 3px;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .video-card,
+    .play-overlay,
+    .category-btn,
+    .back-btn {
+        transition: none;
+    }
+    
+    .video-thumbnail img {
+        transition: none;
+    }
+    
+    .loading {
+        animation: none;
+    }
+}
+</style>
+
+<script>
+// Function to open video in new tab
+function openVideo(videoId) {
+    if (videoId && videoId !== 'undefined' && videoId !== '') {
+        console.log('Opening video:', videoId);
+        window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank');
+    } else {
+        console.error('Invalid video ID:', videoId);
+        alert('Désolé, cette vidéo n\'est pas disponible pour le moment.');
+    }
+}
+
+// Enhanced category navigation
+function navigateToCategory(category) {
+    console.log('Navigating to category:', category);
+    if (category === 'all') {
+        window.location.href = "{{ url_for('videos') }}";
+    } else {
+        window.location.href = `/videos/category/${category}`;
+    }
+}
+
+// Add enhanced interactions
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Videos page loaded');
+    console.log('Current category:', "{{ category or 'all' }}");
+    
+    const videoCards = document.querySelectorAll('.video-card');
+    console.log('Found', videoCards.length, 'video cards');
+    
+    videoCards.forEach((card, index) => {
+        const videoId = card.dataset.videoId;
+        console.log(`Video ${index + 1} ID:`, videoId);
+        
+        // Add keyboard navigation
+        card.setAttribute('tabindex', '0');
+        
+        card.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                openVideo(videoId);
+            }
+        });
+        
+        // Enhanced hover effects
+        card.addEventListener('mouseenter', function() {
+            const playButton = this.querySelector('.play-overlay');
+            if (playButton) {
+                playButton.style.opacity = '1';
+                playButton.style.transform = 'translate(-50%, -50%) scale(1.1)';
+            }
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            const playButton = this.querySelector('.play-overlay');
+            if (playButton) {
+                playButton.style.opacity = '0';
+                playButton.style.transform = 'translate(-50%, -50%) scale(1)';
+            }
+        });
+    });
+    
+    // Enhanced category button interactions
+    const categoryBtns = document.querySelectorAll('.category-btn');
+    categoryBtns.forEach(btn => {
+        // Add keyboard navigation
+        btn.setAttribute('tabindex', '0');
+        
+        btn.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                this.click();
+            }
+        });
+        
+        // Ensure proper navigation
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const href = this.getAttribute('href');
+            if (href) {
+                console.log('Navigating to:', href);
+                window.location.href = href;
+            }
+        });
+    });
+    
+    // Intersection Observer for animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+    
+    // Observe video cards for animation
+    videoCards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        card.style.transitionDelay = `${index * 0.1}s`;
+        observer.observe(card);
+    });
+    
+    // Debug: Log videos data
+    {% if videos %}
+    console.log('Videos data:');
+    {% for video in videos %}
+    console.log('Video {{ loop.index }}:', {
+        id: '{{ video.id }}',
+        title: '{{ video.title|replace("'", "\\'") }}',
+        category: '{{ video.category }}',
+        thumbnail: '{{ video.thumbnail }}'
+    });
+    {% endfor %}
+    {% else %}
+    console.log('No videos found for category: {{ category }}');
+    {% endif %}
+    
+    // Debug category routes
+    console.log('Available category routes:');
+    console.log('- All videos:', "{{ url_for('videos') }}");
+    console.log('- Actualités:', "{{ url_for('videos_by_category', category='actualites') }}");
+    console.log('- Débats:', "{{ url_for('videos_by_category', category='debats') }}");
+    console.log('- Culture:', "{{ url_for('videos_by_category', category='culture') }}");
+    console.log('- Sport:', "{{ url_for('videos_by_category', category='sport') }}");
+    console.log('- Jeunesse:', "{{ url_for('videos_by_category', category='jeunesse') }}");
+    console.log('- Économie:', "{{ url_for('videos_by_category', category='economie') }}");
+    console.log('- Politique:', "{{ url_for('videos_by_category', category='politique') }}");
+    console.log('- Santé:', "{{ url_for('videos_by_category', category='sante') }}");
+    console.log('- Société:', "{{ url_for('videos_by_category', category='societe') }}");
+});
+
+// Handle image loading errors
+document.addEventListener('DOMContentLoaded', function() {
+    const images = document.querySelectorAll('.video-thumbnail img');
+    images.forEach(img => {
+        img.addEventListener('error', function() {
+            this.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzUwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDM1MCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzNTAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjBGMEYwIi8+CjxwYXRoIGQ9Ik0xNzUgNzBMMTk1IDkwSDE1NUwxNzUgNzBaIiBmaWxsPSIjQ0NDIi8+CjxwYXRoIGQ9Ik0xNDAgMTEwSDE2MFYxMzBIMTQwVjExMFoiIGZpbGw9IiNDQ0MiLz4KPHA+CjwvcGF0aD4KPC9zdmc+';
+            this.alt = 'Image non disponible';
+        });
+    });
+});
+</script>
+{% endblock %}

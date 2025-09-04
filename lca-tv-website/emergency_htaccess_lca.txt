@@ -1,0 +1,51 @@
+# LCA TV - Configuration d'urgence pour forcer le routage
+# Cette configuration force toutes les requêtes vers l'application Python
+
+RewriteEngine On
+RewriteBase /lca/
+
+# Debug: ajouter des headers pour voir si .htaccess fonctionne
+<IfModule mod_headers.c>
+    Header always set X-LCA-Htaccess "active"
+    Header always set X-LCA-Path "%{REQUEST_URI}e"
+</IfModule>
+
+# Gestion des fichiers statiques en premier
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteCond %{REQUEST_URI} ^/lca/static/
+RewriteRule ^static/(.*)$ static/$1 [L]
+
+# Favicon et robots
+RewriteRule ^favicon\.ico$ static/favicon.ico [L]
+RewriteRule ^robots\.txt$ static/robots.txt [L]
+
+# Force TOUTES les autres requêtes vers passenger_wsgi.py
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /lca/passenger_wsgi.py [L,QSA]
+
+# Alternative si la première règle ne fonctionne pas
+# RewriteRule ^(.*)$ passenger_wsgi.py [L,QSA]
+
+# Gestion des erreurs
+ErrorDocument 404 /lca/404.html
+ErrorDocument 500 /lca/500.html
+
+# Sécurité
+<Files "*.py">
+    <RequireAll>
+        Require all denied
+    </RequireAll>
+</Files>
+
+<Files "passenger_wsgi.py">
+    <RequireAll>
+        Require all granted
+    </RequireAll>
+</Files>
+
+<Files "run.py">
+    <RequireAll>
+        Require all granted
+    </RequireAll>
+</Files>

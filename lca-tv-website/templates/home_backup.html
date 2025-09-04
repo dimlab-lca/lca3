@@ -1,0 +1,1053 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Welcome Slider Section with Working Auto-Play -->
+<div class="welcome-slider-container">
+    <div class="welcome-slider" id="mainSlider">
+        <div class="slider-wrapper">
+            <div class="slide active" data-slide="1">
+                <div class="slide-content">
+                    <div class="slide-image">
+                        <img src="{{ url_for('static', filename='images/slider1.jpg') }}" alt="LCA TV - Bienvenue" onerror="this.src='{{ url_for('static', filename='images/slider1.jpg') }}'">
+                        <div class="slide-overlay"></div>
+                    </div>
+                    <div class="slide-text">
+                        <h2>Bienvenue sur LCA TV</h2>
+                        <p>Votre chaîne de référence au Burkina Faso pour l'information, la culture et le divertissement authentique</p>
+                        <a href="{{ url_for('about') }}" class="slide-btn">Découvrir LCA TV</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slide" data-slide="2">
+                <div class="slide-content">
+                    <div class="slide-image">
+                        <img src="{{ url_for('static', filename='images/slider2.jpg') }}" alt="Actualités & Débats" onerror="this.src='{{ url_for('static', filename='images/slider2.jpg') }}'">
+                        <div class="slide-overlay"></div>
+                    </div>
+                    <div class="slide-text">
+                        <h2>Actualités & Débats</h2>
+                        <p>Suivez l'actualité burkinabè et participez aux débats citoyens qui façonnent notre société</p>
+                        <a href="{{ url_for('journal') }}" class="slide-btn">Voir le Journal</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slide" data-slide="3">
+                <div class="slide-content">
+                    <div class="slide-image">
+                        <img src="{{ url_for('static', filename='images/slider3.jpg') }}" alt="Culture & Divertissement" onerror="this.src='{{ url_for('static', filename='images/slider3.jpg') }}'">
+                        <div class="slide-overlay"></div>
+                    </div>
+                    <div class="slide-text">
+                        <h2>Culture & Divertissement</h2>
+                        <p>Découvrez la richesse culturelle du Burkina Faso à travers nos programmes de divertissement</p>
+                        <a href="{{ url_for('emissions') }}" class="slide-btn">Voir nos Émissions</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slide" data-slide="4">
+                <div class="slide-content">
+                    <div class="slide-image">
+                        <img src="{{ url_for('static', filename='images/slider4.jpg') }}" alt="Émissions Spéciales" onerror="this.src='{{ url_for('static', filename='images/slider4.jpg') }}'">
+                        <div class="slide-overlay"></div>
+                    </div>
+                    <div class="slide-text">
+                        <h2>Émissions Spéciales</h2>
+                        <p>Des programmes uniques qui explorent les enjeux contemporains de notre société</p>
+                        <a href="{{ url_for('emissions') }}" class="slide-btn">Découvrir</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slide" data-slide="5">
+                <div class="slide-content">
+                    <div class="slide-image">
+                        <img src="{{ url_for('static', filename='images/slider5.jpg') }}" alt="Programmes Jeunesse" onerror="this.src='{{ url_for('static', filename='images/slider5.jpg') }}'">
+                        <div class="slide-overlay"></div>
+                    </div>
+                    <div class="slide-text">
+                        <h2>Programmes Jeunesse</h2>
+                        <p>Des contenus éducatifs et divertissants spécialement conçus pour la jeunesse burkinabè</p>
+                        <a href="{{ url_for('emissions') }}" class="slide-btn">Voir les Programmes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slider Navigation -->
+        <div class="slider-nav">
+            <button class="nav-btn prev-btn" onclick="LCASlider.changeSlide(-1)">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="nav-btn next-btn" onclick="LCASlider.changeSlide(1)">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+        
+        <!-- Slider Dots -->
+        <div class="slider-dots">
+            <span class="dot active" onclick="LCASlider.goToSlide(1)"></span>
+            <span class="dot" onclick="LCASlider.goToSlide(2)"></span>
+            <span class="dot" onclick="LCASlider.goToSlide(3)"></span>
+            <span class="dot" onclick="LCASlider.goToSlide(4)"></span>
+            <span class="dot" onclick="LCASlider.goToSlide(5)"></span>
+        </div>
+        
+        <!-- Auto-play Progress Bar -->
+        <div class="auto-play-progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <!-- Auto-play Control -->
+        <div class="auto-play-control">
+            <button id="playPauseBtn" onclick="LCASlider.toggleAutoPlay()">
+                <i class="fas fa-pause"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="home-layout">
+    <div class="content-left">
+        <h1 style="font-size: 32px; color: #28a745; margin-bottom: 10px; text-align: center;">LCA TV - En Direct</h1>
+        <p style="color: #666; margin-bottom: 30px; text-align: center; font-size: 16px;">Votre chaîne de référence au Burkina Faso</p>
+        
+        <div class="video-player" style="background: #000; border-radius: 8px; overflow: hidden; position: relative; padding-bottom: 56.25%; height: 0; margin-bottom: 30px;">
+            <div style="position: absolute; top: 10px; left: 10px; background: #e74c3c; color: white; padding: 8px 12px; border-radius: 4px; font-weight: bold; font-size: 12px; z-index: 10;">
+                EN DIRECT
+            </div>
+            <div style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 8px 12px; border-radius: 4px; font-size: 12px; z-index: 10;" id="viewer-count">
+                2440 spectateurs
+            </div>
+            <iframe 
+                src="https://www.youtube.com/embed/ixQEmhTbvTI?autoplay=1&mute=0&controls=1&rel=0&modestbranding=1" 
+                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+                frameborder="0" 
+                allowfullscreen
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+            </iframe>
+        </div>
+
+        <div class="current-program" style="background: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 40px;">
+            <h3 style="color: #28a745; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-clock"></i>
+                Actuellement à l'antenne
+            </h3>
+            <div style="background: #e74c3c; color: white; padding: 8px 15px; border-radius: 4px; font-weight: bold; display: inline-block; margin-bottom: 10px;">
+                20:00 - 21:00
+            </div>
+            <div style="font-size: 18px; color: #333; margin: 10px 0 5px 0; font-weight: 600;">
+                Journal du Soir
+            </div>
+            <p>Toute l'actualité nationale et internationale avec nos journalistes</p>
+        </div>
+
+        <!-- Programmes Populaires Section -->
+        <div style="margin-bottom: 50px;">
+            <h2 style="font-size: 2rem; color: #333; text-align: center; margin-bottom: 30px; font-weight: bold;">
+                Programmes Populaires
+                <div style="width: 60px; height: 4px; background: #28a745; margin: 10px auto; border-radius: 2px;"></div>
+            </h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 30px;">
+                {% for video in featured_videos %}
+                <div class="program-card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.1); transition: transform 0.3s ease; cursor: pointer;" data-video-id="{{ video.id }}">
+                    <div style="position: relative; height: 180px; background: #f0f0f0; overflow: hidden;">
+                        <img src="{{ video.thumbnail }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; background: rgba(231, 76, 60, 0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem;">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div style="padding: 15px;">
+                        <div style="background: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; display: inline-block; margin-bottom: 8px;">{{ video.published_at[:10] }}</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">{{ video.category|title }}</div>
+                        <div style="color: #666; font-size: 14px; font-style: italic;">"{{ video.title[:30] }}..."</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Programme Grid Section -->
+        <div class="program-grid-section" style="margin-bottom: 50px;">
+            <h2 style="font-size: 2rem; color: #333; text-align: center; margin-bottom: 30px; font-weight: bold;">
+                Grille des Programmes
+                <div style="width: 60px; height: 4px; background: #1e5a2e; margin: 10px auto; border-radius: 2px;"></div>
+            </h2>
+            
+            <div class="program-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                <!-- Morning Programs -->
+                <div class="time-slot" style="background: linear-gradient(135deg, #1e5a2e, #2d5a3d); color: white; border-radius: 15px; padding: 25px; box-shadow: 0 10px 30px rgba(30, 90, 46, 0.3);">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                        <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 50%; backdrop-filter: blur(10px);">
+                            <i class="fas fa-sun" style="font-size: 1.5rem;"></i>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0; font-size: 1.3rem;">Matinée</h3>
+                            <p style="margin: 0; opacity: 0.9; font-size: 0.9rem;">06h00 - 12h00</p>
+                        </div>
+                    </div>
+                    <div class="programs-list">
+                        <div style="margin-bottom: 15px; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 8px; backdrop-filter: blur(5px);">
+                            <div style="font-weight: bold; margin-bottom: 5px;">06h00 - La Lecture du Jour</div>
+                            <div style="font-size: 0.8rem; opacity: 0.9;">Spiritualité et méditation matinale</div>
+                        </div>
+                        <div style="margin-bottom: 15px; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 8px; backdrop-filter: blur(5px);">
+                            <div style="font-weight: bold; margin-bottom: 5px;">07h30 - Journal du Matin</div>
+                            <div style="font-size: 0.8rem; opacity: 0.9;">L'actualité pour bien commencer la journée</div>
+                        </div>
+                        <div style="padding: 10px; background: rgba(255,255,255,0.1); border-radius: 8px; backdrop-filter: blur(5px);">
+                            <div style="font-weight: bold; margin-bottom: 5px;">11h00 - Soleil d'Afrique</div>
+                            <div style="font-size: 0.8rem; opacity: 0.9;">Musique et culture africaine</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Afternoon Programs -->
+                <div class="time-slot" style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; border-radius: 15px; padding: 25px; box-shadow: 0 10px 30px rgba(231, 76, 60, 0.3);">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                        <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 50%; backdrop-filter: blur(10px);">
+                            <i class="fas fa-sun" style="font-size: 1.5rem;"></i>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0; font-size: 1.3rem;">Après-midi</h3>
+                            <p style="margin: 0; opacity: 0.9; font-size: 0.9rem;">12h00 - 18h00</p>
+                        </div>
+                    </div>
+                    <div class="programs-list">
+                        <div style="margin-bottom: 15px; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 8px; backdrop-filter: blur(5px);">
+                            <div style="font-weight: bold; margin-bottom: 5px;">12h05 - Ndefou</div>
+                            <div style="font-size: 0.8rem; opacity: 0.9;">Émission culturelle en mooré</div>
+                        </div>
+                        <div style="margin-bottom: 15px; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 8px; backdrop-filter: blur(5px);">
+                            <div style="font-weight: bold; margin-bottom: 5px;">13h00 - 7 Afrique</div>
+                            <div style="font-size: 0.8rem; opacity: 0.9;">Magazine hebdomadaire africain</div>
+                        </div>
+                        <div style="padding: 10px; background: rgba(255,255,255,0.1); border-radius: 8px; backdrop-filter: blur(5px);">
+                            <div style="font-weight: bold; margin-bottom: 5px;">16h30 - Cultur'Ailes</div>
+                            <div style="font-size: 0.8rem; opacity: 0.9;">Arts et patrimoine burkinabè</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Evening Programs -->
+                <div class="time-slot" style="background: linear-gradient(135deg, #9b59b6, #8e44ad); color: white; border-radius: 15px; padding: 25px; box-shadow: 0 10px 30px rgba(155, 89, 182, 0.3);">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                        <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 50%; backdrop-filter: blur(10px);">
+                            <i class="fas fa-moon" style="font-size: 1.5rem;"></i>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0; font-size: 1.3rem;">Soirée</h3>
+                            <p style="margin: 0; opacity: 0.9; font-size: 0.9rem;">18h00 - 24h00</p>
+                        </div>
+                    </div>
+                    <div class="programs-list">
+                        <div style="margin-bottom: 15px; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 8px; backdrop-filter: blur(5px);">
+                            <div style="font-weight: bold; margin-bottom: 5px;">19h00 - Journal du Soir</div>
+                            <div style="font-size: 0.8rem; opacity: 0.9;">L'actualité de la journée</div>
+                        </div>
+                        <div style="margin-bottom: 15px; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 8px; backdrop-filter: blur(5px);">
+                            <div style="font-weight: bold; margin-bottom: 5px;">20h40 - Questions de Femmes</div>
+                            <div style="font-size: 0.8rem; opacity: 0.9;">Émission féminine (Lundi)</div>
+                        </div>
+                        <div style="padding: 10px; background: rgba(255,255,255,0.1); border-radius: 8px; backdrop-filter: blur(5px);">
+                            <div style="font-weight: bold; margin-bottom: 5px;">20h40 - Franc Parler</div>
+                            <div style="font-size: 0.8rem; opacity: 0.9;">Débats citoyens (Mercredi)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Weekend Programs -->
+                <div class="time-slot" style="background: linear-gradient(135deg, #1abc9c, #16a085); color: white; border-radius: 15px; padding: 25px; box-shadow: 0 10px 30px rgba(26, 188, 156, 0.3);">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                        <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 50%; backdrop-filter: blur(10px);">
+                            <i class="fas fa-calendar-weekend" style="font-size: 1.5rem;"></i>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0; font-size: 1.3rem;">Week-end</h3>
+                            <p style="margin: 0; opacity: 0.9; font-size: 0.9rem;">Samedi - Dimanche</p>
+                        </div>
+                    </div>
+                    <div class="programs-list">
+                        <div style="margin-bottom: 15px; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 8px; backdrop-filter: blur(5px);">
+                            <div style="font-weight: bold; margin-bottom: 5px;">Samedi Bonheur</div>
+                            <div style="font-size: 0.8rem; opacity: 0.9;">Divertissement familial</div>
+                        </div>
+                        <div style="margin-bottom: 15px; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 8px; backdrop-filter: blur(5px);">
+                            <div style="font-weight: bold; margin-bottom: 5px;">13h00 - 7 Afrique</div>
+                            <div style="font-size: 0.8rem; opacity: 0.9;">Magazine dominical</div>
+                        </div>
+                        <div style="padding: 10px; background: rgba(255,255,255,0.1); border-radius: 8px; backdrop-filter: blur(5px);">
+                            <div style="font-weight: bold; margin-bottom: 5px;">Programmes Spéciaux</div>
+                            <div style="font-size: 0.8rem; opacity: 0.9;">Événements et rediffusions</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="{{ url_for('emissions') }}" style="background: linear-gradient(135deg, #4472c4, #3451a3); color: white; padding: 15px 30px; border-radius: 50px; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 8px 20px rgba(68, 114, 196, 0.3); transition: all 0.3s ease;">
+                    <i class="fas fa-tv"></i>
+                    Voir toutes les émissions
+                </a>
+            </div>
+        </div>
+
+        <!-- Fun Marketing Web TV Block --<div style="margin-bottom: 50px;">
+            <h2 style="font-size: 2rem; color: #333; text-align: center; margin-bottom: 30px; font-weight: bold;">
+                Plus de Vidéos
+                <div style="width: 60px; height: 4px; background: #1e5a2e; margin: 10px auto; border-radius: 2px;"></div>
+            </h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-bottom: 30px;">
+                <!-- Sample Video 1 -->
+                <div class="video-card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.1); transition: transform 0.3s ease; cursor: pointer;">
+                    <div style="position: relative; height: 200px; background: linear-gradient(135deg, #1e5a2e, #2d5a3d); overflow: hidden;">
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 60px; height: 60px; background: rgba(255, 255, 255, 0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #1e5a2e; font-size: 1.5rem;">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <div style="position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.7); color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px;">
+                            15:30
+                        </div>
+                    </div>
+                    <div style="padding: 15px;">
+                        <div style="background: #1e5a2e; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; display: inline-block; margin-bottom: 8px;">Journal</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Journal du Soir - Édition Spéciale</div>
+                        <div style="color: #666; font-size: 14px; line-height: 1.4;">Toute l'actualité nationale et internationale avec nos journalistes experts</div>
+                    </div>
+                </div>
+
+                <!-- Sample Video 2 -->
+                <div class="video-card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.1); transition: transform 0.3s ease; cursor: pointer;">
+                    <div style="position: relative; height: 200px; background: linear-gradient(135deg, #1e5a2e, #2d5a3d); overflow: hidden;">
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 60px; height: 60px; background: rgba(255, 255, 255, 0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #1e5a2e; font-size: 1.5rem;">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <div style="position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.7); color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px;">
+                            28:45
+                        </div>
+                    </div>
+                    <div style="padding: 15px;">
+                        <div style="background: #1e5a2e; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; display: inline-block; margin-bottom: 8px;">Culture</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Cultur'Ailes - Arts Burkinabè</div>
+                        <div style="color: #666; font-size: 14px; line-height: 1.4;">Découverte du patrimoine artistique et culturel du Burkina Faso</div>
+                    </div>
+                </div>
+
+                <!-- Sample Video 3 -->
+                <div class="video-card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.1); transition: transform 0.3s ease; cursor: pointer;">
+                    <div style="position: relative; height: 200px; background: linear-gradient(135deg, #1e5a2e, #2d5a3d); overflow: hidden;">
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 60px; height: 60px; background: rgba(255, 255, 255, 0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #1e5a2e; font-size: 1.5rem;">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <div style="position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.7); color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px;">
+                            42:15
+                        </div>
+                    </div>
+                    <div style="padding: 15px;">
+                        <div style="background: #1e5a2e; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; display: inline-block; margin-bottom: 8px;">Débat</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Franc Parler - Société</div>
+                        <div style="color: #666; font-size: 14px; line-height: 1.4;">Débats citoyens sur les enjeux de société au Burkina Faso</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="{{ url_for('videos') if url_for('videos') else '#' }}" style="background: linear-gradient(135deg, #1e5a2e, #2d5a3d); color: white; padding: 15px 30px; border-radius: 50px; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 8px 20px rgba(30, 90, 46, 0.3); transition: all 0.3s ease;">
+                    <i class="fas fa-video"></i>
+                    Voir toutes les vidéos
+                </a>
+            </div>
+            <!-- Animated Background Elements -->
+            <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(255,255,255,0.1); border-radius: 50%; animation: float 6s ease-in-out infinite;"></div>
+            <div style="position: absolute; bottom: -30px; left: -30px; width: 150px; height: 150px; background: rgba(255,255,255,0.05); border-radius: 50%; animation: float 8s ease-in-out infinite reverse;"></div>
+            
+            <div style="position: relative; z-index: 2; padding: 50px 40px; color: white; text-align: center;">
+                <div style="margin-bottom: 30px;">
+                    <div style="display: inline-flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.2); padding: 15px 25px; border-radius: 50px; backdrop-filter: blur(10px); margin-bottom: 20px;">
+                        <i class="fas fa-rocket" style="font-size: 1.5rem; color: #ffd700;"></i>
+                        <span style="font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Innovation TV</span>
+                    </div>
+                    <h2 style="font-size: 2.5rem; font-weight: bold; margin-bottom: 15px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+                        L'Avenir de la Télévision est Ici !
+                    </h2>
+                    <p style="font-size: 1.2rem; opacity: 0.9; max-width: 600px; margin: 0 auto; line-height: 1.6;">
+                        Découvrez une expérience télévisuelle révolutionnaire avec LCA TV Web. 
+                        Regardez vos programmes préférés où vous voulez, quand vous voulez !
+                    </p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; margin: 40px 0;">
+                    <!-- Feature 1 -->
+                    <div style="background: rgba(255,255,255,0.1); padding: 25px; border-radius: 15px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                        <div style="background: linear-gradient(135deg, #ff6b6b, #ee5a52); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px;">
+                            <i class="fas fa-mobile-alt" style="font-size: 1.5rem; color: white;"></i>
+                        </div>
+                        <h3 style="margin-bottom: 10px; font-size: 1.1rem;">Multi-Plateforme</h3>
+                        <p style="font-size: 0.9rem; opacity: 0.9; line-height: 1.5;">Regardez sur mobile, tablette, ordinateur ou smart TV</p>
+                    </div>
+
+                    <!-- Feature 2 -->
+                    <div style="background: rgba(255,255,255,0.1); padding: 25px; border-radius: 15px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                        <div style="background: linear-gradient(135deg, #4ecdc4, #44a08d); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px;">
+                            <i class="fas fa-clock" style="font-size: 1.5rem; color: white;"></i>
+                        </div>
+                        <h3 style="margin-bottom: 10px; font-size: 1.1rem;">Replay 24/7</h3>
+                        <p style="font-size: 0.9rem; opacity: 0.9; line-height: 1.5;">Rattrapez vos émissions manquées à tout moment</p>
+                    </div>
+
+                    <!-- Feature 3 -->
+                    <div style="background: rgba(255,255,255,0.1); padding: 25px; border-radius: 15px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                        <div style="background: linear-gradient(135deg, #ffa726, #fb8c00); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px;">
+                            <i class="fas fa-hd-video" style="font-size: 1.5rem; color: white;"></i>
+                        </div>
+                        <h3 style="margin-bottom: 10px; font-size: 1.1rem;">Qualité HD</h3>
+                        <p style="font-size: 0.9rem; opacity: 0.9; line-height: 1.5;">Streaming haute définition pour une expérience optimale</p>
+                    </div>
+
+                    <!-- Feature 4 -->
+                    <div style="background: rgba(255,255,255,0.1); padding: 25px; border-radius: 15px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                        <div style="background: linear-gradient(135deg, #ab47bc, #8e24aa); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px;">
+                            <i class="fas fa-bell" style="font-size: 1.5rem; color: white;"></i>
+                        </div>
+                        <h3 style="margin-bottom: 10px; font-size: 1.1rem;">Notifications</h3>
+                        <p style="font-size: 0.9rem; opacity: 0.9; line-height: 1.5;">Soyez alerté de vos programmes favoris</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 40px;">
+                    <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                        <a href="{{ url_for('live') }}" style="background: linear-gradient(135deg, #ff6b6b, #ee5a52); color: white; padding: 15px 30px; border-radius: 50px; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4); transition: all 0.3s ease; border: 2px solid rgba(255,255,255,0.2);" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 25px rgba(255, 107, 107, 0.5)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 20px rgba(255, 107, 107, 0.4)'">
+                            <i class="fas fa-play"></i>
+                            Regarder Maintenant
+                        </a>
+                        <a href="{{ url_for('about') }}" style="background: rgba(255,255,255,0.2); color: white; padding: 15px 30px; border-radius: 50px; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 10px; backdrop-filter: blur(10px); border: 2px solid rgba(255,255,255,0.3); transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.3)'; this.style.transform='translateY(-3px)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'; this.style.transform='translateY(0)'">
+                            <i class="fas fa-info-circle"></i>
+                            En Savoir Plus
+                        </a>
+                    </div>
+                    
+                    <div style="margin-top: 30px; display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;">
+                        <div style="display: flex; align-items: center; gap: 10px; font-size: 0.9rem; opacity: 0.9;">
+                            <i class="fas fa-users" style="color: #ffd700;"></i>
+                            <span>100K+ Spectateurs</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px; font-size: 0.9rem; opacity: 0.9;">
+                            <i class="fas fa-star" style="color: #ffd700;"></i>
+                            <span>15+ Émissions</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px; font-size: 0.9rem; opacity: 0.9;">
+                            <i class="fas fa-globe-africa" style="color: #ffd700;"></i>
+                            <span>Burkina Faso & Diaspora</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <h2 style="background: #28a745; color: white; padding: 15px 20px; margin: 0; font-size: 18px; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-clock"></i>
+                Prochains Programmes
+            </h2>
+            
+            <div style="padding: 20px;">
+                <div style="margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 15px;">
+                    <div style="background: #4472c4; color: white; padding: 8px 15px; border-radius: 4px; font-weight: bold; font-size: 16px; margin-bottom: 10px; display: inline-block;">07:30</div>
+                    <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Journal du Matin</div>
+                    <div style="font-size: 14px; color: #666; line-height: 1.4;">Réveil avec l'actualité, météo et revue de presse internationale</div>
+                </div>
+
+                <div style="margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 15px;">
+                    <div style="background: #4472c4; color: white; padding: 8px 15px; border-radius: 4px; font-weight: bold; font-size: 16px; margin-bottom: 10px; display: inline-block;">09:00</div>
+                    <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Météo Africa</div>
+                    <div style="font-size: 14px; color: #666; line-height: 1.4;">Prévisions météorologiques pour l'Afrique de l'Ouest</div>
+                </div>
+
+                <button style="background: #4472c4; color: white; border: none; padding: 12px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; font-size: 14px;">
+                    Voir la grille complète
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Enhanced Slider Styles with Working Auto-Play */
+.welcome-slider-container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #1e5a2e 0%, #2d5a3d 100%);
+}
+
+.welcome-slider {
+    position: relative;
+    max-width: 1400px;
+    margin: 0 auto;
+    height: 500px;
+    overflow: hidden;
+}
+
+.slider-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+    display: flex;
+    align-items: center;
+}
+
+.slide.active {
+    opacity: 1;
+}
+
+.slide-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    width: 100%;
+    height: 100%;
+    padding: 0 40px;
+    align-items: center;
+}
+
+.slide-image {
+    position: relative;
+    height: 100%;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+.slide-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s ease;
+}
+
+.slide.active .slide-image img {
+    transform: scale(1.05);
+}
+
+.slide-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(30, 90, 46, 0.3), rgba(45, 90, 61, 0.1));
+}
+
+.slide-text {
+    color: white;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
+.slide-text h2 {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    line-height: 1.2;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.slide-text p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    line-height: 1.6;
+    opacity: 0.9;
+}
+
+.slide-btn {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 20px rgba(231, 76, 60, 0.3);
+    align-self: flex-start;
+}
+
+.slide-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 25px rgba(231, 76, 60, 0.4);
+}
+
+/* Slider Navigation */
+.slider-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+    pointer-events: none;
+}
+
+.nav-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    pointer-events: all;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.nav-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+/* Slider Dots */
+.slider-dots {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+}
+
+.dot {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+.dot.active {
+    background: white;
+    transform: scale(1.2);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.dot:hover {
+    background: rgba(255, 255, 255, 0.7);
+    transform: scale(1.1);
+}
+
+/* Auto-play Progress Bar */
+.auto-play-progress {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #e74c3c, #c0392b);
+    width: 0%;
+    border-radius: 2px;
+    transition: width 0.1s linear;
+}
+
+/* Auto-play Control */
+.auto-play-control {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+#playPauseBtn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+#playPauseBtn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+/* Marketing Block Animation */
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+}
+
+/* Home Layout */
+.home-layout {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 30px;
+    margin-top: 0;
+}
+
+@media (max-width: 768px) {
+    .welcome-slider {
+        height: 400px;
+    }
+    
+    .slide-content {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 20px;
+        text-align: center;
+    }
+    
+    .slide-image {
+        height: 200px;
+        order: 2;
+    }
+    
+    .slide-text {
+        padding: 20px;
+        order: 1;
+    }
+    
+    .slide-text h2 {
+        font-size: 2rem;
+    }
+    
+    .slide-text p {
+        font-size: 1rem;
+    }
+    
+    .auto-play-progress {
+        width: 150px;
+    }
+    
+    .home-layout {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .sidebar {
+        order: -1;
+    }
+    
+    .program-grid {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .marketing-block {
+        padding: 30px 20px !important;
+    }
+}
+
+.program-card:hover {
+    transform: translateY(-5px);
+}
+</style>
+
+<script>
+// Enhanced LCA TV Slider with Working Auto-Play
+const LCASlider = {
+    currentSlide: 1,
+    totalSlides: 5,
+    autoPlayInterval: null,
+    progressInterval: null,
+    isPlaying: true,
+    slideDuration: 5000, // 5 seconds
+    progressUpdateInterval: 50, // Update every 50ms
+
+    init() {
+        console.log('Initializing LCA Slider...');
+        this.showSlide(this.currentSlide);
+        this.startAutoPlay();
+        this.setupEventListeners();
+        console.log('LCA Slider initialized successfully');
+    },
+
+    showSlide(n) {
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+        
+        if (n > this.totalSlides) this.currentSlide = 1;
+        if (n < 1) this.currentSlide = this.totalSlides;
+        
+        // Hide all slides
+        slides.forEach(slide => slide.classList.remove('active'));
+        dots.forEach(dot => dot.classList.remove('active'));
+        
+        // Show current slide
+        if (slides[this.currentSlide - 1]) {
+            slides[this.currentSlide - 1].classList.add('active');
+        }
+        if (dots[this.currentSlide - 1]) {
+            dots[this.currentSlide - 1].classList.add('active');
+        }
+        
+        console.log(`Showing slide ${this.currentSlide}`);
+        this.resetProgressBar();
+    },
+
+    nextSlide() {
+        this.currentSlide++;
+        this.showSlide(this.currentSlide);
+    },
+
+    changeSlide(direction) {
+        this.currentSlide += direction;
+        this.showSlide(this.currentSlide);
+        this.restartAutoPlay();
+    },
+
+    goToSlide(n) {
+        this.currentSlide = n;
+        this.showSlide(this.currentSlide);
+        this.restartAutoPlay();
+    },
+
+    startAutoPlay() {
+        if (this.autoPlayInterval) {
+            clearInterval(this.autoPlayInterval);
+        }
+        
+        this.autoPlayInterval = setInterval(() => {
+            this.nextSlide();
+        }, this.slideDuration);
+        
+        this.startProgressBar();
+        this.isPlaying = true;
+        this.updatePlayPauseButton();
+        console.log('Auto-play started');
+    },
+
+    stopAutoPlay() {
+        if (this.autoPlayInterval) {
+            clearInterval(this.autoPlayInterval);
+            this.autoPlayInterval = null;
+        }
+        
+        if (this.progressInterval) {
+            clearInterval(this.progressInterval);
+            this.progressInterval = null;
+        }
+        
+        this.isPlaying = false;
+        this.updatePlayPauseButton();
+        console.log('Auto-play stopped');
+    },
+
+    restartAutoPlay() {
+        if (this.isPlaying) {
+            this.stopAutoPlay();
+            this.startAutoPlay();
+        }
+    },
+
+    toggleAutoPlay() {
+        if (this.isPlaying) {
+            this.stopAutoPlay();
+        } else {
+            this.startAutoPlay();
+        }
+    },
+
+    startProgressBar() {
+        const progressBar = document.getElementById('progressBar');
+        if (!progressBar) return;
+        
+        let progress = 0;
+        const increment = (this.progressUpdateInterval / this.slideDuration) * 100;
+        
+        if (this.progressInterval) {
+            clearInterval(this.progressInterval);
+        }
+        
+        progressBar.style.width = '0%';
+        
+        this.progressInterval = setInterval(() => {
+            progress += increment;
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(this.progressInterval);
+            }
+            progressBar.style.width = progress + '%';
+        }, this.progressUpdateInterval);
+    },
+
+    resetProgressBar() {
+        const progressBar = document.getElementById('progressBar');
+        if (progressBar) {
+            progressBar.style.width = '0%';
+        }
+        
+        if (this.progressInterval) {
+            clearInterval(this.progressInterval);
+        }
+        
+        if (this.isPlaying) {
+            this.startProgressBar();
+        }
+    },
+
+    updatePlayPauseButton() {
+        const btn = document.getElementById('playPauseBtn');
+        if (btn) {
+            const icon = btn.querySelector('i');
+            if (icon) {
+                icon.className = this.isPlaying ? 'fas fa-pause' : 'fas fa-play';
+            }
+        }
+    },
+
+    setupEventListeners() {
+        const slider = document.getElementById('mainSlider');
+        if (!slider) return;
+
+        // Pause on hover
+        slider.addEventListener('mouseenter', () => {
+            if (this.isPlaying) {
+                this.stopAutoPlay();
+                console.log('Auto-play paused on hover');
+            }
+        });
+
+        // Resume on mouse leave
+        slider.addEventListener('mouseleave', () => {
+            if (!this.isPlaying) {
+                this.startAutoPlay();
+                console.log('Auto-play resumed after hover');
+            }
+        });
+
+        // Touch/swipe support
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        slider.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+            this.stopAutoPlay();
+        });
+
+        slider.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            this.handleSwipe();
+            setTimeout(() => {
+                this.startAutoPlay();
+            }, 1000);
+        });
+
+        // Visibility change (pause when tab is not visible)
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                this.stopAutoPlay();
+            } else if (this.isPlaying) {
+                this.startAutoPlay();
+            }
+        });
+    },
+
+    handleSwipe() {
+        const swipeThreshold = 50;
+        const diff = touchStartX - touchEndX;
+        
+        if (Math.abs(diff) > swipeThreshold) {
+            if (diff > 0) {
+                // Swipe left - next slide
+                this.changeSlide(1);
+            } else {
+                // Swipe right - previous slide
+                this.changeSlide(-1);
+            }
+        }
+    }
+};
+
+// Initialize slider when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, initializing slider...');
+    LCASlider.init();
+    
+    // Initialize other functionality
+    setupVideoCards();
+    startViewerCountUpdates();
+});
+
+// Video card functionality
+function setupVideoCards() {
+    const programCards = document.querySelectorAll('.program-card');
+    
+    programCards.forEach((card, index) => {
+        const videoId = card.dataset.videoId;
+        
+        card.addEventListener('click', function() {
+            if (videoId && videoId !== 'undefined' && videoId !== '') {
+                window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank');
+            }
+        });
+    });
+}
+
+// Viewer count updates
+function startViewerCountUpdates() {
+    function updateViewerCount() {
+        const viewerCount = document.getElementById('viewer-count');
+        if (viewerCount) {
+            const baseCount = 2440;
+            const variation = Math.floor(Math.random() * 100) - 50;
+            const newCount = baseCount + variation;
+            viewerCount.textContent = `${newCount} spectateurs`;
+        }
+    }
+    
+    setInterval(updateViewerCount, 30000);
+}
+
+// Global functions for backward compatibility
+function changeSlide(direction) {
+    LCASlider.changeSlide(direction);
+}
+
+function currentSlide(n) {
+    LCASlider.goToSlide(n);
+}
+</script>
+{% endblock %}

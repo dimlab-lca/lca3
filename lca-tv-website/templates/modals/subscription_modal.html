@@ -1,0 +1,350 @@
+<!-- Subscription Management Modal -->
+<div id="subscription-modal" class="modal">
+    <div class="modal-content large">
+        <div class="modal-header">
+            <h3>Nouvelle Souscription Publicité</h3>
+            <button class="modal-close" onclick="closeModal('subscription-modal')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <form id="subscription-form" onsubmit="saveSubscription(event)">
+            <div class="modal-body">
+                <div class="form-section">
+                    <h4>Informations Client</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="client-name">Nom du client *</label>
+                            <input type="text" id="client-name" name="client_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="client-email">Email *</label>
+                            <input type="email" id="client-email" name="client_email" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="client-phone">Téléphone</label>
+                            <input type="tel" id="client-phone" name="client_phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="company-name">Nom de l'entreprise</label>
+                            <input type="text" id="company-name" name="company_name">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h4>Package Publicité</h4>
+                    <div class="packages-selection" id="packages-selection">
+                        <!-- Packages will be loaded here -->
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="duration-months">Durée (mois) *</label>
+                            <select id="duration-months" name="duration_months" required onchange="calculateTotal()">
+                                <option value="1">1 mois</option>
+                                <option value="3">3 mois (-5%)</option>
+                                <option value="6">6 mois (-10%)</option>
+                                <option value="12">12 mois (-15%)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="start-date">Date de début *</label>
+                            <input type="date" id="start-date" name="start_date" required>
+                        </div>
+                    </div>
+                    
+                    <div class="price-summary">
+                        <div class="price-breakdown">
+                            <div class="price-line">
+                                <span>Prix mensuel:</span>
+                                <span id="monthly-price">0 FCFA</span>
+                            </div>
+                            <div class="price-line">
+                                <span>Durée:</span>
+                                <span id="duration-display">1 mois</span>
+                            </div>
+                            <div class="price-line discount">
+                                <span>Remise:</span>
+                                <span id="discount-amount">0 FCFA</span>
+                            </div>
+                            <div class="price-line total">
+                                <span>Total:</span>
+                                <span id="total-price">0 FCFA</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h4>Options</h4>
+                    <div class="form-group">
+                        <label for="payment-status">Statut de paiement</label>
+                        <select id="payment-status" name="payment_status">
+                            <option value="pending">En attente</option>
+                            <option value="paid">Payé</option>
+                            <option value="partial">Partiel</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subscription-notes">Notes</label>
+                        <textarea id="subscription-notes" name="notes" rows="3" placeholder="Notes internes sur cette souscription..."></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeModal('subscription-modal')">
+                    Annuler
+                </button>
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-save"></i> Créer Souscription
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.modal-content.large {
+    max-width: 800px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: #333;
+    font-size: 1.3rem;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: #666;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+    background: #f8f9fa;
+    color: #333;
+}
+
+.modal-body {
+    padding: 25px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 20px 25px;
+    border-top: 1px solid #e9ecef;
+    background: #f8f9fa;
+}
+
+.form-section {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.form-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.form-section h4 {
+    margin: 0 0 15px 0;
+    color: #28a745;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #333;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #28a745;
+    box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.2);
+}
+
+.form-group small {
+    display: block;
+    margin-top: 5px;
+    color: #666;
+    font-size: 0.8rem;
+}
+
+.packages-selection {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.package-option {
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.package-option:hover {
+    border-color: #28a745;
+    background: #f8f9fa;
+}
+
+.package-option.selected {
+    border-color: #28a745;
+    background: #e8f5e8;
+}
+
+.package-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.package-name {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.package-price {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #28a745;
+    margin-bottom: 8px;
+}
+
+.package-features {
+    font-size: 0.8rem;
+    color: #666;
+    line-height: 1.4;
+}
+
+.price-summary {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.price-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.price-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.price-line.discount {
+    color: #28a745;
+}
+
+.price-line.total {
+    font-weight: bold;
+    font-size: 1.1rem;
+    padding-top: 10px;
+    border-top: 1px solid #dee2e6;
+    color: #333;
+}
+
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+        margin: 20px;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .packages-selection {
+        grid-template-columns: 1fr;
+    }
+    
+    .modal-footer {
+        flex-direction: column;
+    }
+}
+</style>

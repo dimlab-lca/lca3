@@ -1,0 +1,347 @@
+{% extends "base.html" %}
+
+{% block title %}Contact - LCA TV{% endblock %}
+
+{% block content %}
+<div style="display: grid; grid-template-columns: 1fr 350px; gap: 30px; margin-top: 0;">
+    <div class="content-left">
+        <h1 style="font-size: 32px; color: #28a745; margin-bottom: 10px; text-align: center;">Contactez LCA TV</h1>
+        <p style="color: #666; margin-bottom: 40px; text-align: center; font-size: 16px;">Nous sommes à votre écoute - Votre avis compte pour nous</p>
+        
+        <!-- Contact Methods -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; margin-bottom: 40px;">
+            <div style="background: white; border-radius: 15px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; border-top: 4px solid #28a745;">
+                <div style="width: 70px; height: 70px; background: linear-gradient(135deg, #28a745, #20693e); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: white; font-size: 1.8rem;">
+                    <i class="fas fa-phone"></i>
+                </div>
+                <h3 style="color: #333; margin-bottom: 10px;">Téléphone</h3>
+                <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">Appelez-nous directement</p>
+                <p style="color: #28a745; font-weight: bold; font-size: 1.1rem;">+226 25 36 45 78</p>
+            </div>
+
+            <div style="background: white; border-radius: 15px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; border-top: 4px solid #4472c4;">
+                <div style="width: 70px; height: 70px; background: linear-gradient(135deg, #4472c4, #3451a3); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: white; font-size: 1.8rem;">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <h3 style="color: #333; margin-bottom: 10px;">Email</h3>
+                <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">Écrivez-nous</p>
+                <p style="color: #4472c4; font-weight: bold; font-size: 1.1rem;">contact@lcatv.bf</p>
+            </div>
+
+            <div style="background: white; border-radius: 15px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; border-top: 4px solid #e74c3c;">
+                <div style="width: 70px; height: 70px; background: linear-gradient(135deg, #e74c3c, #c0392b); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: white; font-size: 1.8rem;">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <h3 style="color: #333; margin-bottom: 10px;">Adresse</h3>
+                <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">Rendez-nous visite</p>
+                <p style="color: #e74c3c; font-weight: bold; font-size: 1rem;">Avenue Kwame N'Krumah<br>Ouagadougou, Burkina Faso</p>
+            </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div style="background: white; border-radius: 15px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-bottom: 40px;">
+            <h2 style="color: #28a745; margin-bottom: 25px; font-size: 1.5rem; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-paper-plane"></i>
+                Envoyez-nous un Message
+            </h2>
+            
+            <form id="contactForm" style="display: grid; gap: 20px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <label style="display: block; color: #333; font-weight: 600; margin-bottom: 8px;">Nom complet *</label>
+                        <input type="text" name="name" required style="width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border-color 0.3s ease;">
+                    </div>
+                    <div>
+                        <label style="display: block; color: #333; font-weight: 600; margin-bottom: 8px;">Email *</label>
+                        <input type="email" name="email" required style="width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border-color 0.3s ease;">
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <label style="display: block; color: #333; font-weight: 600; margin-bottom: 8px;">Téléphone</label>
+                        <input type="tel" name="phone" style="width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border-color 0.3s ease;">
+                    </div>
+                    <div>
+                        <label style="display: block; color: #333; font-weight: 600; margin-bottom: 8px;">Sujet</label>
+                        <select name="subject" style="width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border-color 0.3s ease;">
+                            <option value="general">Question générale</option>
+                            <option value="emission">Proposition d'émission</option>
+                            <option value="pub">Partenariat publicitaire</option>
+                            <option value="technique">Problème technique</option>
+                            <option value="emploi">Candidature emploi</option>
+                            <option value="autre">Autre</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div>
+                    <label style="display: block; color: #333; font-weight: 600; margin-bottom: 8px;">Message *</label>
+                    <textarea name="message" required rows="6" style="width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; resize: vertical; transition: border-color 0.3s ease;" placeholder="Décrivez votre demande en détail..."></textarea>
+                </div>
+                
+                <button type="submit" style="background: linear-gradient(135deg, #28a745, #20693e); color: white; padding: 15px 30px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: transform 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <i class="fas fa-paper-plane"></i>
+                    Envoyer le Message
+                </button>
+            </form>
+        </div>
+
+        <!-- Social Media & Hours -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 40px;">
+            <!-- Social Media -->
+            <div style="background: white; border-radius: 15px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                <h3 style="color: #333; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-share-alt" style="color: #4472c4;"></i>
+                    Suivez-nous
+                </h3>
+                <div style="display: grid; gap: 15px;">
+                    <a href="#" style="display: flex; align-items: center; gap: 15px; padding: 12px; border-radius: 8px; text-decoration: none; transition: background 0.3s ease; border: 1px solid #e0e0e0;">
+                        <div style="width: 40px; height: 40px; background: #1877f2; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
+                            <i class="fab fa-facebook-f"></i>
+                        </div>
+                        <div>
+                            <div style="color: #333; font-weight: 600;">Facebook</div>
+                            <div style="color: #666; font-size: 0.8rem;">@LCATVBurkinaFaso</div>
+                        </div>
+                    </a>
+                    
+                    <a href="#" style="display: flex; align-items: center; gap: 15px; padding: 12px; border-radius: 8px; text-decoration: none; transition: background 0.3s ease; border: 1px solid #e0e0e0;">
+                        <div style="width: 40px; height: 40px; background: #ff0000; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
+                            <i class="fab fa-youtube"></i>
+                        </div>
+                        <div>
+                            <div style="color: #333; font-weight: 600;">YouTube</div>
+                            <div style="color: #666; font-size: 0.8rem;">LCA TV Officiel</div>
+                        </div>
+                    </a>
+                    
+                    <a href="#" style="display: flex; align-items: center; gap: 15px; padding: 12px; border-radius: 8px; text-decoration: none; transition: background 0.3s ease; border: 1px solid #e0e0e0;">
+                        <div style="width: 40px; height: 40px; background: #1da1f2; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
+                            <i class="fab fa-twitter"></i>
+                        </div>
+                        <div>
+                            <div style="color: #333; font-weight: 600;">Twitter</div>
+                            <div style="color: #666; font-size: 0.8rem;">@LCATVBurkina</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Hours -->
+            <div style="background: white; border-radius: 15px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                <h3 style="color: #333; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-clock" style="color: #28a745;"></i>
+                    Horaires
+                </h3>
+                <div style="display: grid; gap: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #f0f0f0;">
+                        <span style="color: #333; font-weight: 600;">Lundi - Vendredi</span>
+                        <span style="color: #28a745; font-weight: 600;">07:00 - 24:00</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #f0f0f0;">
+                        <span style="color: #333; font-weight: 600;">Samedi</span>
+                        <span style="color: #28a745; font-weight: 600;">08:00 - 24:00</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #f0f0f0;">
+                        <span style="color: #333; font-weight: 600;">Dimanche</span>
+                        <span style="color: #28a745; font-weight: 600;">09:00 - 23:00</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0;">
+                        <span style="color: #333; font-weight: 600;">Urgences</span>
+                        <span style="color: #e74c3c; font-weight: 600;">24h/24</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Map -->
+        <div style="background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+            <div style="padding: 20px; border-bottom: 1px solid #e0e0e0;">
+                <h3 style="color: #333; margin: 0; display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-map-marked-alt" style="color: #e74c3c;"></i>
+                    Notre Localisation
+                </h3>
+            </div>
+            <div style="height: 300px; background: linear-gradient(135deg, #28a745, #20693e); display: flex; align-items: center; justify-content: center; color: white;">
+                <div style="text-align: center;">
+                    <i class="fas fa-map-marker-alt" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                    <h4 style="margin-bottom: 10px;">LCA TV Studios</h4>
+                    <p style="margin: 0; opacity: 0.9;">Avenue Kwame N'Krumah<br>Secteur 4, Ouagadougou<br>Burkina Faso</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <!-- Contact Rapide -->
+        <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.1); margin-bottom: 25px;">
+            <h3 style="background: #28a745; color: white; padding: 15px 20px; margin: 0; font-size: 16px; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-headset"></i>
+                Contact Rapide
+            </h3>
+            <div style="padding: 20px;">
+                <div style="margin-bottom: 20px;">
+                    <h4 style="color: #333; margin-bottom: 10px; font-size: 1rem;">Service Rédaction</h4>
+                    <p style="color: #666; font-size: 0.9rem; margin-bottom: 8px;">Pour vos communiqués et informations</p>
+                    <p style="color: #28a745; font-weight: bold;">+226 25 36 45 79</p>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <h4 style="color: #333; margin-bottom: 10px; font-size: 1rem;">Service Commercial</h4>
+                    <p style="color: #666; font-size: 0.9rem; margin-bottom: 8px;">Publicité et partenariats</p>
+                    <p style="color: #4472c4; font-weight: bold;">+226 25 36 45 80</p>
+                </div>
+                
+                <div>
+                    <h4 style="color: #333; margin-bottom: 10px; font-size: 1rem;">Service Technique</h4>
+                    <p style="color: #666; font-size: 0.9rem; margin-bottom: 8px;">Support et problèmes techniques</p>
+                    <p style="color: #e74c3c; font-weight: bold;">+226 25 36 45 81</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ -->
+        <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.1); margin-bottom: 25px;">
+            <h3 style="background: #4472c4; color: white; padding: 15px 20px; margin: 0; font-size: 16px; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-question-circle"></i>
+                Questions Fréquentes
+            </h3>
+            <div style="padding: 20px;">
+                <div style="margin-bottom: 15px;">
+                    <h5 style="color: #333; font-size: 0.9rem; margin-bottom: 5px;">Comment proposer un sujet ?</h5>
+                    <p style="color: #666; font-size: 0.8rem; line-height: 1.4;">Contactez notre service rédaction par email ou téléphone.</p>
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    <h5 style="color: #333; font-size: 0.9rem; margin-bottom: 5px;">Tarifs publicitaires ?</h5>
+                    <p style="color: #666; font-size: 0.8rem; line-height: 1.4;">Contactez notre service commercial pour un devis personnalisé.</p>
+                </div>
+                
+                <div>
+                    <h5 style="color: #333; font-size: 0.9rem; margin-bottom: 5px;">Problème de réception ?</h5>
+                    <p style="color: #666; font-size: 0.8rem; line-height: 1.4;">Notre service technique vous aide 24h/24.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Publicité -->
+        <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.1); margin-bottom: 25px;">
+            <div style="background: #e74c3c; color: white; padding: 10px 15px; text-align: center; font-size: 12px; font-weight: bold;">
+                PUBLICITÉ
+            </div>
+            <div style="height: 250px; background: linear-gradient(135deg, #f8f9fa, #e9ecef); display: flex; align-items: center; justify-content: center;">
+                <div style="text-align: center; color: #6c757d;">
+                    <i class="fas fa-ad" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                    <div style="font-weight: 600;">Votre Pub Ici</div>
+                    <div style="font-size: 0.8rem;">300 x 250</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feedback -->
+        <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.1);">
+            <h3 style="background: #f39c12; color: white; padding: 15px 20px; margin: 0; font-size: 16px; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-star"></i>
+                Votre Avis
+            </h3>
+            <div style="padding: 20px;">
+                <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">Aidez-nous à améliorer nos programmes !</p>
+                <div style="display: flex; justify-content: center; gap: 5px; margin-bottom: 15px;">
+                    <i class="fas fa-star rating-star" style="color: #f39c12; cursor: pointer; font-size: 1.2rem;"></i>
+                    <i class="fas fa-star rating-star" style="color: #f39c12; cursor: pointer; font-size: 1.2rem;"></i>
+                    <i class="fas fa-star rating-star" style="color: #f39c12; cursor: pointer; font-size: 1.2rem;"></i>
+                    <i class="fas fa-star rating-star" style="color: #f39c12; cursor: pointer; font-size: 1.2rem;"></i>
+                    <i class="fas fa-star rating-star" style="color: #ddd; cursor: pointer; font-size: 1.2rem;"></i>
+                </div>
+                <button style="background: #f39c12; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; width: 100%;">
+                    Laisser un avis
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+input:focus, textarea:focus, select:focus {
+    border-color: #28a745 !important;
+    outline: none;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+.rating-star:hover {
+    color: #f39c12 !important;
+}
+
+@media (max-width: 768px) {
+    .main-content > div {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+    }
+    
+    form > div:first-child,
+    form > div:nth-child(2) {
+        grid-template-columns: 1fr !important;
+    }
+}
+</style>
+
+<script>
+// Form submission
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Get form data
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+    
+    // Simple validation
+    if (!data.name || !data.email || !data.message) {
+        alert('Veuillez remplir tous les champs obligatoires.');
+        return;
+    }
+    
+    // Simulate form submission
+    const button = this.querySelector('button[type="submit"]');
+    const originalText = button.innerHTML;
+    
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi en cours...';
+    button.disabled = true;
+    
+    setTimeout(() => {
+        alert('Message envoyé avec succès ! Nous vous répondrons dans les plus brefs délais.');
+        this.reset();
+        button.innerHTML = originalText;
+        button.disabled = false;
+    }, 2000);
+});
+
+// Rating stars interaction
+document.querySelectorAll('.rating-star').forEach((star, index) => {
+    star.addEventListener('click', function() {
+        // Reset all stars
+        document.querySelectorAll('.rating-star').forEach((s, i) => {
+            if (i <= index) {
+                s.style.color = '#f39c12';
+            } else {
+                s.style.color = '#ddd';
+            }
+        });
+    });
+});
+
+// Social links hover effect
+document.querySelectorAll('a[href="#"]').forEach(link => {
+    link.addEventListener('mouseenter', function() {
+        this.style.backgroundColor = '#f8f9fa';
+    });
+    
+    link.addEventListener('mouseleave', function() {
+        this.style.backgroundColor = 'transparent';
+    });
+});
+</script>
+{% endblock %}

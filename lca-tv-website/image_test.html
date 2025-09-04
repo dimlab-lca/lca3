@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LCA TV - Image Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .image-test { margin: 20px 0; padding: 10px; border: 1px solid #ddd; }
+        .image-test img { max-width: 300px; height: auto; display: block; margin: 10px 0; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <h1>LCA TV - Image Display Test</h1>
+    <p>This page tests if all required images are loading correctly.</p>
+    
+
+    <div class="image-test">
+        <h3>1. LOGO LCA.png</h3>
+        <img src="static/images/LOGO LCA.png" alt="LOGO LCA.png" 
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <div class="error" style="display:none;">❌ Image failed to load: LOGO LCA.png</div>
+        <p>Direct link: <a href="static/images/LOGO LCA.png" target="_blank">static/images/LOGO LCA.png</a></p>
+    </div>
+
+    <div class="image-test">
+        <h3>2. FRANC PARLER (TOUS LES MERCREDIS A 20H 40).png</h3>
+        <img src="static/images/FRANC PARLER (TOUS LES MERCREDIS A 20H 40).png" alt="FRANC PARLER (TOUS LES MERCREDIS A 20H 40).png" 
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <div class="error" style="display:none;">❌ Image failed to load: FRANC PARLER (TOUS LES MERCREDIS A 20H 40).png</div>
+        <p>Direct link: <a href="static/images/FRANC PARLER (TOUS LES MERCREDIS A 20H 40).png" target="_blank">static/images/FRANC PARLER (TOUS LES MERCREDIS A 20H 40).png</a></p>
+    </div>
+
+    <div class="image-test">
+        <h3>3. 7 AFRIQUE (TOUS LES DIMANCHES A 13H 00).png</h3>
+        <img src="static/images/7 AFRIQUE (TOUS LES DIMANCHES A 13H 00).png" alt="7 AFRIQUE (TOUS LES DIMANCHES A 13H 00).png" 
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <div class="error" style="display:none;">❌ Image failed to load: 7 AFRIQUE (TOUS LES DIMANCHES A 13H 00).png</div>
+        <p>Direct link: <a href="static/images/7 AFRIQUE (TOUS LES DIMANCHES A 13H 00).png" target="_blank">static/images/7 AFRIQUE (TOUS LES DIMANCHES A 13H 00).png</a></p>
+    </div>
+
+    <div class="image-test">
+        <h3>4. QUESTIONS DE FEMMES (TOUS LES LUNDIS A 20H 40).png</h3>
+        <img src="static/images/QUESTIONS DE FEMMES (TOUS LES LUNDIS A 20H 40).png" alt="QUESTIONS DE FEMMES (TOUS LES LUNDIS A 20H 40).png" 
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <div class="error" style="display:none;">❌ Image failed to load: QUESTIONS DE FEMMES (TOUS LES LUNDIS A 20H 40).png</div>
+        <p>Direct link: <a href="static/images/QUESTIONS DE FEMMES (TOUS LES LUNDIS A 20H 40).png" target="_blank">static/images/QUESTIONS DE FEMMES (TOUS LES LUNDIS A 20H 40).png</a></p>
+    </div>
+
+    <div class="image-test">
+        <h3>5. SOLEIL D_AFRIQUE (DU LUNDI AU VENDREDI A 11H 00).png</h3>
+        <img src="static/images/SOLEIL D_AFRIQUE (DU LUNDI AU VENDREDI A 11H 00).png" alt="SOLEIL D_AFRIQUE (DU LUNDI AU VENDREDI A 11H 00).png" 
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <div class="error" style="display:none;">❌ Image failed to load: SOLEIL D_AFRIQUE (DU LUNDI AU VENDREDI A 11H 00).png</div>
+        <p>Direct link: <a href="static/images/SOLEIL D_AFRIQUE (DU LUNDI AU VENDREDI A 11H 00).png" target="_blank">static/images/SOLEIL D_AFRIQUE (DU LUNDI AU VENDREDI A 11H 00).png</a></p>
+    </div>
+
+    <script>
+        // Check if images loaded successfully
+        window.addEventListener('load', function() {
+            const images = document.querySelectorAll('img');
+            let loadedCount = 0;
+            let totalCount = images.length;
+            
+            images.forEach(img => {
+                if (img.complete && img.naturalHeight !== 0) {
+                    loadedCount++;
+                }
+            });
+            
+            const result = document.createElement('div');
+            result.style.cssText = 'margin: 20px 0; padding: 15px; border-radius: 5px; font-weight: bold;';
+            
+            if (loadedCount === totalCount) {
+                result.className = 'success';
+                result.style.backgroundColor = '#d4edda';
+                result.innerHTML = `🎉 SUCCESS: All ${totalCount} images loaded correctly!`;
+            } else {
+                result.className = 'error';
+                result.style.backgroundColor = '#f8d7da';
+                result.innerHTML = `⚠️ WARNING: Only ${loadedCount}/${totalCount} images loaded correctly.`;
+            }
+            
+            document.body.appendChild(result);
+        });
+    </script>
+</body>
+</html>

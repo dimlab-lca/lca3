@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test API Espaces Publicitaires</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+        .error { color: red; }
+        .success { color: green; }
+        select, button { padding: 10px; margin: 5px; }
+        #results { background: #f5f5f5; padding: 15px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Test API Espaces Publicitaires LCA TV</h1>
+        
+        <div class="section">
+            <h2>Test de l'API</h2>
+            <button onclick="testSpacesAPI()">Tester /api/admin/ad-spaces</button>
+            <button onclick="testClientsAPI()">Tester /api/admin/clients</button>
+            <button onclick="testHealthAPI()">Tester /health</button>
+        </div>
+        
+        <div class="section">
+            <h2>Simulation du formulaire</h2>
+            <label for="client-select">Client:</label>
+            <select id="client-select">
+                <option value="">Sélectionner un client</option>
+            </select>
+            <br>
+            <label for="space-select">Espace publicitaire:</label>
+            <select id="space-select">
+                <option value="">Sélectionner un espace</option>
+            </select>
+            <br>
+            <button onclick="loadFormData()">Charger les données</button>
+        </div>
+        
+        <div class="section">
+            <h2>Résultats</h2>
+            <div id="results">Cliquez sur un bouton pour tester...</div>
+        </div>
+    </div>
+
+    <script>
+        const baseURL = 'http://localhost:5005';
+        
+        function log(message, type = 'info') {
+            const results = document.getElementById('results');
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'error' ? 'error' : (type === 'success' ? 'success' : '');
+            results.innerHTML += `<div class="${className}">[${timestamp}] ${message}</div>`;
+        }
+        
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+        
+        async function testHealthAPI() {
+            clearResults();
+            log('🔍 Test de l\'API Health...');
+            
+            try {
+                const response = await fetch(`${baseURL}/health`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    log('✅ API Health OK', 'success');
+                    log(`Version: ${data.version}`);
+                    log(`Database: ${data.database}`);
+                    log(`Features: ${JSON.stringify(data.features)}`);
+                } else {
+                    log(`❌ Erreur Health API: ${response.status}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ Erreur de connexion: ${error.message}`, 'error');
+                log('Assurez-vous que l\'application est démarrée sur le port 5005', 'error');
+            }
+        }
+        
+        async function testSpacesAPI() {
+            clearResults();
+            log('🔍 Test de l\'API Espaces Publicitaires...');
+            
+            try {
+                const response = await fetch(`${baseURL}/api/admin/ad-spaces`);
+                
+                if (response.status === 401) {
+                    log('⚠️ Authentification requise (normal pour l\'API admin)', 'error');
+                    log('Vous devez être connecté pour accéder à cette API');
+                    return;
+                }
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    log(`✅ ${data.length} espaces publicitaires trouvés`, 'success');
+                    
+                    // Remplir le select
+                    const select = document.getElementById('space-select');
+                    select.innerHTML = '<option value="">Sélectionner un espace</option>';
+                    
+                    data.forEach(space => {
+                        const option = document.createElement('option');
+                        option.value = space.id;
+                        option.textContent = `${space.name} (${space.width}x${space.height})`;
+                        select.appendChild(option);
+                        
+                        log(`• ${space.name} - ${space.location} (${space.width}x${space.height})`);
+                    });
+                    
+                } else {
+                    log(`❌ Erreur API Spaces: ${response.status}`, 'error');
+                    log(`Response: ${JSON.stringify(data)}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ Erreur de connexion: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testClientsAPI() {
+            clearResults();
+            log('🔍 Test de l\'API Clients...');
+            
+            try {
+                const response = await fetch(`${baseURL}/api/admin/clients`);
+                
+                if (response.status === 401) {
+                    log('⚠️ Authentification requise (normal pour l\'API admin)', 'error');
+                    return;
+                }
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    log(`✅ ${data.length} clients trouvés`, 'success');
+                    
+                    // Remplir le select
+                    const select = document.getElementById('client-select');
+                    select.innerHTML = '<option value="">Sélectionner un client</option>';
+                    
+                    data.forEach(client => {
+                        const option = document.createElement('option');
+                        option.value = client.id;
+                        option.textContent = client.name;
+                        select.appendChild(option);
+                        
+                        log(`• ${client.name} - ${client.email}`);
+                    });
+                    
+                } else {
+                    log(`❌ Erreur API Clients: ${response.status}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ Erreur de connexion: ${error.message}`, 'error');
+            }
+        }
+        
+        async function loadFormData() {
+            clearResults();
+            log('🔄 Chargement des données du formulaire...');
+            
+            await testClientsAPI();
+            await testSpacesAPI();
+            
+            log('✅ Données du formulaire chargées', 'success');
+        }
+        
+        // Test automatique au chargement
+        window.onload = function() {
+            log('🚀 Page de test chargée');
+            log('Cliquez sur "Tester /health" pour vérifier la connexion');
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direct - LCA TV</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #28a745, #20693e);
+            color: white;
+            padding: 1rem 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+        
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+        
+        .main {
+            padding: 2rem 0;
+        }
+        
+        .live-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .live-status {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .live-indicator {
+            width: 20px;
+            height: 20px;
+            background: #dc3545;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .live-title {
+            font-size: 1.5rem;
+            color: #dc3545;
+            font-weight: bold;
+        }
+        
+        .video-player {
+            width: 100%;
+            height: 400px;
+            background: #000;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .live-info {
+            text-align: center;
+        }
+        
+        .live-info h2 {
+            color: #28a745;
+            margin-bottom: 1rem;
+        }
+        
+        .live-info p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .schedule {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .schedule h3 {
+            color: #28a745;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .schedule-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .schedule-item:last-child {
+            border-bottom: none;
+        }
+        
+        .schedule-time {
+            font-weight: bold;
+            color: #28a745;
+        }
+        
+        .footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .video-player {
+                height: 250px;
+            }
+            
+            .schedule-item {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="logo">LCA TV</div>
+                <ul class="nav-links">
+                    <li><a href="/">Accueil</a></li>
+                    <li><a href="/videos">Vidéos</a></li>
+                    <li><a href="/live">Direct</a></li>
+                    <li><a href="/about">À propos</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="/login">Admin</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="live-section">
+                <div class="live-status">
+                    <div class="live-indicator"></div>
+                    <div class="live-title">HORS LIGNE</div>
+                </div>
+                
+                <div class="video-player">
+                    <div>
+                        <h3>LCA TV - Diffusion Hors Ligne</h3>
+                        <p>La diffusion reprendra bientôt</p>
+                    </div>
+                </div>
+                
+                <div class="live-info">
+                    <h2>Diffusion en Direct</h2>
+                    <p>Suivez nos programmes en direct depuis notre studio à Ouagadougou.</p>
+                    <p>Nous diffusons du lundi au dimanche de 6h00 à 24h00.</p>
+                </div>
+            </div>
+            
+            <div class="schedule">
+                <h3>Programme de la Journée</h3>
+                
+                <div class="schedule-item">
+                    <div class="schedule-time">06:00</div>
+                    <div>Réveil Matin - Actualités et Musique</div>
+                </div>
+                
+                <div class="schedule-item">
+                    <div class="schedule-time">08:00</div>
+                    <div>Journal du Matin</div>
+                </div>
+                
+                <div class="schedule-item">
+                    <div class="schedule-time">12:00</div>
+                    <div>Journal de Midi</div>
+                </div>
+                
+                <div class="schedule-item">
+                    <div class="schedule-time">15:00</div>
+                    <div>Émission Culturelle</div>
+                </div>
+                
+                <div class="schedule-item">
+                    <div class="schedule-time">18:00</div>
+                    <div>Journal du Soir</div>
+                </div>
+                
+                <div class="schedule-item">
+                    <div class="schedule-time">20:00</div>
+                    <div>Franc-Parler - Débat</div>
+                </div>
+                
+                <div class="schedule-item">
+                    <div class="schedule-time">22:00</div>
+                    <div>Sport et Divertissement</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 LCA TV. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Auto-refresh live status every 30 seconds
+        setInterval(function() {
+            fetch('/api/live-status')
+                .then(response => response.json())
+                .then(data => {
+                    const indicator = document.querySelector('.live-indicator');
+                    const title = document.querySelector('.live-title');
+                    
+                    if (data.is_live) {
+                        indicator.style.background = '#28a745';
+                        title.textContent = 'EN DIRECT';
+                        title.style.color = '#28a745';
+                    } else {
+                        indicator.style.background = '#dc3545';
+                        title.textContent = 'HORS LIGNE';
+                        title.style.color = '#dc3545';
+                    }
+                })
+                .catch(error => console.log('Erreur lors de la vérification du statut live:', error));
+        }, 30000);
+    </script>
+</body>
+</html>

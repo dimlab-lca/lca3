@@ -1,0 +1,1642 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Avancé - LCA TV</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        .dashboard-header {
+            background: linear-gradient(135deg, #28a745, #20693e);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        .logo-section p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .dashboard-nav {
+            background: white;
+            border-bottom: 1px solid #e9ecef;
+            padding: 0;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tab:hover {
+            background: #f8f9fa;
+        }
+
+        .nav-tab.active {
+            border-bottom-color: #28a745;
+            color: #28a745;
+            background: #f8f9fa;
+        }
+
+        .dashboard-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .stat-icon.users { background: #007bff; }
+        .stat-icon.ads { background: #28a745; }
+        .stat-icon.clients { background: #ffc107; }
+        .stat-icon.revenue { background: #dc3545; }
+
+        .stat-info h3 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .stat-info p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .section-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            padding: 20px 25px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-header h2 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.3rem;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .section-content {
+            padding: 25px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .table th,
+        .table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #28a745;
+            box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.2);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .ad-space-preview {
+            border: 2px dashed #ddd;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px;
+            margin: 10px 0;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
+        }
+
+        .ad-space-preview.occupied {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        .file-upload {
+            border: 2px dashed #ddd;
+            padding: 30px;
+            text-align: center;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload:hover {
+            border-color: #28a745;
+            background: #f8f9fa;
+        }
+
+        .file-upload.dragover {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-container {
+                flex-wrap: wrap;
+            }
+
+            .table {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="dashboard-header">
+        <div class="header-content">
+            <div class="logo-section">
+                <h1><i class="fas fa-tv"></i> LCA TV Dashboard</h1>
+                <p>Système de Gestion Avancé</p>
+            </div>
+            <div class="user-section">
+                <div class="user-info">
+                    <div><strong>{{ session.user or 'Admin' }}</strong></div>
+                    <div style="font-size: 0.8rem; opacity: 0.8;">Administrateur</div>
+                </div>
+                <a href="{{ url_for('logout') }}" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Déconnexion
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="dashboard-nav">
+        <div class="nav-container">
+            <div class="nav-tab active" data-tab="overview">
+                <i class="fas fa-chart-line"></i> Vue d'ensemble
+            </div>
+            <div class="nav-tab" data-tab="users">
+                <i class="fas fa-users"></i> Utilisateurs
+            </div>
+            <div class="nav-tab" data-tab="clients">
+                <i class="fas fa-handshake"></i> Clients
+            </div>
+            <div class="nav-tab" data-tab="ads">
+                <i class="fas fa-ad"></i> Publicités
+            </div>
+            <div class="nav-tab" data-tab="spaces">
+                <i class="fas fa-map"></i> Espaces Pub
+            </div>
+            <div class="nav-tab" data-tab="portfolio">
+                <i class="fas fa-briefcase"></i> Portefeuille
+            </div>
+            <div class="nav-tab" data-tab="settings">
+                <i class="fas fa-cog"></i> Paramètres
+            </div>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="dashboard-content">
+        <!-- Vue d'ensemble -->
+        <div class="tab-content active" id="overview">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon users">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="total-users">{{ stats.total_users or 0 }}</h3>
+                        <p>Utilisateurs</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon ads">
+                        <i class="fas fa-ad"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="total-ads">{{ stats.total_ads or 0 }}</h3>
+                        <p>Publicités Actives</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon clients">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="total-clients">{{ stats.total_clients or 0 }}</h3>
+                        <p>Clients</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon revenue">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="total-revenue">{{ "{:,}".format(stats.monthly_revenue or 0) }} FCFA</h3>
+                        <p>Revenus Mensuels</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-header">
+                    <h2><i class="fas fa-chart-bar"></i> Activité Récente</h2>
+                </div>
+                <div class="section-content">
+                    <div id="recent-activity">
+                        <p>Chargement des activités récentes...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gestion des Utilisateurs -->
+        <div class="tab-content" id="users">
+            <div class="section-card">
+                <div class="section-header">
+                    <h2><i class="fas fa-users"></i> Gestion des Utilisateurs</h2>
+                    <button class="btn btn-primary" onclick="openUserModal()">
+                        <i class="fas fa-plus"></i> Ajouter Utilisateur
+                    </button>
+                </div>
+                <div class="section-content">
+                    <table class="table" id="users-table">
+                        <thead>
+                            <tr>
+                                <th>Nom d'utilisateur</th>
+                                <th>Email</th>
+                                <th>Rôle</th>
+                                <th>Statut</th>
+                                <th>Dernière connexion</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Les utilisateurs seront chargés ici -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gestion des Clients -->
+        <div class="tab-content" id="clients">
+            <div class="section-card">
+                <div class="section-header">
+                    <h2><i class="fas fa-handshake"></i> Portefeuille Clients</h2>
+                    <button class="btn btn-success" onclick="openClientModal()">
+                        <i class="fas fa-plus"></i> Nouveau Client
+                    </button>
+                </div>
+                <div class="section-content">
+                    <table class="table" id="clients-table">
+                        <thead>
+                            <tr>
+                                <th>Nom/Entreprise</th>
+                                <th>Contact</th>
+                                <th>Souscriptions</th>
+                                <th>Revenus Total</th>
+                                <th>Statut</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Les clients seront chargés ici -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gestion des Publicités -->
+        <div class="tab-content" id="ads">
+            <div class="section-card">
+                <div class="section-header">
+                    <h2><i class="fas fa-ad"></i> Gestion des Publicités</h2>
+                    <button class="btn btn-success" onclick="openAdModal()">
+                        <i class="fas fa-plus"></i> Nouvelle Publicité
+                    </button>
+                </div>
+                <div class="section-content">
+                    <table class="table" id="ads-table">
+                        <thead>
+                            <tr>
+                                <th>Titre</th>
+                                <th>Client</th>
+                                <th>Espace</th>
+                                <th>Période</th>
+                                <th>Statut</th>
+                                <th>Performance</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Les publicités seront chargées ici -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gestion des Espaces Publicitaires -->
+        <div class="tab-content" id="spaces">
+            <div class="section-card">
+                <div class="section-header">
+                    <h2><i class="fas fa-map"></i> Espaces Publicitaires</h2>
+                    <button class="btn btn-primary" onclick="openSpaceModal()">
+                        <i class="fas fa-plus"></i> Nouvel Espace
+                    </button>
+                </div>
+                <div class="section-content">
+                    <div class="form-grid">
+                        <div>
+                            <h3>Espaces Disponibles</h3>
+                            <div id="available-spaces">
+                                <!-- Les espaces seront chargés ici -->
+                            </div>
+                        </div>
+                        <div>
+                            <h3>Aperçu du Site</h3>
+                            <div id="site-preview">
+                                <div class="ad-space-preview" data-space="header">
+                                    <span>Espace Header (728x90)</span>
+                                </div>
+                                <div class="ad-space-preview" data-space="sidebar">
+                                    <span>Espace Sidebar (300x250)</span>
+                                </div>
+                                <div class="ad-space-preview" data-space="footer">
+                                    <span>Espace Footer (728x90)</span>
+                                </div>
+                                <div class="ad-space-preview" data-space="popup">
+                                    <span>Popup (400x300)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Portefeuille -->
+        <div class="tab-content" id="portfolio">
+            <div class="section-card">
+                <div class="section-header">
+                    <h2><i class="fas fa-briefcase"></i> Analyse du Portefeuille</h2>
+                </div>
+                <div class="section-content">
+                    <div class="form-grid">
+                        <div class="section-card">
+                            <div class="section-header">
+                                <h3>Revenus par Mois</h3>
+                            </div>
+                            <div class="section-content">
+                                <canvas id="revenue-chart" width="400" height="200"></canvas>
+                            </div>
+                        </div>
+                        <div class="section-card">
+                            <div class="section-header">
+                                <h3>Top Clients</h3>
+                            </div>
+                            <div class="section-content">
+                                <div id="top-clients">
+                                    <!-- Top clients seront chargés ici -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Paramètres -->
+        <div class="tab-content" id="settings">
+            <div class="section-card">
+                <div class="section-header">
+                    <h2><i class="fas fa-cog"></i> Paramètres du Site</h2>
+                </div>
+                <div class="section-content">
+                    <form id="settings-form">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="site_title">Titre du Site</label>
+                                <input type="text" id="site_title" name="site_title" class="form-control" value="{{ settings.site_title or '' }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="site_description">Description</label>
+                                <input type="text" id="site_description" name="site_description" class="form-control" value="{{ settings.site_description or '' }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="contact_email">Email de Contact</label>
+                                <input type="email" id="contact_email" name="contact_email" class="form-control" value="{{ settings.contact_email or '' }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="contact_phone">Téléphone</label>
+                                <input type="text" id="contact_phone" name="contact_phone" class="form-control" value="{{ settings.contact_phone or '' }}">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Sauvegarder
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Utilisateur -->
+    <div class="modal" id="user-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="user-modal-title">Ajouter un Utilisateur</h3>
+                <button class="close-btn" onclick="closeModal('user-modal')">&times;</button>
+            </div>
+            <form id="user-form">
+                <input type="hidden" id="user-id" name="user_id">
+                <div class="form-group">
+                    <label for="username">Nom d'utilisateur</label>
+                    <input type="text" id="username" name="username" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" name="password" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="role">Rôle</label>
+                    <select id="role" name="role" class="form-control" required>
+                        <option value="editor">Éditeur</option>
+                        <option value="admin">Administrateur</option>
+                        <option value="moderator">Modérateur</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="full_name">Nom complet</label>
+                    <input type="text" id="full_name" name="full_name" class="form-control">
+                </div>
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('user-modal')">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Sauvegarder</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Client -->
+    <div class="modal" id="client-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="client-modal-title">Nouveau Client</h3>
+                <button class="close-btn" onclick="closeModal('client-modal')">&times;</button>
+            </div>
+            <form id="client-form">
+                <input type="hidden" id="client-id" name="client_id">
+                <div class="form-group">
+                    <label for="client_name">Nom/Entreprise</label>
+                    <input type="text" id="client_name" name="client_name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="client_email">Email</label>
+                    <input type="email" id="client_email" name="client_email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="client_phone">Téléphone</label>
+                    <input type="text" id="client_phone" name="client_phone" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="company_name">Nom de l'entreprise</label>
+                    <input type="text" id="company_name" name="company_name" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="client_notes">Notes</label>
+                    <textarea id="client_notes" name="client_notes" class="form-control" rows="3"></textarea>
+                </div>
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('client-modal')">Annuler</button>
+                    <button type="submit" class="btn btn-success">Sauvegarder</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Publicité -->
+    <div class="modal" id="ad-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="ad-modal-title">Nouvelle Publicité</h3>
+                <button class="close-btn" onclick="closeModal('ad-modal')">&times;</button>
+            </div>
+            <form id="ad-form">
+                <input type="hidden" id="ad-id" name="ad_id">
+                <div class="form-group">
+                    <label for="ad_title">Titre de la publicité</label>
+                    <input type="text" id="ad_title" name="ad_title" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="ad_client">Client</label>
+                    <select id="ad_client" name="ad_client" class="form-control" required>
+                        <option value="">Sélectionner un client</option>
+                        <!-- Les clients seront chargés ici -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="ad_space">Espace publicitaire</label>
+                    <select id="ad_space" name="ad_space" class="form-control" required>
+                        <option value="">Sélectionner un espace</option>
+                        <!-- Les espaces seront chargés dynamiquement -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="ad_type">Type de contenu</label>
+                    <select id="ad_type" name="ad_type" class="form-control" required onchange="toggleAdContent()">
+                        <option value="image">Image</option>
+                        <option value="html">Code HTML</option>
+                        <option value="video">Vidéo</option>
+                    </select>
+                </div>
+                <div class="form-group" id="image-upload" style="display: block;">
+                    <label>Image publicitaire</label>
+                    <div class="file-upload" onclick="document.getElementById('ad-image').click()">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #666; margin-bottom: 10px;"></i>
+                        <p>Cliquez pour sélectionner une image</p>
+                        <input type="file" id="ad-image" name="ad_image" accept="image/*" style="display: none;" onchange="previewImage(this)">
+                    </div>
+                    <div id="image-preview" style="margin-top: 10px;"></div>
+                </div>
+                <div class="form-group" id="html-content" style="display: none;">
+                    <label for="ad_html">Code HTML</label>
+                    <textarea id="ad_html" name="ad_html" class="form-control" rows="5" placeholder="<div>Votre code HTML ici...</div>"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="ad_url">URL de destination (optionnel)</label>
+                    <input type="url" id="ad_url" name="ad_url" class="form-control" placeholder="https://example.com">
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="ad_start_date">Date de début</label>
+                        <input type="date" id="ad_start_date" name="ad_start_date" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ad_end_date">Date de fin</label>
+                        <input type="date" id="ad_end_date" name="ad_end_date" class="form-control" required>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('ad-modal')">Annuler</button>
+                    <button type="submit" class="btn btn-success">Créer Publicité</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Espace Publicitaire -->
+    <div class="modal" id="space-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Nouvel Espace Publicitaire</h3>
+                <button class="close-btn" onclick="closeModal('space-modal')">&times;</button>
+            </div>
+            <form id="space-form">
+                <div class="form-group">
+                    <label for="space_name">Nom de l'espace</label>
+                    <input type="text" id="space_name" name="space_name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="space_location">Emplacement</label>
+                    <select id="space_location" name="space_location" class="form-control" required>
+                        <option value="header">Header</option>
+                        <option value="sidebar">Sidebar</option>
+                        <option value="footer">Footer</option>
+                        <option value="content">Dans le contenu</option>
+                        <option value="popup">Popup</option>
+                        <option value="banner">Banner</option>
+                    </select>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="space_width">Largeur (px)</label>
+                        <input type="number" id="space_width" name="space_width" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="space_height">Hauteur (px)</label>
+                        <input type="number" id="space_height" name="space_height" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="space_price">Prix mensuel (FCFA)</label>
+                    <input type="number" id="space_price" name="space_price" class="form-control" required>
+                </div>
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('space-modal')">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Créer Espace</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let currentTab = 'overview';
+        let users = [];
+        let clients = [];
+        let ads = [];
+        let spaces = [];
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDashboard();
+            loadAllData();
+        });
+
+        function initializeDashboard() {
+            // Navigation entre les onglets
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.dataset.tab;
+                    switchTab(tabId);
+                });
+            });
+
+            // Gestion des formulaires
+            setupFormHandlers();
+        }
+
+        function switchTab(tabId) {
+            // Désactiver tous les onglets
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Activer l'onglet sélectionné
+            document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+
+            currentTab = tabId;
+
+            // Charger les données spécifiques à l'onglet
+            loadTabData(tabId);
+        }
+
+        function loadAllData() {
+            loadUsers();
+            loadClients();
+            loadAds();
+            loadSpaces();
+            loadStats();
+            loadRecentActivity();
+        }
+
+        function loadTabData(tabId) {
+            switch(tabId) {
+                case 'users':
+                    loadUsers();
+                    break;
+                case 'clients':
+                    loadClients();
+                    break;
+                case 'ads':
+                    loadAds();
+                    break;
+                case 'spaces':
+                    loadSpaces();
+                    break;
+                case 'portfolio':
+                    loadPortfolioData();
+                    break;
+            }
+        }
+
+        // Gestion des utilisateurs
+        function loadUsers() {
+            fetch('/api/admin/users')
+                .then(response => response.json())
+                .then(data => {
+                    users = data;
+                    renderUsersTable();
+                })
+                .catch(error => {
+                    console.error('Erreur lors du chargement des utilisateurs:', error);
+                });
+        }
+
+        function renderUsersTable() {
+            const tbody = document.querySelector('#users-table tbody');
+            tbody.innerHTML = '';
+
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${user.username}</td>
+                    <td>${user.email}</td>
+                    <td><span class="badge badge-${getRoleBadgeClass(user.role)}">${user.role}</span></td>
+                    <td><span class="badge badge-${user.is_active ? 'success' : 'danger'}">${user.is_active ? 'Actif' : 'Inactif'}</span></td>
+                    <td>${user.last_login ? new Date(user.last_login).toLocaleDateString('fr-FR') : 'Jamais'}</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm" onclick="editUser(${user.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteUser(${user.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function getRoleBadgeClass(role) {
+            switch(role) {
+                case 'admin': return 'danger';
+                case 'moderator': return 'warning';
+                default: return 'success';
+            }
+        }
+
+        // Gestion des clients
+        function loadClients() {
+            fetch('/api/admin/clients')
+                .then(response => response.json())
+                .then(data => {
+                    clients = data;
+                    renderClientsTable();
+                    updateClientSelects();
+                })
+                .catch(error => {
+                    console.error('Erreur lors du chargement des clients:', error);
+                });
+        }
+
+        function renderClientsTable() {
+            const tbody = document.querySelector('#clients-table tbody');
+            tbody.innerHTML = '';
+
+            clients.forEach(client => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>
+                        <div>${client.email}</div>
+                        <small>${client.phone || ''}</small>
+                    </td>
+                    <td>${client.subscriptions_count || 0}</td>
+                    <td>${(client.total_revenue || 0).toLocaleString()} FCFA</td>
+                    <td><span class="badge badge-${client.status === 'active' ? 'success' : 'warning'}">${client.status}</span></td>
+                    <td>
+                        <button class="btn btn-warning btn-sm" onclick="editClient(${client.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteClient(${client.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function updateClientSelects() {
+            const select = document.getElementById('ad_client');
+            select.innerHTML = '<option value="">Sélectionner un client</option>';
+            
+            clients.forEach(client => {
+                const option = document.createElement('option');
+                option.value = client.id;
+                option.textContent = client.name;
+                select.appendChild(option);
+            });
+        }
+
+        function updateSpaceSelects() {
+            const select = document.getElementById('ad_space');
+            select.innerHTML = '<option value="">Sélectionner un espace</option>';
+            
+            spaces.forEach(space => {
+                const option = document.createElement('option');
+                option.value = space.id;
+                option.textContent = `${space.name} (${space.width}x${space.height})`;
+                select.appendChild(option);
+            });
+        }
+
+        // Gestion des publicités
+        function loadAds() {
+            fetch('/api/admin/advertisements')
+                .then(response => response.json())
+                .then(data => {
+                    ads = data;
+                    renderAdsTable();
+                })
+                .catch(error => {
+                    console.error('Erreur lors du chargement des publicités:', error);
+                });
+        }
+
+        function renderAdsTable() {
+            const tbody = document.querySelector('#ads-table tbody');
+            tbody.innerHTML = '';
+
+            ads.forEach(ad => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${ad.title}</td>
+                    <td>${ad.client_name || 'N/A'}</td>
+                    <td>${ad.position}</td>
+                    <td>${ad.start_date} - ${ad.end_date}</td>
+                    <td><span class="badge badge-${ad.status === 'active' ? 'success' : 'warning'}">${ad.status}</span></td>
+                    <td>
+                        <small>${ad.impressions || 0} vues<br>${ad.clicks || 0} clics</small>
+                    </td>
+                    <td>
+                        <button class="btn btn-warning btn-sm" onclick="editAd(${ad.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteAd(${ad.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Gestion des espaces publicitaires
+        function loadSpaces() {
+            fetch('/api/admin/ad-spaces')
+                .then(response => response.json())
+                .then(data => {
+                    spaces = data;
+                    renderSpaces();
+                    updateSpaceSelects();
+                })
+                .catch(error => {
+                    console.error('Erreur lors du chargement des espaces:', error);
+                });
+        }
+
+        function renderSpaces() {
+            const container = document.getElementById('available-spaces');
+            container.innerHTML = '';
+
+            spaces.forEach(space => {
+                const spaceDiv = document.createElement('div');
+                spaceDiv.className = 'section-card';
+                spaceDiv.innerHTML = `
+                    <div class="section-header">
+                        <h4>${space.name}</h4>
+                        <span class="badge badge-${space.occupied ? 'danger' : 'success'}">
+                            ${space.occupied ? 'Occupé' : 'Libre'}
+                        </span>
+                    </div>
+                    <div class="section-content">
+                        <p><strong>Position:</strong> ${space.location}</p>
+                        <p><strong>Dimensions:</strong> ${space.width}x${space.height}px</p>
+                        <p><strong>Prix:</strong> ${space.price.toLocaleString()} FCFA/mois</p>
+                        ${space.occupied ? `<p><strong>Client:</strong> ${space.client_name}</p>` : ''}
+                        <div style="margin-top: 10px;">
+                            <button class="btn btn-warning btn-sm" onclick="editSpace(${space.id})">
+                                <i class="fas fa-edit"></i> Modifier
+                            </button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteSpace(${space.id})">
+                                <i class="fas fa-trash"></i> Supprimer
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(spaceDiv);
+            });
+        }
+
+        // Gestion des statistiques
+        function loadStats() {
+            fetch('/api/admin/overview')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('total-users').textContent = data.total_users || 0;
+                    document.getElementById('total-ads').textContent = data.total_ads || 0;
+                    document.getElementById('total-clients').textContent = data.total_clients || 0;
+                    document.getElementById('total-revenue').textContent = (data.monthly_revenue || 0).toLocaleString() + ' FCFA';
+                })
+                .catch(error => {
+                    console.error('Erreur lors du chargement des statistiques:', error);
+                });
+        }
+
+        function loadRecentActivity() {
+            fetch('/api/admin/recent-activity')
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('recent-activity');
+                    container.innerHTML = '';
+
+                    data.forEach(activity => {
+                        const activityDiv = document.createElement('div');
+                        activityDiv.style.cssText = 'display: flex; align-items: center; gap: 15px; padding: 10px; border-bottom: 1px solid #eee;';
+                        activityDiv.innerHTML = `
+                            <i class="fas fa-${activity.icon}" style="color: #28a745;"></i>
+                            <div style="flex: 1;">
+                                <div>${activity.description}</div>
+                                <small style="color: #666;">Il y a ${activity.time}</small>
+                            </div>
+                        `;
+                        container.appendChild(activityDiv);
+                    });
+                })
+                .catch(error => {
+                    console.error('Erreur lors du chargement de l\'activité récente:', error);
+                });
+        }
+
+        // Gestion des modals
+        function openUserModal(userId = null) {
+            const modal = document.getElementById('user-modal');
+            const form = document.getElementById('user-form');
+            const title = document.getElementById('user-modal-title');
+
+            if (userId) {
+                const user = users.find(u => u.id === userId);
+                if (user) {
+                    title.textContent = 'Modifier l\'utilisateur';
+                    document.getElementById('user-id').value = user.id;
+                    document.getElementById('username').value = user.username;
+                    document.getElementById('email').value = user.email;
+                    document.getElementById('role').value = user.role;
+                    document.getElementById('full_name').value = user.full_name || '';
+                    document.getElementById('password').required = false;
+                }
+            } else {
+                title.textContent = 'Ajouter un utilisateur';
+                form.reset();
+                document.getElementById('password').required = true;
+            }
+
+            modal.classList.add('show');
+        }
+
+        function openClientModal(clientId = null) {
+            const modal = document.getElementById('client-modal');
+            const form = document.getElementById('client-form');
+            const title = document.getElementById('client-modal-title');
+
+            if (clientId) {
+                const client = clients.find(c => c.id === clientId);
+                if (client) {
+                    title.textContent = 'Modifier le client';
+                    document.getElementById('client-id').value = client.id;
+                    document.getElementById('client_name').value = client.name;
+                    document.getElementById('client_email').value = client.email;
+                    document.getElementById('client_phone').value = client.phone || '';
+                    document.getElementById('company_name').value = client.company_name || '';
+                    document.getElementById('client_notes').value = client.notes || '';
+                }
+            } else {
+                title.textContent = 'Nouveau client';
+                form.reset();
+            }
+
+            modal.classList.add('show');
+        }
+
+        function openAdModal(adId = null) {
+            const modal = document.getElementById('ad-modal');
+            const form = document.getElementById('ad-form');
+            const title = document.getElementById('ad-modal-title');
+
+            if (adId) {
+                const ad = ads.find(a => a.id === adId);
+                if (ad) {
+                    title.textContent = 'Modifier la publicité';
+                    // Remplir le formulaire avec les données de la publicité
+                }
+            } else {
+                title.textContent = 'Nouvelle publicité';
+                form.reset();
+                // Définir les dates par défaut
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('ad_start_date').value = today;
+            }
+
+            modal.classList.add('show');
+        }
+
+        function openSpaceModal() {
+            const modal = document.getElementById('space-modal');
+            const form = document.getElementById('space-form');
+            form.reset();
+            modal.classList.add('show');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        // Gestion des formulaires
+        function setupFormHandlers() {
+            // Formulaire utilisateur
+            document.getElementById('user-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveUser();
+            });
+
+            // Formulaire client
+            document.getElementById('client-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveClient();
+            });
+
+            // Formulaire publicité
+            document.getElementById('ad-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveAd();
+            });
+
+            // Formulaire espace
+            document.getElementById('space-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveSpace();
+            });
+
+            // Formulaire paramètres
+            document.getElementById('settings-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveSettings();
+            });
+        }
+
+        function saveUser() {
+            const formData = new FormData(document.getElementById('user-form'));
+            const userId = formData.get('user_id');
+            const url = userId ? `/api/admin/users/${userId}` : '/api/admin/users';
+            const method = userId ? 'PUT' : 'POST';
+
+            fetch(url, {
+                method: method,
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    closeModal('user-modal');
+                    loadUsers();
+                    showNotification('Utilisateur sauvegardé avec succès', 'success');
+                } else {
+                    showNotification('Erreur lors de la sauvegarde', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                showNotification('Erreur lors de la sauvegarde', 'error');
+            });
+        }
+
+        function saveClient() {
+            const formData = new FormData(document.getElementById('client-form'));
+            const clientId = formData.get('client_id');
+            const url = clientId ? `/api/admin/clients/${clientId}` : '/api/admin/clients';
+            const method = clientId ? 'PUT' : 'POST';
+
+            fetch(url, {
+                method: method,
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    closeModal('client-modal');
+                    loadClients();
+                    showNotification('Client sauvegardé avec succès', 'success');
+                } else {
+                    showNotification('Erreur lors de la sauvegarde', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                showNotification('Erreur lors de la sauvegarde', 'error');
+            });
+        }
+
+        function saveAd() {
+            const formData = new FormData(document.getElementById('ad-form'));
+            
+            fetch('/api/admin/advertisements', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    closeModal('ad-modal');
+                    loadAds();
+                    showNotification('Publicité créée avec succès', 'success');
+                } else {
+                    showNotification('Erreur lors de la création', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                showNotification('Erreur lors de la création', 'error');
+            });
+        }
+
+        function saveSpace() {
+            const formData = new FormData(document.getElementById('space-form'));
+            
+            fetch('/api/admin/ad-spaces', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    closeModal('space-modal');
+                    loadSpaces();
+                    showNotification('Espace créé avec succès', 'success');
+                } else {
+                    showNotification('Erreur lors de la création', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                showNotification('Erreur lors de la création', 'error');
+            });
+        }
+
+        function saveSettings() {
+            const formData = new FormData(document.getElementById('settings-form'));
+            const data = Object.fromEntries(formData);
+
+            fetch('/api/admin/settings', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showNotification('Paramètres sauvegardés avec succès', 'success');
+                } else {
+                    showNotification('Erreur lors de la sauvegarde', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                showNotification('Erreur lors de la sauvegarde', 'error');
+            });
+        }
+
+        // Fonctions utilitaires
+        function editUser(userId) {
+            openUserModal(userId);
+        }
+
+        function deleteUser(userId) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
+                fetch(`/api/admin/users/${userId}`, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        loadUsers();
+                        showNotification('Utilisateur supprimé avec succès', 'success');
+                    } else {
+                        showNotification('Erreur lors de la suppression', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    showNotification('Erreur lors de la suppression', 'error');
+                });
+            }
+        }
+
+        function editClient(clientId) {
+            openClientModal(clientId);
+        }
+
+        function deleteClient(clientId) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer ce client ?')) {
+                fetch(`/api/admin/clients/${clientId}`, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        loadClients();
+                        showNotification('Client supprimé avec succès', 'success');
+                    } else {
+                        showNotification('Erreur lors de la suppression', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    showNotification('Erreur lors de la suppression', 'error');
+                });
+            }
+        }
+
+        function editAd(adId) {
+            openAdModal(adId);
+        }
+
+        function deleteAd(adId) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer cette publicité ?')) {
+                fetch(`/api/admin/advertisements/${adId}`, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        loadAds();
+                        showNotification('Publicité supprimée avec succès', 'success');
+                    } else {
+                        showNotification('Erreur lors de la suppression', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    showNotification('Erreur lors de la suppression', 'error');
+                });
+            }
+        }
+
+        function editSpace(spaceId) {
+            // Implémenter l'édition d'espace
+        }
+
+        function deleteSpace(spaceId) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer cet espace ?')) {
+                fetch(`/api/admin/ad-spaces/${spaceId}`, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        loadSpaces();
+                        showNotification('Espace supprimé avec succès', 'success');
+                    } else {
+                        showNotification('Erreur lors de la suppression', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    showNotification('Erreur lors de la suppression', 'error');
+                });
+            }
+        }
+
+        function toggleAdContent() {
+            const adType = document.getElementById('ad_type').value;
+            const imageUpload = document.getElementById('image-upload');
+            const htmlContent = document.getElementById('html-content');
+
+            imageUpload.style.display = adType === 'image' ? 'block' : 'none';
+            htmlContent.style.display = adType === 'html' ? 'block' : 'none';
+        }
+
+        function previewImage(input) {
+            const preview = document.getElementById('image-preview');
+            preview.innerHTML = '';
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.maxWidth = '200px';
+                    img.style.maxHeight = '200px';
+                    img.style.borderRadius = '5px';
+                    preview.appendChild(img);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function showNotification(message, type) {
+            // Créer une notification toast
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                border-radius: 5px;
+                color: white;
+                font-weight: 500;
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+                background: ${type === 'success' ? '#28a745' : '#dc3545'};
+            `;
+            notification.textContent = message;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Fermer les modals en cliquant à l'extérieur
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.classList.remove('show');
+            }
+        });
+
+        // Gestion du drag & drop pour les images
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileUpload = document.querySelector('.file-upload');
+            if (fileUpload) {
+                fileUpload.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('dragover');
+                });
+
+                fileUpload.addEventListener('dragleave', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('dragover');
+                });
+
+                fileUpload.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('dragover');
+                    
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        document.getElementById('ad-image').files = files;
+                        previewImage(document.getElementById('ad-image'));
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!-- User Management Modal -->
+<div id="user-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="user-modal-title">Nouvel Utilisateur</h3>
+            <button class="modal-close" onclick="closeModal('user-modal')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <form id="user-form" onsubmit="saveUser(event)">
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="user-username">Nom d'utilisateur *</label>
+                        <input type="text" id="user-username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-email">Email *</label>
+                        <input type="email" id="user-email" name="email" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="user-password">Mot de passe *</label>
+                        <input type="password" id="user-password" name="password">
+                        <small>Laissez vide pour conserver le mot de passe actuel (modification)</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-role">Rôle *</label>
+                        <select id="user-role" name="role" required>
+                            <option value="editor">Éditeur</option>
+                            <option value="admin">Administrateur</option>
+                            <option value="moderator">Modérateur</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="user-fullname">Nom complet</label>
+                        <input type="text" id="user-fullname" name="full_name">
+                    </div>
+                    <div class="form-group">
+                        <label for="user-phone">Téléphone</label>
+                        <input type="tel" id="user-phone" name="phone">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="user-active" name="is_active" checked>
+                        Compte actif
+                    </label>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeModal('user-modal')">
+                    Annuler
+                </button>
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-save"></i> Sauvegarder
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

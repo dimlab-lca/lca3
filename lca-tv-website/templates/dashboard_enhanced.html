@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - LCA TV</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        .dashboard-header {
+            background: linear-gradient(135deg, #28a745, #20693e);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .dashboard-nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .tab-navigation {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            background: white;
+            padding: 10px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .tab-btn {
+            padding: 12px 20px;
+            border: none;
+            background: transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+
+        .tab-btn.active {
+            background: #28a745;
+            color: white;
+        }
+
+        .tab-btn:hover {
+            background: #f8f9fa;
+        }
+
+        .tab-btn.active:hover {
+            background: #20693e;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 1.8rem;
+            color: white;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #20693e;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .table th,
+        .table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .table tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-inactive {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #28a745;
+            box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .news-item {
+            padding: 15px;
+            border-left: 4px solid #28a745;
+            background: #f8f9fa;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 15px;
+        }
+
+        .news-item.breaking {
+            border-left-color: #dc3545;
+            background: #fff5f5;
+        }
+
+        .news-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .news-meta {
+            font-size: 0.8rem;
+            color: #666;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .breaking-badge {
+            background: #dc3545;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .dashboard-nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .tab-navigation {
+                flex-wrap: wrap;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-tv"></i>
+                </div>
+                <div>
+                    <h1>LCA TV Dashboard</h1>
+                    <p>Administration & Analytics</p>
+                </div>
+            </div>
+            <nav class="dashboard-nav">
+                <a href="{{ url_for('home') }}" class="nav-link">
+                    <i class="fas fa-home"></i> Site Web
+                </a>
+                <a href="{{ url_for('live') }}" class="nav-link">
+                    <i class="fas fa-broadcast-tower"></i> Live
+                </a>
+                <a href="{{ url_for('logout') }}" class="nav-link">
+                    <i class="fas fa-sign-out-alt"></i> Déconnexion
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <button class="tab-btn active" onclick="showTab('overview')">
+                <i class="fas fa-chart-line"></i> Vue d'ensemble
+            </button>
+            <button class="tab-btn" onclick="showTab('publicity')">
+                <i class="fas fa-bullhorn"></i> Publicité
+            </button>
+            <button class="tab-btn" onclick="showTab('news')">
+                <i class="fas fa-newspaper"></i> Actualités
+            </button>
+            <button class="tab-btn" onclick="showTab('analytics')">
+                <i class="fas fa-chart-bar"></i> Analytics
+            </button>
+            <button class="tab-btn" onclick="showTab('content')">
+                <i class="fas fa-video"></i> Contenu
+            </button>
+        </div>
+
+        <!-- Overview Tab -->
+        <div id="overview" class="tab-content active">
+            <!-- Statistics Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #28a745, #20693e);">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <div class="stat-number" id="total-videos">{{ stats.total_videos }}</div>
+                    <div class="stat-label">Total Vidéos</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #4472c4, #3451a3);">
+                        <i class="fas fa-bullhorn"></i>
+                    </div>
+                    <div class="stat-number" id="active-ads">{{ publicity_stats.active_subscriptions }}</div>
+                    <div class="stat-label">Publicités Actives</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <div class="stat-number" id="breaking-news">{{ breaking_news|length }}</div>
+                    <div class="stat-label">Breaking News</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #f39c12, #e67e22);">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="stat-number">{{ "{:,.0f}".format(publicity_stats.monthly_revenue) }} F</div>
+                    <div class="stat-label">Revenus Mensuels</div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-bolt"></i>
+                        Actions Rapides
+                    </h2>
+                </div>
+                <div class="grid-3">
+                    <button class="btn btn-primary" onclick="showModal('addSubscriptionModal')">
+                        <i class="fas fa-plus"></i> Nouvelle Souscription
+                    </button>
+                    <button class="btn btn-primary" onclick="showModal('addNewsModal')">
+                        <i class="fas fa-plus"></i> Ajouter Actualité
+                    </button>
+                    <button class="btn btn-warning" onclick="showModal('breakingNewsModal')">
+                        <i class="fas fa-exclamation-triangle"></i> Breaking News
+                    </button>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="grid-2">
+                <div class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-clock"></i>
+                            Activité Récente
+                        </h2>
+                    </div>
+                    <div id="recent-activity">
+                        <!-- Activity items will be loaded here -->
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-newspaper"></i>
+                            Dernières Actualités
+                        </h2>
+                    </div>
+                    <div id="latest-news">
+                        {% for news in recent_news %}
+                        <div class="news-item {% if news.is_breaking %}breaking{% endif %}">
+                            <div class="news-title">
+                                {{ news.title }}
+                                {% if news.is_breaking %}
+                                <span class="breaking-badge">Breaking</span>
+                                {% endif %}
+                            </div>
+                            <div class="news-meta">
+                                <span><i class="fas fa-user"></i> {{ news.author or 'Admin' }}</span>
+                                <span><i class="fas fa-clock"></i> {{ news.publish_date[:16] }}</span>
+                                <span><i class="fas fa-eye"></i> {{ news.views }} vues</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Publicity Tab -->
+        <div id="publicity" class="tab-content">
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-bullhorn"></i>
+                        Gestion des Publicités
+                    </h2>
+                    <button class="btn btn-primary" onclick="showModal('addSubscriptionModal')">
+                        <i class="fas fa-plus"></i> Nouvelle Souscription
+                    </button>
+                </div>
+
+                <!-- Subscription Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #28a745, #20693e);">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-number">{{ publicity_stats.active_subscriptions }}</div>
+                        <div class="stat-label">Souscriptions Actives</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #4472c4, #3451a3);">
+                            <i class="fas fa-campaign"></i>
+                        </div>
+                        <div class="stat-number">{{ publicity_stats.active_campaigns }}</div>
+                        <div class="stat-label">Campagnes Actives</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #f39c12, #e67e22);">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <div class="stat-number">{{ "{:,.0f}".format(publicity_stats.monthly_revenue) }} F</div>
+                        <div class="stat-label">Revenus ce Mois</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="stat-number">{{ "{:,.0f}".format(publicity_stats.monthly_impressions) }}</div>
+                        <div class="stat-label">Impressions ce Mois</div>
+                    </div>
+                </div>
+
+                <!-- Subscriptions Table -->
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Entreprise</th>
+                            <th>Contact</th>
+                            <th>Type</th>
+                            <th>Période</th>
+                            <th>Montant</th>
+                            <th>Statut</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="subscriptions-table">
+                        {% for sub in subscriptions %}
+                        <tr>
+                            <td>{{ sub.company_name }}</td>
+                            <td>{{ sub.contact_person }}<br><small>{{ sub.email }}</small></td>
+                            <td>{{ sub.subscription_type }}</td>
+                            <td>{{ sub.start_date }} - {{ sub.end_date }}</td>
+                            <td>{{ "{:,.0f}".format(sub.amount) }} F</td>
+                            <td>
+                                <span class="status-badge status-{{ sub.status }}">
+                                    {{ sub.status.title() }}
+                                </span>
+                            </td>
+                            <td>
+                                <button class="btn btn-secondary" onclick="viewSubscription({{ sub.id }})">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn btn-primary" onclick="manageCampaigns({{ sub.id }})">
+                                    <i class="fas fa-campaign"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- News Tab -->
+        <div id="news" class="tab-content">
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-newspaper"></i>
+                        Gestion des Actualités
+                    </h2>
+                    <div>
+                        <button class="btn btn-primary" onclick="showModal('addNewsModal')">
+                            <i class="fas fa-plus"></i> Nouvelle Actualité
+                        </button>
+                        <button class="btn btn-warning" onclick="showModal('breakingNewsModal')">
+                            <i class="fas fa-exclamation-triangle"></i> Breaking News
+                        </button>
+                    </div>
+                </div>
+
+                <!-- News Table -->
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Titre</th>
+                            <th>Auteur</th>
+                            <th>Date</th>
+                            <th>Priorité</th>
+                            <th>Vues</th>
+                            <th>Statut</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for news in all_news %}
+                        <tr>
+                            <td>
+                                {{ news.title }}
+                                {% if news.is_breaking %}
+                                <span class="breaking-badge">Breaking</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ news.author or 'Admin' }}</td>
+                            <td>{{ news.publish_date[:16] }}</td>
+                            <td>{{ news.priority.title() }}</td>
+                            <td>{{ news.views }}</td>
+                            <td>
+                                <span class="status-badge status-{% if news.is_active %}active{% else %}inactive{% endif %}">
+                                    {% if news.is_active %}Actif{% else %}Inactif{% endif %}
+                                </span>
+                            </td>
+                            <td>
+                                <button class="btn btn-secondary" onclick="editNews({{ news.id }})">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-{% if news.is_active %}danger{% else %}primary{% endif %}" 
+                                        onclick="toggleNewsStatus({{ news.id }}, {{ news.is_active|lower }})">
+                                    <i class="fas fa-{% if news.is_active %}pause{% else %}play{% endif %}"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Analytics Tab -->
+        <div id="analytics" class="tab-content">
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-chart-bar"></i>
+                        Analytics Publicitaires
+                    </h2>
+                </div>
+                
+                <div class="grid-2">
+                    <div class="card">
+                        <h3>Performance des Campagnes</h3>
+                        <canvas id="campaignChart" width="400" height="200"></canvas>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Revenus Mensuels</h3>
+                        <canvas id="revenueChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Tab -->
+        <div id="content" class="tab-content">
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-video"></i>
+                        Gestion du Contenu
+                    </h2>
+                    <button class="btn btn-primary" onclick="refreshContent()">
+                        <i class="fas fa-sync-alt"></i> Actualiser
+                    </button>
+                </div>
+
+                <!-- Video Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #28a745, #20693e);">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <div class="stat-number">{{ stats.total_videos }}</div>
+                        <div class="stat-label">Total Vidéos</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #4472c4, #3451a3);">
+                            <i class="fas fa-list"></i>
+                        </div>
+                        <div class="stat-number">{{ stats.total_playlists }}</div>
+                        <div class="stat-label">Playlists</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="stat-number">
+                            {% if live_info and live_info.concurrent_viewers %}
+                                {{ live_info.concurrent_viewers }}
+                            {% else %}
+                                0
+                            {% endif %}
+                        </div>
+                        <div class="stat-label">Spectateurs Live</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #f39c12, #e67e22);">
+                            <i class="fas fa-tags"></i>
+                        </div>
+                        <div class="stat-number">{{ stats.categories|length }}</div>
+                        <div class="stat-label">Catégories</div>
+                    </div>
+                </div>
+
+                <!-- Recent Videos -->
+                <div class="grid-2">
+                    <div class="card">
+                        <h3>Vidéos Récentes</h3>
+                        <div id="recent-videos">
+                            {% for video in videos[:5] %}
+                            <div style="display: flex; gap: 15px; padding: 10px; border-bottom: 1px solid #eee;">
+                                <img src="{{ video.thumbnail }}" alt="{{ video.title }}" style="width: 80px; height: 45px; border-radius: 5px; object-fit: cover;">
+                                <div>
+                                    <div style="font-weight: 600; margin-bottom: 5px;">{{ video.title[:50] }}...</div>
+                                    <div style="font-size: 0.8rem; color: #666;">{{ video.published_at[:10] }}</div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Statut Live</h3>
+                        <div style="text-align: center; padding: 20px;">
+                            {% if live_info and live_info.is_live %}
+                            <div style="color: #dc3545; font-size: 1.2rem; margin-bottom: 10px;">
+                                <i class="fas fa-circle" style="animation: pulse 2s infinite;"></i> EN DIRECT
+                            </div>
+                            <div>{{ live_info.title }}</div>
+                            {% else %}
+                            <div style="color: #6c757d; font-size: 1.2rem;">
+                                <i class="fas fa-circle"></i> HORS LIGNE
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Add Subscription Modal -->
+    <div id="addSubscriptionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Nouvelle Souscription Publicitaire</h2>
+                <span class="close" onclick="hideModal('addSubscriptionModal')">&times;</span>
+            </div>
+            <form id="subscriptionForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Nom de l'entreprise</label>
+                        <input type="text" class="form-control" name="company_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Personne de contact</label>
+                        <input type="text" class="form-control" name="contact_person" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Téléphone</label>
+                        <input type="tel" class="form-control" name="phone">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Type de souscription</label>
+                    <select class="form-control" name="subscription_type" required>
+                        {% for package in packages %}
+                        <option value="{{ package.package_name }}">{{ package.package_name }} - {{ "{:,.0f}".format(package.price) }} F</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Date de début</label>
+                        <input type="date" class="form-control" name="start_date" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Date de fin</label>
+                        <input type="date" class="form-control" name="end_date" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Montant (F CFA)</label>
+                    <input type="number" class="form-control" name="amount" required>
+                </div>
+                <div style="text-align: right; margin-top: 20px;">
+                    <button type="button" class="btn btn-secondary" onclick="hideModal('addSubscriptionModal')">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Créer Souscription</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add News Modal -->
+    <div id="addNewsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Nouvelle Actualité</h2>
+                <span class="close" onclick="hideModal('addNewsModal')">&times;</span>
+            </div>
+            <form id="newsForm">
+                <div class="form-group">
+                    <label class="form-label">Titre</label>
+                    <input type="text" class="form-control" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Contenu</label>
+                    <textarea class="form-control" name="content" rows="5" required></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Priorité</label>
+                        <select class="form-control" name="priority">
+                            <option value="normal">Normal</option>
+                            <option value="high">Haute</option>
+                            <option value="urgent">Urgent</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Auteur</label>
+                        <input type="text" class="form-control" name="author" value="{{ session.user }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Date d'expiration (optionnel)</label>
+                    <input type="datetime-local" class="form-control" name="expire_date">
+                </div>
+                <div style="text-align: right; margin-top: 20px;">
+                    <button type="button" class="btn btn-secondary" onclick="hideModal('addNewsModal')">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Publier</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Breaking News Modal -->
+    <div id="breakingNewsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 style="color: #dc3545;">
+                    <i class="fas fa-exclamation-triangle"></i> Breaking News
+                </h2>
+                <span class="close" onclick="hideModal('breakingNewsModal')">&times;</span>
+            </div>
+            <form id="breakingNewsForm">
+                <div class="alert alert-danger">
+                    <strong>Attention!</strong> Cette actualité sera marquée comme "Breaking News" et apparaîtra en priorité sur le site.
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Titre du Breaking News</label>
+                    <input type="text" class="form-control" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Contenu</label>
+                    <textarea class="form-control" name="content" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Auteur</label>
+                    <input type="text" class="form-control" name="author" value="{{ session.user }}">
+                </div>
+                <input type="hidden" name="is_breaking" value="true">
+                <input type="hidden" name="priority" value="urgent">
+                <div style="text-align: right; margin-top: 20px;">
+                    <button type="button" class="btn btn-secondary" onclick="hideModal('breakingNewsModal')">Annuler</button>
+                    <button type="submit" class="btn btn-danger">Publier Breaking News</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        // Modal functionality
+        function showModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function hideModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // Form submissions
+        document.getElementById('subscriptionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            
+            fetch('/api/subscriptions', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    hideModal('addSubscriptionModal');
+                    location.reload();
+                } else {
+                    alert('Erreur: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Erreur lors de la création de la souscription');
+            });
+        });
+
+        document.getElementById('newsForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            
+            fetch('/api/news', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    hideModal('addNewsModal');
+                    location.reload();
+                } else {
+                    alert('Erreur: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Erreur lors de la publication');
+            });
+        });
+
+        document.getElementById('breakingNewsForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            
+            fetch('/api/news', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    hideModal('breakingNewsModal');
+                    location.reload();
+                } else {
+                    alert('Erreur: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Erreur lors de la publication du breaking news');
+            });
+        });
+
+        // Utility functions
+        function toggleNewsStatus(newsId, currentStatus) {
+            const newStatus = !currentStatus;
+            
+            fetch(`/api/news/${newsId}/status`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ is_active: newStatus })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Erreur lors de la mise à jour du statut');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Erreur lors de la mise à jour');
+            });
+        }
+
+        function refreshContent() {
+            location.reload();
+        }
+
+        // Auto-refresh data every 5 minutes
+        setInterval(() => {
+            // Refresh stats and recent data
+            fetch('/api/dashboard-stats')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('total-videos').textContent = data.total_videos;
+                    // Update other stats as needed
+                })
+                .catch(error => console.error('Error refreshing stats:', error));
+        }, 300000);
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Enhanced dashboard loaded');
+        });
+    </script>
+</body>
+</html>

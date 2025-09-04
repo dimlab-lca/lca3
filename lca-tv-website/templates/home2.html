@@ -1,0 +1,345 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="display: grid; grid-template-columns: 1fr 350px; gap: 30px; margin-top: 0;">
+    <div class="content-left">
+        <h1 style="font-size: 32px; color: #28a745; margin-bottom: 10px; text-align: center;">LCA TV - En Direct</h1>
+        <p style="color: #666; margin-bottom: 30px; text-align: center; font-size: 16px;">Votre chaîne de référence au Burkina Faso</p>
+        
+        <div class="video-player" style="background: #000; border-radius: 8px; overflow: hidden; position: relative; padding-bottom: 56.25%; height: 0; margin-bottom: 30px;">
+            <div style="position: absolute; top: 10px; left: 10px; background: #e74c3c; color: white; padding: 8px 12px; border-radius: 4px; font-weight: bold; font-size: 12px; z-index: 10;">
+                EN DIRECT
+            </div>
+            <div style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 8px 12px; border-radius: 4px; font-size: 12px; z-index: 10;" id="viewer-count">
+                2440 spectateurs
+            </div>
+            <iframe 
+                src="https://www.youtube.com/embed/ixQEmhTbvTI?autoplay=1&mute=0&controls=1&rel=0&modestbranding=1" 
+                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+                frameborder="0" 
+                allowfullscreen
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+            </iframe>
+        </div>
+
+        <div class="current-program" style="background: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 40px;">
+            <h3 style="color: #28a745; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-clock"></i>
+                Actuellement à l'antenne
+            </h3>
+            <div style="background: #e74c3c; color: white; padding: 8px 15px; border-radius: 4px; font-weight: bold; display: inline-block; margin-bottom: 10px;">
+                20:00 - 21:00
+            </div>
+            <div style="font-size: 18px; color: #333; margin: 10px 0 5px 0; font-weight: 600;">
+                Journal du Soir
+            </div>
+            <p>Toute l'actualité nationale et internationale avec nos journalistes</p>
+        </div>
+
+        <!-- Programmes Populaires Section -->
+        <div style="margin-bottom: 50px;">
+            <h2 style="font-size: 2rem; color: #333; text-align: center; margin-bottom: 30px; font-weight: bold;">
+                Programmes Populaires
+                <div style="width: 60px; height: 4px; background: #28a745; margin: 10px auto; border-radius: 2px;"></div>
+            </h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 30px;">
+                <!-- Row 1 -->
+                {% for video in featured_videos %}
+                <div class="program-card" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.1); transition: transform 0.3s ease; cursor: pointer;" data-video-id="{{ video.id }}">
+                    <div style="position: relative; height: 180px; background: #f0f0f0; overflow: hidden;">
+                        <img src="{{ video.thumbnail }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; background: rgba(231, 76, 60, 0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem;">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div style="padding: 15px;">
+                        <div style="background: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; display: inline-block; margin-bottom: 8px;">{{ video.published_at[:10] }}</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">{{ video.category|title }}</div>
+                        <div style="color: #666; font-size: 14px; font-style: italic;">"{{ video.title[:30] }}..."</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Guide de Programme Section -->
+        <div style="margin-bottom: 40px;">
+            <h2 style="font-size: 2rem; color: #333; text-align: center; margin-bottom: 30px; font-weight: bold;">
+                Aujourd'hui sur LCA TV - lundi 14 juillet 2025
+                <div style="width: 60px; height: 4px; background: #4472c4; margin: 10px auto; border-radius: 2px;"></div>
+            </h2>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
+                <!-- DÉBATS & SOCIÉTÉ -->
+                <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 8px 25px rgba(0,0,0,0.1);">
+                    <h3 style="color: #333; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-size: 1.2rem;">
+                        <div style="width: 12px; height: 12px; background: #28a745; border-radius: 50%;"></div>
+                        DÉBATS & SOCIÉTÉ
+                    </h3>
+                    
+                    <div style="border-left: 4px solid #28a745; padding-left: 20px; margin-bottom: 20px;">
+                        <div style="background: #28a745; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block; margin-bottom: 10px;">10:00</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Question de Femme</div>
+                        <div style="color: #4472c4; font-size: 14px; font-style: italic;">"L'entrepreneuriat féminin"</div>
+                    </div>
+
+                    <div style="border-left: 4px solid #28a745; padding-left: 20px; margin-bottom: 20px;">
+                        <div style="background: #28a745; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block; margin-bottom: 10px;">14:30</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Franc Parler</div>
+                        <div style="color: #4472c4; font-size: 14px; font-style: italic;">"La jeunesse africaine"</div>
+                    </div>
+
+                    <div style="border-left: 4px solid #28a745; padding-left: 20px;">
+                        <div style="background: #28a745; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block; margin-bottom: 10px;">21:00</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Le Grand Débat</div>
+                        <div style="color: #4472c4; font-size: 14px; font-style: italic;">"Économie post-pandémie"</div>
+                    </div>
+                </div>
+
+                <!-- MUSIQUE & CULTURE -->
+                <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 8px 25px rgba(0,0,0,0.1);">
+                    <h3 style="color: #333; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-size: 1.2rem;">
+                        <div style="width: 12px; height: 12px; background: #28a745; border-radius: 50%;"></div>
+                        MUSIQUE & CULTURE
+                    </h3>
+                    
+                    <div style="border-left: 4px solid #28a745; padding-left: 20px; margin-bottom: 20px;">
+                        <div style="background: #28a745; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block; margin-bottom: 10px;">13:00</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Hits africains</div>
+                        <div style="color: #4472c4; font-size: 14px; font-style: italic;">"Top 10 du mois"</div>
+                    </div>
+
+                    <div style="border-left: 4px solid #28a745; padding-left: 20px; margin-bottom: 20px;">
+                        <div style="background: #28a745; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block; margin-bottom: 10px;">15:00</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Soleil d'Afrique</div>
+                        <div style="color: #4472c4; font-size: 14px; font-style: italic;">"Artiste du mois"</div>
+                    </div>
+
+                    <div style="border-left: 4px solid #28a745; padding-left: 20px;">
+                        <div style="background: #28a745; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block; margin-bottom: 10px;">20:00</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Concert Live</div>
+                        <div style="color: #4472c4; font-size: 14px; font-style: italic;">"Musiques urbaines"</div>
+                    </div>
+                </div>
+
+                <!-- ACTUALITÉS & INFO -->
+                <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 8px 25px rgba(0,0,0,0.1);">
+                    <h3 style="color: #333; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-size: 1.2rem;">
+                        <div style="width: 12px; height: 12px; background: #28a745; border-radius: 50%;"></div>
+                        ACTUALITÉS & INFO
+                    </h3>
+                    
+                    <div style="border-left: 4px solid #28a745; padding-left: 20px; margin-bottom: 20px;">
+                        <div style="background: #28a745; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block; margin-bottom: 10px;">07:30</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Journal du Matin</div>
+                        <div style="color: #4472c4; font-size: 14px; font-style: italic;">"L'actualité du jour"</div>
+                    </div>
+
+                    <div style="border-left: 4px solid #28a745; padding-left: 20px; margin-bottom: 20px;">
+                        <div style="background: #28a745; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block; margin-bottom: 10px;">12:00</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Journal de Midi</div>
+                        <div style="color: #4472c4; font-size: 14px; font-style: italic;">"Point sur l'actualité"</div>
+                    </div>
+
+                    <div style="border-left: 4px solid #28a745; padding-left: 20px; margin-bottom: 20px;">
+                        <div style="background: #28a745; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block; margin-bottom: 10px;">19:00</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Journal du Soir</div>
+                        <div style="color: #4472c4; font-size: 14px; font-style: italic;">"Édition principale"</div>
+                    </div>
+
+                    <div style="border-left: 4px solid #28a745; padding-left: 20px;">
+                        <div style="background: #28a745; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block; margin-bottom: 10px;">15:30</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Flash Info</div>
+                        <div style="color: #4472c4; font-size: 14px; font-style: italic;">"Dernières nouvelles"</div>
+                    </div>
+                </div>
+
+                <!-- DOCUMENTAIRES -->
+                <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 8px 25px rgba(0,0,0,0.1);">
+                    <h3 style="color: #333; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-size: 1.2rem;">
+                        <div style="width: 12px; height: 12px; background: #4472c4; border-radius: 50%;"></div>
+                        DOCUMENTAIRES
+                    </h3>
+                    
+                    <div style="border-left: 4px solid #4472c4; padding-left: 20px; margin-bottom: 20px;">
+                        <div style="background: #4472c4; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block; margin-bottom: 10px;">11:30</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">7 Afrique</div>
+                        <div style="color: #4472c4; font-size: 14px; font-style: italic;">"Nigeria - Économie émergente"</div>
+                    </div>
+
+                    <div style="border-left: 4px solid #4472c4; padding-left: 20px; margin-bottom: 20px;">
+                        <div style="background: #4472c4; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block; margin-bottom: 10px;">14:00</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Nature africaine</div>
+                        <div style="color: #4472c4; font-size: 14px; font-style: italic;">"Forêts d'Afrique centrale"</div>
+                    </div>
+
+                    <div style="border-left: 4px solid #4472c4; padding-left: 20px; margin-bottom: 20px;">
+                        <div style="background: #4472c4; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block; margin-bottom: 10px;">16:30</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Découverte Afrique</div>
+                        <div style="color: #4472c4; font-size: 14px; font-style: italic;">"Côte atlantique"</div>
+                    </div>
+
+                    <div style="border-left: 4px solid #4472c4; padding-left: 20px;">
+                        <div style="background: #4472c4; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block; margin-bottom: 10px;">22:30</div>
+                        <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Spécial Environnement</div>
+                        <div style="color: #4472c4; font-size: 14px; font-style: italic;">"Développement durable"</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <h2 style="background: #28a745; color: white; padding: 15px 20px; margin: 0; font-size: 18px; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-clock"></i>
+                Prochains Programmes
+            </h2>
+            
+            <div style="padding: 20px;">
+                <div style="margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 15px;">
+                    <div style="background: #4472c4; color: white; padding: 8px 15px; border-radius: 4px; font-weight: bold; font-size: 16px; margin-bottom: 10px; display: inline-block;">07:30</div>
+                    <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Journal du Matin</div>
+                    <div style="font-size: 14px; color: #666; line-height: 1.4;">Réveil avec l'actualité, météo et revue de presse internationale</div>
+                </div>
+
+                <div style="margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 15px;">
+                    <div style="background: #4472c4; color: white; padding: 8px 15px; border-radius: 4px; font-weight: bold; font-size: 16px; margin-bottom: 10px; display: inline-block;">09:00</div>
+                    <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Météo Africa</div>
+                    <div style="font-size: 14px; color: #666; line-height: 1.4;">Prévisions météorologiques pour l'Afrique de l'Ouest</div>
+                </div>
+
+                <div style="margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 15px;">
+                    <div style="background: #4472c4; color: white; padding: 8px 15px; border-radius: 4px; font-weight: bold; font-size: 16px; margin-bottom: 10px; display: inline-block;">10:00</div>
+                    <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Question de Femme</div>
+                    <div style="font-size: 14px; color: #666; line-height: 1.4;">L'entrepreneuriat féminin au Burkina Faso</div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <div style="background: #4472c4; color: white; padding: 8px 15px; border-radius: 4px; font-weight: bold; font-size: 16px; margin-bottom: 10px; display: inline-block;">12:00</div>
+                    <div style="font-weight: 600; margin-bottom: 5px; color: #333;">Journal de Midi</div>
+                    <div style="font-size: 14px; color: #666; line-height: 1.4;">Point d'actualité de la mi-journée avec nos correspondants</div>
+                </div>
+
+                <button style="background: #4472c4; color: white; border: none; padding: 12px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; font-size: 14px;">
+                    Voir la grille complète
+                </button>
+            </div>
+        </div>
+
+        <!-- Advertisement Space -->
+        <div style="margin-top: 30px; text-align: center; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <div style="color: #666; font-size: 14px; margin-bottom: 10px; font-weight: bold;">PUBLICITÉ</div>
+            <div style="height: 200px; background: #f8f9fa; border: 2px dashed #dee2e6; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #6c757d;">
+                <div style="text-align: center;">
+                    <i class="fas fa-ad" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                    <div>Espace Publicitaire</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.program-card {
+    transition: transform 0.3s ease;
+}
+
+.program-card:hover {
+    transform: translateY(-5px);
+}
+
+@media (max-width: 768px) {
+    .main-content > div {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+    }
+    
+    .program-card {
+        margin-bottom: 20px;
+    }
+    
+    /* Programme guide responsive */
+    div[style*="grid-template-columns: 1fr 1fr"] {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+    }
+}
+</style>
+
+<script>
+// Simulate viewer count changes
+function updateViewerCount() {
+    const viewerCount = document.getElementById('viewer-count');
+    if (viewerCount) {
+        const baseCount = 2440;
+        const variation = Math.floor(Math.random() * 100) - 50;
+        const newCount = baseCount + variation;
+        viewerCount.textContent = `${newCount} spectateurs`;
+    }
+}
+
+// Update viewer count every 30 seconds
+setInterval(updateViewerCount, 30000);
+
+// Function to open video in new tab
+function openVideo(videoId) {
+    if (videoId && videoId !== 'undefined' && videoId !== '') {
+        console.log('Opening video:', videoId);
+        window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank');
+    } else {
+        console.error('Invalid video ID:', videoId);
+        alert('Désolé, cette vidéo n\'est pas disponible pour le moment.');
+    }
+}
+
+// Add click functionality to program cards
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, setting up video cards...');
+    
+    const programCards = document.querySelectorAll('.program-card');
+    console.log('Found', programCards.length, 'program cards');
+    
+    programCards.forEach((card, index) => {
+        const videoId = card.dataset.videoId;
+        console.log(`Card ${index + 1} video ID:`, videoId);
+        
+        card.addEventListener('click', function() {
+            openVideo(videoId);
+        });
+        
+        // Add hover effects
+        card.addEventListener('mouseenter', function() {
+            const playButton = this.querySelector('.fas.fa-play').parentElement;
+            if (playButton) {
+                playButton.style.transform = 'translate(-50%, -50%) scale(1.1)';
+                playButton.style.opacity = '1';
+            }
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            const playButton = this.querySelector('.fas.fa-play').parentElement;
+            if (playButton) {
+                playButton.style.transform = 'translate(-50%, -50%) scale(1)';
+                playButton.style.opacity = '0.9';
+            }
+        });
+    });
+    
+    // Debug: Log featured videos data
+    {% if featured_videos %}
+    console.log('Featured videos data:');
+    {% for video in featured_videos %}
+    console.log('Video {{ loop.index }}:', {
+        id: '{{ video.id }}',
+        title: '{{ video.title|replace("'", "\\'") }}',
+        thumbnail: '{{ video.thumbnail }}'
+    });
+    {% endfor %}
+    {% else %}
+    console.log('No featured videos found');
+    {% endif %}
+});
+</script>
+{% endblock %}
