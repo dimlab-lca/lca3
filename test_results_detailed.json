@@ -1,0 +1,94 @@
+{
+  "summary": {
+    "total_tests": 12,
+    "passed": 10,
+    "failed": 2,
+    "success_rate": 83.33333333333334
+  },
+  "results": [
+    {
+      "test": "Root Endpoint",
+      "success": false,
+      "details": "Connection error: HTTPSConnectionPool(host='replay-fidelity.preview.emergentagent.com', port=443): Read timed out. (read timeout=10)",
+      "timestamp": "2025-09-04T21:20:00.298031"
+    },
+    {
+      "test": "User Registration",
+      "success": true,
+      "details": "User created with ID: a05c71e5-bd9a-4812-9e72-064caab2e801, Points: 100",
+      "timestamp": "2025-09-04T21:20:01.055877"
+    },
+    {
+      "test": "User Login",
+      "success": true,
+      "details": "Login successful for user: jean.dupont@test.bf, Last login updated",
+      "timestamp": "2025-09-04T21:20:01.665450"
+    },
+    {
+      "test": "User Profile",
+      "success": true,
+      "details": "Profile retrieved for: Jean Dupont, Points: 100",
+      "timestamp": "2025-09-04T21:20:01.832850"
+    },
+    {
+      "test": "Videos List",
+      "success": true,
+      "details": "Retrieved 6 videos, Sample: Journal LCA TV - \u00c9dition du Soir",
+      "timestamp": "2025-09-04T21:20:02.034325"
+    },
+    {
+      "test": "Featured Videos",
+      "success": true,
+      "details": "Retrieved 6 featured videos",
+      "timestamp": "2025-09-04T21:20:02.134373"
+    },
+    {
+      "test": "News List",
+      "success": true,
+      "details": "Retrieved 3 articles, Sample: Actualit\u00e9s nationales - Flash info du jour",
+      "timestamp": "2025-09-04T21:20:02.187152"
+    },
+    {
+      "test": "Categories",
+      "success": true,
+      "details": "Retrieved 8 categories",
+      "timestamp": "2025-09-04T21:20:02.280962"
+    },
+    {
+      "test": "Live Status",
+      "success": true,
+      "details": "Live status: True, Title: LCA TV - Direct",
+      "timestamp": "2025-09-04T21:20:02.435161"
+    },
+    {
+      "test": "Add Favorite",
+      "success": true,
+      "details": "Added video eSApphrRKWg to favorites, Points earned: 5",
+      "timestamp": "2025-09-04T21:20:02.633592"
+    },
+    {
+      "test": "Get Favorites",
+      "success": true,
+      "details": "Retrieved 1 favorite videos",
+      "timestamp": "2025-09-04T21:20:02.748957"
+    },
+    {
+      "test": "401 Error Handling",
+      "success": false,
+      "details": "Expected 401, got 403",
+      "timestamp": "2025-09-04T21:20:02.865117"
+    },
+    {
+      "test": "404 Error Handling",
+      "success": true,
+      "details": "Correctly returns 404 for non-existent video",
+      "timestamp": "2025-09-04T21:20:02.964938"
+    },
+    {
+      "test": "400 Error Handling",
+      "success": true,
+      "details": "Correctly validates registration data",
+      "timestamp": "2025-09-04T21:20:03.070106"
+    }
+  ]
+}
