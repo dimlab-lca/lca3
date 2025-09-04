@@ -282,34 +282,22 @@ export default function VideoScreen() {
       <StatusBar style="light" backgroundColor={colors.primary} />
       
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-        {/* Video Player */}
+        {/* Video Player Placeholder */}
         <View style={styles.playerContainer}>
-          <YoutubePlayer
-            height={220}
-            width={screenWidth}
-            play={playing}
-            videoId={video.id}
-            onChangeState={onStateChange}
-            onReady={onReady}
-            onError={onError}
-            initialPlayerParams={{
-              loop: false,
-              controls: false,
-              modestbranding: true,
-              rel: false,
-              showinfo: false,
-            }}
-          />
+          <View style={styles.videoPlaceholder}>
+            <Image source={{ uri: video.thumbnail }} style={styles.placeholderImage} />
+            <View style={styles.videoOverlay}>
+              <TouchableOpacity onPress={() => setPlaying(!playing)} style={styles.playButton}>
+                <Ionicons 
+                  name={playing ? "pause" : "play"} 
+                  size={48} 
+                  color={colors.white} 
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
           
           <View style={styles.playerControls}>
-            <TouchableOpacity onPress={() => setPlaying(!playing)} style={styles.playButton}>
-              <Ionicons 
-                name={playing ? "pause" : "play"} 
-                size={32} 
-                color={colors.white} 
-              />
-            </TouchableOpacity>
-            
             <TouchableOpacity onPress={toggleFullscreen} style={styles.fullscreenBtn}>
               <Ionicons name="expand" size={24} color={colors.white} />
             </TouchableOpacity>
