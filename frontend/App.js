@@ -5,10 +5,9 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Alert,
   SafeAreaView,
   Image,
-  Dimensions,
+  Alert,
 } from 'react-native';
 
 const { width: screenWidth } = Dimensions.get('window');
