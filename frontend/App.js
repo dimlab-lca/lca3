@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   Image,
   Alert,
+  Dimensions,
 } from 'react-native';
 
 const { width: screenWidth } = Dimensions.get('window');
