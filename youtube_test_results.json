@@ -1,0 +1,40 @@
+{
+  "summary": {
+    "total_tests": 5,
+    "passed": 4,
+    "failed": 1,
+    "success_rate": 80.0
+  },
+  "results": [
+    {
+      "test": "YouTube API Integration",
+      "success": true,
+      "details": "Real YouTube data detected: 20 videos from LCA TV channel. Sample: 'Reconstitution de la Haute Volta 1947'",
+      "timestamp": "2025-09-05T00:58:20.985512"
+    },
+    {
+      "test": "Video Data Quality",
+      "success": false,
+      "details": "Data quality issues: 100.0% complete, 40.0% LCA content",
+      "timestamp": "2025-09-05T00:58:21.720391"
+    },
+    {
+      "test": "API Response Times",
+      "success": true,
+      "details": "All endpoints respond within reasonable time. Average: 0.58s",
+      "timestamp": "2025-09-05T00:58:23.463378"
+    },
+    {
+      "test": "Fallback Mechanism",
+      "success": true,
+      "details": "Content available but may be real YouTube data: 20 videos",
+      "timestamp": "2025-09-05T00:58:24.276765"
+    },
+    {
+      "test": "Video Categories",
+      "success": true,
+      "details": "Videos categorized: ['general', 'national']",
+      "timestamp": "2025-09-05T00:58:25.162901"
+    }
+  ]
+}
