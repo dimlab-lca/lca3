@@ -31,11 +31,12 @@ const colors = {
 };
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState('home');
+  const [currentPage, setCurrentPage] = useState('welcome');
   const [user, setUser] = useState(null);
   const [videos, setVideos] = useState([]);
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     loadInitialData();
