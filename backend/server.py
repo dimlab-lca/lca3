@@ -326,7 +326,7 @@ def fetch_youtube_videos(max_results: int = 20) -> List[Dict]:
                 'duration': '28:15'
             }
         ]
-    return fallback_videos[:max_results]
+        return fallback_videos[:max_results]
 
 def parse_youtube_duration(duration: str) -> str:
     """Convert YouTube ISO 8601 duration to readable format"""
