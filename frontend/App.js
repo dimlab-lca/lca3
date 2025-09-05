@@ -14,12 +14,13 @@ import {
   StatusBar,
   Animated,
   Modal,
+  FlatList,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
-// LCA TV Colors - Modern Style
+// LCA TV Colors - Ultra Modern Style
 const colors = {
   primary: '#2d5016',
   primaryLight: '#22c55e',
@@ -40,6 +41,21 @@ const colors = {
   darkGray: '#374151',
   black: '#111827',
   cardShadow: 'rgba(0, 0, 0, 0.1)',
+  gradient1: '#2d5016',
+  gradient2: '#22c55e',
+  accent: '#fbbf24',
+};
+
+// Modern LCA TV Images for enhanced UI
+const images = {
+  hero: 'https://images.unsplash.com/photo-1590339726068-24fe9cb82787?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzl8MHwxfHNlYXJjaHwxfHxhZnJpY2FuJTIwdGVsZXZpc2lvbnxlbnwwfHx8fDE3NTcwMzQyMjN8MA&ixlib=rb-4.1.0&q=85',
+  personality: 'https://images.pexels.com/photos/14916179/pexels-photo-14916179.jpeg',
+  studio: 'https://images.unsplash.com/photo-1693328394659-e0782c606d25?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzR8MHwxfHNlYXJjaHwyfHxicm9hZGNhc3R8ZW58MHx8fHwxNzU3MDM0MjI5fDA&ixlib=rb-4.1.0&q=85',
+  broadcast: 'https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzR8MHwxfHNlYXJjaHw0fHxicm9hZGNhc3R8ZW58MHx8fHwxNzU3MDM0MjI5fDA&ixlib=rb-4.1.0&q=85',
+  equipment: 'https://images.unsplash.com/photo-1613031729579-ace1feefda4c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzR8MHwxfHNlYXJjaHwxfHxicm9hZGNhc3R8ZW58MHx8fHwxNzU3MDM0MjI5fDA&ixlib=rb-4.1.0&q=85',
+  colorful: 'https://images.pexels.com/photos/668296/pexels-photo-668296.jpeg',
+  news: 'https://images.unsplash.com/photo-1478737270239-2f02b77fc618?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzR8MHwxfHNlYXJjaHwzfHxicm9hZGNhc3R8ZW58MHx8fHwxNzU3MDM0MjI5fDA&ixlib=rb-4.1.0&q=85',
+  viewer: 'https://images.unsplash.com/photo-1676989634369-b891237d6011?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzl8MHwxfHNlYXJjaHwzfHxhZnJpY2FuJTIwdGVsZXZpc2lvbnxlbnwwfHx8fDE3NTcwMzQyMjN8MA&ixlib=rb-4.1.0&q=85'
 };
 
 export default function App() {
@@ -47,9 +63,11 @@ export default function App() {
   const [user, setUser] = useState(null);
   const [videos, setVideos] = useState([]);
   const [news, setNews] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [slideAnim] = useState(new Animated.Value(-screenWidth));
+  const [featuredVideos, setFeaturedVideos] = useState([]);
 
   useEffect(() => {
     checkExistingUser();
@@ -70,8 +88,12 @@ export default function App() {
 
   const loadInitialData = async () => {
     try {
-      await loadVideos();
-      await loadNews();
+      await Promise.all([
+        loadVideos(),
+        loadNews(),
+        loadCategories(),
+        loadFeaturedVideos()
+      ]);
     } catch (error) {
       console.error('Error loading initial data:', error);
     }
@@ -84,22 +106,6 @@ export default function App() {
       setVideos(data.videos || []);
     } catch (error) {
       console.error('Error loading videos:', error);
-      setVideos([
-        {
-          id: 'eSApphrRKWg',
-          title: 'Journal LCA TV - Édition du Soir',
-          thumbnail: 'https://i.ytimg.com/vi/eSApphrRKWg/hqdefault.jpg',
-          view_count: '15420',
-          like_count: '234'
-        },
-        {
-          id: 'xJatmbxIaIM',
-          title: 'Franc-Parler - Débat Économie',
-          thumbnail: 'https://i.ytimg.com/vi/xJatmbxIaIM/hqdefault.jpg',
-          view_count: '8750',
-          like_count: '156'
-        }
-      ]);
     }
   };
 
@@ -110,15 +116,26 @@ export default function App() {
       setNews(data.news || []);
     } catch (error) {
       console.error('Error loading news:', error);
-      setNews([
-        {
-          _id: '1',
-          title: 'Flash Info - Burkina Faso',
-          excerpt: 'Les dernières nouvelles du pays des hommes intègres...',
-          image_url: 'https://via.placeholder.com/300x200/2d5016/ffffff?text=LCA+TV+NEWS',
-          published_at: new Date().toISOString()
-        }
-      ]);
+    }
+  };
+
+  const loadCategories = async () => {
+    try {
+      const response = await fetch('https://lcatv-mobile.preview.emergentagent.com/api/categories');
+      const data = await response.json();
+      setCategories(data.categories || []);
+    } catch (error) {
+      console.error('Error loading categories:', error);
+    }
+  };
+
+  const loadFeaturedVideos = async () => {
+    try {
+      const response = await fetch('https://lcatv-mobile.preview.emergentagent.com/api/videos/featured');
+      const data = await response.json();
+      setFeaturedVideos(data.videos || []);
+    } catch (error) {
+      console.error('Error loading featured videos:', error);
     }
   };
 
@@ -208,7 +225,7 @@ export default function App() {
     toggleSidebar();
   };
 
-  // Icon Component
+  // Enhanced Icon Component
   const Icon = ({ name, size = 24, color = colors.gray }) => {
     const icons = {
       home: '🏠',
@@ -233,6 +250,12 @@ export default function App() {
       info: 'ℹ️',
       help: '❓',
       notification: '🔔',
+      fire: '🔥',
+      trending: '📈',
+      africa: '🌍',
+      microphone: '🎤',
+      camera: '📷',
+      broadcast: '📡',
     };
     
     return (
@@ -240,94 +263,138 @@ export default function App() {
     );
   };
 
-  // Welcome Page - Ultra Modern
+  // Ultra Modern Welcome Page
   const WelcomePage = () => (
     <View style={styles.welcomeContainer}>
       <StatusBar barStyle="light-content" backgroundColor={colors.primary} />
       
-      {/* Background Gradient */}
+      {/* Enhanced Background with Gradient Overlay */}
       <View style={styles.welcomeBackground}>
+        <Image source={{ uri: images.hero }} style={styles.welcomeBackgroundImage} />
         <View style={styles.gradientOverlay} />
         
-        {/* Hero Section */}
-        <View style={styles.heroSection}>
-          <View style={styles.logoHero}>
-            <Text style={styles.logoHeroText}>LCA</Text>
-            <View style={styles.logoHeroCircle}>
-              <Text style={styles.logoHeroSubText}>TV</Text>
+        {/* Hero Section Enhanced */}
+        <ScrollView contentContainerStyle={styles.welcomeContent}>
+          <View style={styles.heroSection}>
+            <View style={styles.logoHero}>
+              <Text style={styles.logoHeroText}>LCA</Text>
+              <View style={styles.logoHeroCircle}>
+                <Text style={styles.logoHeroSubText}>TV</Text>
+              </View>
+            </View>
+            
+            <Text style={styles.welcomeTitle}>Bienvenue sur LCA TV</Text>
+            <Text style={styles.welcomeSubtitle}>La Chaîne Africaine de télévision</Text>
+            <Text style={styles.welcomeDescription}>
+              Découvrez l'actualité, le divertissement et la culture du Burkina Faso 
+              en direct et en replay avec une qualité exceptionnelle
+            </Text>
+          </View>
+
+          {/* Enhanced Features Preview Grid */}
+          <View style={styles.featuresGrid}>
+            <View style={styles.featureCard}>
+              <Image source={{ uri: images.colorful }} style={styles.featureImage} />
+              <View style={styles.featureOverlay}>
+                <Icon name="live" size={32} color={colors.white} />
+                <Text style={styles.featureTitle}>Direct 24/7</Text>
+                <Text style={styles.featureDescription}>Suivez nos programmes en temps réel</Text>
+              </View>
+            </View>
+
+            <View style={styles.featureCard}>
+              <Image source={{ uri: images.studio }} style={styles.featureImage} />
+              <View style={styles.featureOverlay}>
+                <Icon name="play" size={32} color={colors.white} />
+                <Text style={styles.featureTitle}>Replays HD</Text>
+                <Text style={styles.featureDescription}>Rattrapage de toutes vos émissions</Text>
+              </View>
+            </View>
+
+            <View style={styles.featureCard}>
+              <Image source={{ uri: images.news }} style={styles.featureImage} />
+              <View style={styles.featureOverlay}>
+                <Icon name="newspaper" size={32} color={colors.white} />
+                <Text style={styles.featureTitle}>Actualités</Text>
+                <Text style={styles.featureDescription}>Info nationale et internationale</Text>
+              </View>
+            </View>
+
+            <View style={styles.featureCard}>
+              <Image source={{ uri: images.broadcast }} style={styles.featureImage} />
+              <View style={styles.featureOverlay}>
+                <Icon name="africa" size={32} color={colors.white} />
+                <Text style={styles.featureTitle}>Culture</Text>
+                <Text style={styles.featureDescription}>Patrimoine burkinabè authentique</Text>
+              </View>
             </View>
           </View>
-          
-          <Text style={styles.welcomeTitle}>Bienvenue sur LCA TV</Text>
-          <Text style={styles.welcomeSubtitle}>La Chaîne Africaine de télévision</Text>
-          <Text style={styles.welcomeDescription}>
-            Découvrez l'actualité, le divertissement et la culture du Burkina Faso 
-            en direct et en replay
-          </Text>
-        </View>
 
-        {/* Features Preview */}
-        <View style={styles.featuresPreview}>
-          <View style={styles.featurePreviewItem}>
-            <Icon name="live" size={32} color={colors.red} />
-            <Text style={styles.featurePreviewText}>Direct 24/7</Text>
+          {/* Action Buttons Enhanced */}
+          <View style={styles.welcomeActions}>
+            <TouchableOpacity 
+              style={styles.primaryActionButton}
+              onPress={() => setCurrentPage('login')}
+            >
+              <View style={styles.primaryActionGradient}>
+                <Text style={styles.primaryActionText}>Se connecter</Text>
+                <Icon name="arrow" size={20} color={colors.white} />
+              </View>
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+              style={styles.secondaryActionButton}
+              onPress={() => setCurrentPage('register')}
+            >
+              <Text style={styles.secondaryActionText}>Créer un compte</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+              style={styles.ghostActionButton}
+              onPress={() => setCurrentPage('home')}
+            >
+              <Text style={styles.ghostActionText}>Continuer sans compte</Text>
+            </TouchableOpacity>
           </View>
-          <View style={styles.featurePreviewItem}>
-            <Icon name="play" size={32} color={colors.blue} />
-            <Text style={styles.featurePreviewText}>Replays</Text>
-          </View>
-          <View style={styles.featurePreviewItem}>
-            <Icon name="news" size={32} color={colors.orange} />
-            <Text style={styles.featurePreviewText}>Actualités</Text>
-          </View>
-        </View>
 
-        {/* Action Buttons */}
-        <View style={styles.welcomeActions}>
-          <TouchableOpacity 
-            style={styles.primaryActionButton}
-            onPress={() => setCurrentPage('login')}
-          >
-            <View style={styles.primaryActionGradient}>
-              <Text style={styles.primaryActionText}>Se connecter</Text>
+          {/* Enhanced Stats Section */}
+          <View style={styles.statsSection}>
+            <View style={styles.statCard}>
+              <Icon name="fire" size={28} color={colors.accent} />
+              <Text style={styles.statNumber}>500K+</Text>
+              <Text style={styles.statLabel}>Téléspectateurs</Text>
             </View>
-          </TouchableOpacity>
-          
-          <TouchableOpacity 
-            style={styles.secondaryActionButton}
-            onPress={() => setCurrentPage('register')}
-          >
-            <Text style={styles.secondaryActionText}>Créer un compte</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity 
-            style={styles.ghostActionButton}
-            onPress={() => setCurrentPage('home')}
-          >
-            <Text style={styles.ghostActionText}>Continuer sans compte</Text>
-          </TouchableOpacity>
-        </View>
+            <View style={styles.statCard}>
+              <Icon name="live" size={28} color={colors.red} />
+              <Text style={styles.statNumber}>24/7</Text>
+              <Text style={styles.statLabel}>Diffusion</Text>
+            </View>
+            <View style={styles.statCard}>
+              <Icon name="africa" size={28} color={colors.emerald} />
+              <Text style={styles.statNumber}>100%</Text>
+              <Text style={styles.statLabel}>Burkinabè</Text>
+            </View>
+          </View>
 
-        {/* Stats Section */}
-        <View style={styles.statsSection}>
-          <View style={styles.statItem}>
-            <Text style={styles.statNumber}>500K+</Text>
-            <Text style={styles.statLabel}>Téléspectateurs</Text>
+          {/* Testimonials/Reviews */}
+          <View style={styles.testimonialsSection}>
+            <Text style={styles.sectionTitleWhite}>Ce que disent nos téléspectateurs</Text>
+            <View style={styles.testimonialCard}>
+              <Image source={{ uri: images.personality }} style={styles.testimonialAvatar} />
+              <View style={styles.testimonialContent}>
+                <Text style={styles.testimonialText}>
+                  "LCA TV est devenue ma source d'information principale. Contenu de qualité et très professionnel !"
+                </Text>
+                <Text style={styles.testimonialAuthor}>- Aminata, Ouagadougou</Text>
+              </View>
+            </View>
           </View>
-          <View style={styles.statItem}>
-            <Text style={styles.statNumber}>24/7</Text>
-            <Text style={styles.statLabel}>Diffusion</Text>
-          </View>
-          <View style={styles.statItem}>
-            <Text style={styles.statNumber}>100%</Text>
-            <Text style={styles.statLabel}>Burkinabè</Text>
-          </View>
-        </View>
+        </ScrollView>
       </View>
     </View>
   );
 
-  // Sidebar Component
+  // Enhanced Sidebar Component
   const Sidebar = () => (
     <Modal
       transparent={true}
@@ -342,7 +409,7 @@ export default function App() {
         />
         
         <Animated.View style={[styles.sidebar, { transform: [{ translateX: slideAnim }] }]}>
-          {/* Sidebar Header */}
+          {/* Enhanced Sidebar Header */}
           <View style={styles.sidebarHeader}>
             {user ? (
               <View style={styles.sidebarUserInfo}>
@@ -354,7 +421,10 @@ export default function App() {
                 <View style={styles.sidebarUserDetails}>
                   <Text style={styles.sidebarUserName}>{user.prenom} {user.nom}</Text>
                   <Text style={styles.sidebarUserEmail}>{user.email}</Text>
-                  <Text style={styles.sidebarUserPoints}>{user.points || 0} points</Text>
+                  <View style={styles.pointsBadge}>
+                    <Icon name="star" size={14} color={colors.accent} />
+                    <Text style={styles.sidebarUserPoints}>{user.points || 0} points</Text>
+                  </View>
                 </View>
               </View>
             ) : (
@@ -373,11 +443,12 @@ export default function App() {
             )}
           </View>
 
-          {/* Navigation Menu */}
+          {/* Enhanced Navigation Menu */}
           <ScrollView style={styles.sidebarMenu}>
             <TouchableOpacity style={styles.menuItem} onPress={() => navigateTo('home')}>
               <Icon name="home" size={24} color={colors.primaryLight} />
               <Text style={styles.menuItemText}>Accueil</Text>
+              <Icon name="arrow" size={16} color={colors.gray} />
             </TouchableOpacity>
             
             <TouchableOpacity style={styles.menuItem} onPress={() => navigateTo('live')}>
@@ -388,14 +459,18 @@ export default function App() {
               </View>
             </TouchableOpacity>
             
-            <TouchableOpacity style={styles.menuItem} onPress={() => Alert.alert('Replays', 'Accédez aux replays de nos émissions')}>
+            <TouchableOpacity style={styles.menuItem} onPress={() => navigateTo('replays')}>
               <Icon name="play" size={24} color={colors.blue} />
               <Text style={styles.menuItemText}>Replays</Text>
+              <Text style={styles.menuItemBadge}>HD</Text>
             </TouchableOpacity>
             
-            <TouchableOpacity style={styles.menuItem} onPress={() => Alert.alert('Actualités', 'Toute l\'info du Burkina Faso')}>
+            <TouchableOpacity style={styles.menuItem} onPress={() => navigateTo('news')}>
               <Icon name="news" size={24} color={colors.orange} />
               <Text style={styles.menuItemText}>Actualités</Text>
+              <View style={styles.newsBadge}>
+                <Text style={styles.newsBadgeText}>FLASH</Text>
+              </View>
             </TouchableOpacity>
             
             <TouchableOpacity style={styles.menuItem} onPress={() => navigateTo('profile')}>
@@ -410,7 +485,7 @@ export default function App() {
               <Text style={styles.menuItemText}>Mes Favoris</Text>
             </TouchableOpacity>
             
-            <TouchableOpacity style={styles.menuItem} onPress={() => Alert.alert('Publicité', 'Programme publicitaire LCA TV')}>
+            <TouchableOpacity style={styles.menuItem} onPress={() => Alert.alert('Programme Publicitaire', 'Boostez votre visibilité avec LCA TV')}>
               <Icon name="megaphone" size={24} color={colors.darkBlue} />
               <Text style={styles.menuItemText}>Programme Pub</Text>
             </TouchableOpacity>
@@ -425,14 +500,14 @@ export default function App() {
               <Text style={styles.menuItemText}>Paramètres</Text>
             </TouchableOpacity>
             
-            <TouchableOpacity style={styles.menuItem} onPress={() => Alert.alert('À propos', 'LCA TV Mobile v1.0\nDéveloppé pour LCA TV')}>
+            <TouchableOpacity style={styles.menuItem} onPress={() => Alert.alert('À propos', 'LCA TV Mobile v2.0\nApplication officielle LCA TV')}>
               <Icon name="info" size={24} color={colors.gray} />
               <Text style={styles.menuItemText}>À propos</Text>
             </TouchableOpacity>
             
-            <TouchableOpacity style={styles.menuItem} onPress={() => Alert.alert('Aide', 'Contactez-nous : support@lcatv.bf')}>
+            <TouchableOpacity style={styles.menuItem} onPress={() => Alert.alert('Aide & Support', 'Contactez-nous :\nsupport@lcatv.bf\n+226 25 XX XX XX')}>
               <Icon name="help" size={24} color={colors.gray} />
-              <Text style={styles.menuItemText}>Aide</Text>
+              <Text style={styles.menuItemText}>Aide & Support</Text>
             </TouchableOpacity>
             
             {user && (
@@ -450,7 +525,7 @@ export default function App() {
     </Modal>
   );
 
-  // Header Component with Sidebar Toggle
+  // Enhanced Header Component
   const Header = () => (
     <View style={styles.header}>
       <TouchableOpacity style={styles.menuButton} onPress={toggleSidebar}>
@@ -464,79 +539,194 @@ export default function App() {
         </View>
       </View>
       
-      <TouchableOpacity style={styles.notificationButton}>
-        <Icon name="notification" size={24} color={colors.white} />
-        <View style={styles.notificationDot} />
-      </TouchableOpacity>
+      <View style={styles.headerActions}>
+        <TouchableOpacity style={styles.headerActionButton}>
+          <Icon name="trending" size={20} color={colors.white} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.headerActionButton}>
+          <Icon name="notification" size={20} color={colors.white} />
+          <View style={styles.notificationDot} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 
-  // Home Page (unchanged but with new header)
+  // Ultra Enhanced Home Page with Rich Content
   const HomePage = () => (
-    <ScrollView style={styles.content}>
-      {/* Live Section */}
-      <View style={styles.section}>
-        <View style={styles.sectionHeader}>
-          <Icon name="radio" size={24} color={colors.primaryLight} />
-          <Text style={styles.sectionTitle}>Direct</Text>
-          <View style={styles.liveIndicator}>
-            <Text style={styles.liveText}>LIVE</Text>
+    <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+      {/* Hero Live Section Enhanced */}
+      <View style={styles.heroLiveSection}>
+        <Image source={{ uri: images.studio }} style={styles.heroLiveBackground} />
+        <View style={styles.heroLiveOverlay}>
+          <View style={styles.liveIndicatorLarge}>
+            <Text style={styles.liveTextLarge}>🔴 EN DIRECT</Text>
           </View>
+          <Text style={styles.heroLiveTitle}>LCA TV - Direct</Text>
+          <Text style={styles.heroLiveSubtitle}>Journal du soir - Édition spéciale</Text>
+          <TouchableOpacity style={styles.heroPlayButton} onPress={() => setCurrentPage('live')}>
+            <Icon name="play" size={40} color={colors.white} />
+          </TouchableOpacity>
+          <Text style={styles.viewerCount}>🔴 1,247 spectateurs connectés</Text>
         </View>
-        
-        <TouchableOpacity onPress={() => setCurrentPage('live')} style={styles.liveContainer}>
-          <Image
-            source={{ uri: 'https://i.ytimg.com/vi/ixQEmhTbvTI/maxresdefault.jpg' }}
-            style={styles.liveImage}
-            resizeMode="cover"
-          />
-          <View style={styles.liveOverlay}>
-            <Icon name="play" size={60} color={colors.white} />
-            <Text style={styles.liveTitle}>Regarder en direct</Text>
-          </View>
+      </View>
+
+      {/* Quick Actions Bar */}
+      <View style={styles.quickActionsBar}>
+        <TouchableOpacity style={styles.quickAction} onPress={() => setCurrentPage('live')}>
+          <Icon name="live" size={24} color={colors.red} />
+          <Text style={styles.quickActionText}>Direct</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.quickAction} onPress={() => Alert.alert('Replays', 'Accédez aux replays')}>
+          <Icon name="play" size={24} color={colors.blue} />
+          <Text style={styles.quickActionText}>Replays</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.quickAction} onPress={() => Alert.alert('Actualités', 'Toute l\'info')}>
+          <Icon name="news" size={24} color={colors.orange} />
+          <Text style={styles.quickActionText}>Actualités</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.quickAction} onPress={() => Alert.alert('Programmes', 'Nos émissions')}>
+          <Icon name="tv" size={24} color={colors.purple} />
+          <Text style={styles.quickActionText}>Programmes</Text>
         </TouchableOpacity>
       </View>
 
-      {/* Featured Videos */}
+      {/* Featured Videos Section Enhanced */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-          <Icon name="star" size={24} color={colors.primaryLight} />
+          <Icon name="star" size={24} color={colors.accent} />
           <Text style={styles.sectionTitle}>Programmes populaires</Text>
           <TouchableOpacity onPress={() => Alert.alert('Replays', 'Accédez aux replays')}>
             <Text style={styles.seeAllText}>Voir tout</Text>
           </TouchableOpacity>
         </View>
         
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {videos.slice(0, 3).map((video, index) => (
-            <TouchableOpacity key={index} style={styles.videoCard}>
-              <Image source={{ uri: video.thumbnail }} style={styles.videoThumbnail} />
-              <View style={styles.videoInfo}>
-                <Text style={styles.videoTitle} numberOfLines={2}>{video.title}</Text>
-                <Text style={styles.videoStats}>{video.view_count} vues • {video.like_count} likes</Text>
+        <FlatList
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          data={featuredVideos.slice(0, 6)}
+          keyExtractor={(item, index) => `featured-${index}`}
+          renderItem={({ item }) => (
+            <TouchableOpacity style={styles.enhancedVideoCard}>
+              <Image source={{ uri: item.thumbnail }} style={styles.enhancedVideoThumbnail} />
+              <View style={styles.videoPlayOverlay}>
+                <Icon name="play" size={20} color={colors.white} />
+              </View>
+              <View style={styles.videoCategoryBadge}>
+                <Text style={styles.videoCategoryText}>{item.category}</Text>
+              </View>
+              <View style={styles.enhancedVideoInfo}>
+                <Text style={styles.enhancedVideoTitle} numberOfLines={2}>{item.title}</Text>
+                <View style={styles.videoMetaRow}>
+                  <Text style={styles.videoStats}>{item.view_count} vues</Text>
+                  <Text style={styles.videoDuration}>{item.duration}</Text>
+                </View>
               </View>
             </TouchableOpacity>
-          ))}
-        </ScrollView>
+          )}
+        />
       </View>
 
-      {/* Rest of home page content... */}
+      {/* Categories Section Enhanced */}
       <View style={styles.section}>
-        <TouchableOpacity style={styles.publicityBanner} onPress={() => Alert.alert('Programme Publicitaire', 'Boostez votre visibilité avec LCA TV')}>
-          <View style={styles.publicityContent}>
-            <Icon name="megaphone" size={32} color={colors.white} />
-            <View style={styles.publicityText}>
-              <Text style={styles.publicityTitle}>Programme Publicitaire</Text>
-              <Text style={styles.publicitySubtitle}>Boostez votre visibilité avec LCA TV</Text>
+        <View style={styles.sectionHeader}>
+          <Icon name="grid" size={24} color={colors.primaryLight} />
+          <Text style={styles.sectionTitle}>Nos émissions</Text>
+        </View>
+        <View style={styles.categoriesGrid}>
+          {categories.slice(0, 8).map((category, index) => (
+            <TouchableOpacity key={index} style={styles.categoryCard}>
+              <View style={styles.categoryIcon}>
+                <Text style={styles.categoryEmoji}>{category.name.charAt(0)}</Text>
+              </View>
+              <Text style={styles.categoryName}>{category.name.substring(2)}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </View>
+
+      {/* News Section Enhanced */}
+      <View style={styles.section}>
+        <View style={styles.sectionHeader}>
+          <Icon name="newspaper" size={24} color={colors.orange} />
+          <Text style={styles.sectionTitle}>Actualités Flash</Text>
+          <TouchableOpacity onPress={() => Alert.alert('Actualités', 'Toutes les actualités')}>
+            <Text style={styles.seeAllText}>Voir tout</Text>
+          </TouchableOpacity>
+        </View>
+        
+        {news.slice(0, 3).map((article, index) => (
+          <TouchableOpacity key={index} style={styles.newsCard}>
+            <Image source={{ uri: images.news }} style={styles.newsImage} />
+            <View style={styles.newsContent}>
+              <View style={styles.newsHeader}>
+                <Text style={styles.newsCategory}>{article.category?.toUpperCase()}</Text>
+                <Text style={styles.newsTime}>Il y a 2h</Text>
+              </View>
+              <Text style={styles.newsTitle} numberOfLines={2}>{article.title}</Text>
+              <Text style={styles.newsExcerpt} numberOfLines={2}>{article.excerpt}</Text>
             </View>
-            <Icon name="arrow" size={24} color={colors.white} />
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      {/* Advertising Program Section Enhanced */}
+      <View style={styles.section}>
+        <TouchableOpacity style={styles.enhancedPublicityBanner} onPress={() => Alert.alert('Programme Publicitaire', 'Boostez votre visibilité avec LCA TV')}>
+          <Image source={{ uri: images.equipment }} style={styles.publicityBackgroundImage} />
+          <View style={styles.publicityContentOverlay}>
+            <View style={styles.publicityContent}>
+              <Icon name="megaphone" size={32} color={colors.white} />
+              <View style={styles.publicityText}>
+                <Text style={styles.publicityTitle}>Programme Publicitaire</Text>
+                <Text style={styles.publicitySubtitle}>Développez votre business avec LCA TV</Text>
+                <Text style={styles.publicityDescription}>Spots TV • Sponsoring • Digital</Text>
+              </View>
+              <Icon name="arrow" size={24} color={colors.white} />
+            </View>
           </View>
         </TouchableOpacity>
+      </View>
+
+      {/* Statistics Section */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>LCA TV en chiffres</Text>
+        <View style={styles.statsGrid}>
+          <View style={styles.statItem}>
+            <Icon name="fire" size={32} color={colors.red} />
+            <Text style={styles.statValue}>500K+</Text>
+            <Text style={styles.statLabel}>Téléspectateurs</Text>
+          </View>
+          <View style={styles.statItem}>
+            <Icon name="tv" size={32} color={colors.blue} />
+            <Text style={styles.statValue}>24/7</Text>
+            <Text style={styles.statLabel}>Diffusion</Text>
+          </View>
+          <View style={styles.statItem}>
+            <Icon name="play" size={32} color={colors.emerald} />
+            <Text style={styles.statValue}>1000+</Text>
+            <Text style={styles.statLabel}>Vidéos</Text>
+          </View>
+          <View style={styles.statItem}>
+            <Icon name="star" size={32} color={colors.accent} />
+            <Text style={styles.statValue}>4.8/5</Text>
+            <Text style={styles.statLabel}>Satisfaction</Text>
+          </View>
+        </View>
+      </View>
+
+      {/* Footer Info */}
+      <View style={styles.footerSection}>
+        <Text style={styles.footerTitle}>LCA TV</Text>
+        <Text style={styles.footerSubtitle}>La Chaîne Africaine de télévision</Text>
+        <Text style={styles.footerDescription}>
+          Votre média de référence au Burkina Faso depuis 2018. 
+          Information, culture, sport et divertissement de qualité.
+        </Text>
       </View>
     </ScrollView>
   );
 
-  // Login Page
+  // Login and Register pages remain the same but with enhanced styling
   const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -549,13 +739,15 @@ export default function App() {
             <Text style={styles.backText}>Retour</Text>
           </TouchableOpacity>
           
-          <Text style={styles.authTitle}>Connexion</Text>
-          <Text style={styles.authSubtitle}>Connectez-vous pour accéder à vos favoris</Text>
+          <View style={styles.authHeader}>
+            <Text style={styles.authTitle}>Connexion</Text>
+            <Text style={styles.authSubtitle}>Connectez-vous pour accéder à vos favoris et points de fidélité</Text>
+          </View>
           
           <View style={styles.inputContainer}>
             <TextInput
               style={styles.input}
-              placeholder="Email"
+              placeholder="Adresse email"
               value={email}
               onChangeText={setEmail}
               keyboardType="email-address"
@@ -581,19 +773,21 @@ export default function App() {
             {loading ? (
               <ActivityIndicator color={colors.white} />
             ) : (
-              <Text style={styles.authButtonText}>Se connecter</Text>
+              <>
+                <Text style={styles.authButtonText}>Se connecter</Text>
+                <Icon name="arrow" size={20} color={colors.white} />
+              </>
             )}
           </TouchableOpacity>
           
           <TouchableOpacity onPress={() => setCurrentPage('register')}>
-            <Text style={styles.linkText}>Créer un compte</Text>
+            <Text style={styles.linkText}>Pas encore de compte ? Créer un compte</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
     );
   };
 
-  // Register Page
   const RegisterPage = () => {
     const [formData, setFormData] = useState({
       nom: '',
@@ -616,13 +810,15 @@ export default function App() {
             <Text style={styles.backText}>Retour</Text>
           </TouchableOpacity>
           
-          <Text style={styles.authTitle}>Inscription</Text>
-          <Text style={styles.authSubtitle}>Créez votre compte LCA TV</Text>
+          <View style={styles.authHeader}>
+            <Text style={styles.authTitle}>Inscription</Text>
+            <Text style={styles.authSubtitle}>Créez votre compte LCA TV et bénéficiez de 100 points de bienvenue</Text>
+          </View>
           
           <View style={styles.inputContainer}>
             <TextInput
               style={styles.input}
-              placeholder="Nom"
+              placeholder="Nom de famille"
               value={formData.nom}
               onChangeText={(text) => updateFormData('nom', text)}
             />
@@ -640,7 +836,7 @@ export default function App() {
           <View style={styles.inputContainer}>
             <TextInput
               style={styles.input}
-              placeholder="Email"
+              placeholder="Adresse email"
               value={formData.email}
               onChangeText={(text) => updateFormData('email', text)}
               keyboardType="email-address"
@@ -686,29 +882,38 @@ export default function App() {
             {loading ? (
               <ActivityIndicator color={colors.white} />
             ) : (
-              <Text style={styles.authButtonText}>Créer mon compte</Text>
+              <>
+                <Text style={styles.authButtonText}>Créer mon compte</Text>
+                <Icon name="arrow" size={20} color={colors.white} />
+              </>
             )}
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => setCurrentPage('login')}>
+            <Text style={styles.linkText}>Déjà un compte ? Se connecter</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
     );
   };
 
-  // Live Page
+  // Enhanced Live Page
   const LivePage = () => (
     <ScrollView style={styles.content}>
       <View style={styles.livePageContainer}>
         <Text style={styles.pageTitle}>LCA TV - Direct</Text>
         
-        <View style={styles.livePlayerContainer}>
+        <View style={styles.enhancedLivePlayerContainer}>
           <Image
-            source={{ uri: 'https://i.ytimg.com/vi/ixQEmhTbvTI/maxresdefault.jpg' }}
+            source={{ uri: images.studio }}
             style={styles.livePlayerImage}
             resizeMode="cover"
           />
           <View style={styles.livePlayerOverlay}>
-            <Icon name="play" size={80} color={colors.white} />
-            <Text style={styles.livePlayerText}>Stream en direct</Text>
+            <TouchableOpacity style={styles.livePlayButton}>
+              <Icon name="play" size={60} color={colors.white} />
+            </TouchableOpacity>
+            <Text style={styles.livePlayerText}>Regarder en direct</Text>
             <View style={styles.liveIndicatorLarge}>
               <Text style={styles.liveTextLarge}>🔴 EN DIRECT</Text>
             </View>
@@ -716,47 +921,102 @@ export default function App() {
         </View>
         
         <View style={styles.liveInfo}>
-          <Text style={styles.liveInfoTitle}>LCA TV - La Chaîne Africaine de télévision</Text>
+          <Text style={styles.liveInfoTitle}>Journal du soir - Édition spéciale</Text>
           <Text style={styles.liveInfoDescription}>
-            Suivez en direct nos programmes : Journal, Franc-Parler, Questions de Femmes, et bien plus encore.
+            Suivez en direct l'actualité du Burkina Faso et de l'Afrique de l'Ouest. 
+            Au programme ce soir : politique, économie, sport et culture.
           </Text>
-          <Text style={styles.viewerCount}>🔴 1,247 spectateurs connectés</Text>
+          <View style={styles.liveMetrics}>
+            <View style={styles.liveMetricItem}>
+              <Icon name="live" size={20} color={colors.red} />
+              <Text style={styles.liveMetricText}>1,247 spectateurs</Text>
+            </View>
+            <View style={styles.liveMetricItem}>
+              <Icon name="heart" size={20} color={colors.red} />
+              <Text style={styles.liveMetricText}>238 likes</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Program Schedule */}
+        <View style={styles.scheduleSection}>
+          <Text style={styles.scheduleSectionTitle}>Programme du jour</Text>
+          <View style={styles.scheduleItem}>
+            <Text style={styles.scheduleTime}>20:00</Text>
+            <Text style={styles.scheduleTitle}>Journal du soir</Text>
+            <Text style={styles.scheduleStatus}>🔴 En cours</Text>
+          </View>
+          <View style={styles.scheduleItem}>
+            <Text style={styles.scheduleTime}>21:00</Text>
+            <Text style={styles.scheduleTitle}>Franc-Parler</Text>
+            <Text style={styles.scheduleStatusNext}>À suivre</Text>
+          </View>
+          <View style={styles.scheduleItem}>
+            <Text style={styles.scheduleTime}>22:00</Text>
+            <Text style={styles.scheduleTitle}>Culture & Tradition</Text>
+            <Text style={styles.scheduleStatusNext}>À suivre</Text>
+          </View>
         </View>
       </View>
     </ScrollView>
   );
 
-  // Profile Page
+  // Enhanced Profile Page
   const ProfilePage = () => (
     <ScrollView style={styles.content}>
       {user ? (
         <View style={styles.profileContainer}>
-          <Text style={styles.pageTitle}>Mon Profil</Text>
-          
-          <View style={styles.userInfo}>
-            <View style={styles.avatar}>
-              <Text style={styles.avatarText}>{user.nom.charAt(0)}{user.prenom.charAt(0)}</Text>
+          <View style={styles.profileHeader}>
+            <View style={styles.profileAvatar}>
+              <Text style={styles.profileAvatarText}>{user.nom.charAt(0)}{user.prenom.charAt(0)}</Text>
             </View>
-            <Text style={styles.userName}>{user.prenom} {user.nom}</Text>
-            <Text style={styles.userEmail}>{user.email}</Text>
+            <Text style={styles.profileName}>{user.prenom} {user.nom}</Text>
+            <Text style={styles.profileEmail}>{user.email}</Text>
+            <View style={styles.profilePointsBadge}>
+              <Icon name="star" size={20} color={colors.accent} />
+              <Text style={styles.profilePoints}>{user.points || 0} points</Text>
+            </View>
           </View>
           
-          <View style={styles.statsContainer}>
-            <View style={styles.statItem}>
-              <Text style={styles.statValue}>{user.points || 0}</Text>
-              <Text style={styles.statLabel}>Points</Text>
+          <View style={styles.profileStats}>
+            <View style={styles.profileStatItem}>
+              <Icon name="heart" size={24} color={colors.red} />
+              <Text style={styles.profileStatValue}>{user.favorites?.length || 0}</Text>
+              <Text style={styles.profileStatLabel}>Favoris</Text>
             </View>
-            <View style={styles.statItem}>
-              <Text style={styles.statValue}>{user.favorites?.length || 0}</Text>
-              <Text style={styles.statLabel}>Favoris</Text>
+            <View style={styles.profileStatItem}>
+              <Icon name="play" size={24} color={colors.blue} />
+              <Text style={styles.profileStatValue}>23</Text>
+              <Text style={styles.profileStatLabel}>Vidéos vues</Text>
             </View>
+            <View style={styles.profileStatItem}>
+              <Icon name="star" size={24} color={colors.accent} />
+              <Text style={styles.profileStatValue}>{user.points || 0}</Text>
+              <Text style={styles.profileStatLabel}>Points</Text>
+            </View>
+          </View>
+
+          <View style={styles.profileActions}>
+            <TouchableOpacity style={styles.profileActionButton}>
+              <Icon name="settings" size={20} color={colors.primary} />
+              <Text style={styles.profileActionText}>Paramètres</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.profileActionButton}>
+              <Icon name="notification" size={20} color={colors.primary} />
+              <Text style={styles.profileActionText}>Notifications</Text>
+            </TouchableOpacity>
           </View>
         </View>
       ) : (
         <View style={styles.authPrompt}>
-          <Text style={styles.authPromptText}>Connectez-vous pour voir votre profil</Text>
+          <Icon name="person" size={80} color={colors.gray} />
+          <Text style={styles.authPromptTitle}>Connectez-vous</Text>
+          <Text style={styles.authPromptText}>
+            Accédez à votre profil, vos favoris et vos points de fidélité
+          </Text>
           <TouchableOpacity style={styles.authButton} onPress={() => setCurrentPage('login')}>
             <Text style={styles.authButtonText}>Se connecter</Text>
+            <Icon name="arrow" size={20} color={colors.white} />
           </TouchableOpacity>
         </View>
       )}
@@ -793,20 +1053,26 @@ export default function App() {
   );
 }
 
+// Ultra Modern Styles with Rich Content Support
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
   },
   
-  // Welcome Page Styles
+  // Enhanced Welcome Page Styles
   welcomeContainer: {
     flex: 1,
   },
   welcomeBackground: {
     flex: 1,
-    backgroundColor: colors.primary,
     position: 'relative',
+  },
+  welcomeBackgroundImage: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
   },
   gradientOverlay: {
     position: 'absolute',
@@ -814,12 +1080,17 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(45,80,22,0.9)',
+    backgroundColor: 'rgba(45,80,22,0.95)',
+  },
+  welcomeContent: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    paddingVertical: 40,
   },
   heroSection: {
     alignItems: 'center',
-    paddingTop: 80,
     paddingHorizontal: 30,
+    marginBottom: 40,
   },
   logoHero: {
     flexDirection: 'row',
@@ -867,22 +1138,55 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     paddingHorizontal: 20,
   },
-  featuresPreview: {
+
+  // Enhanced Features Grid
+  featuresGrid: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingHorizontal: 40,
-    marginTop: 40,
-    marginBottom: 50,
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    paddingHorizontal: 30,
+    marginBottom: 40,
   },
-  featurePreviewItem: {
+  featureCard: {
+    width: (screenWidth - 80) / 2,
+    height: 120,
+    borderRadius: 15,
+    marginBottom: 15,
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  featureImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+  featureOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    justifyContent: 'center',
     alignItems: 'center',
+    padding: 10,
   },
-  featurePreviewText: {
-    color: colors.white,
-    fontSize: 14,
+  featureTitle: {
+    fontSize: 16,
     fontWeight: 'bold',
+    color: colors.white,
     marginTop: 8,
+    textAlign: 'center',
   },
+  featureDescription: {
+    fontSize: 12,
+    color: colors.white,
+    opacity: 0.9,
+    textAlign: 'center',
+    marginTop: 4,
+  },
+
+  // Enhanced Action Buttons
   welcomeActions: {
     paddingHorizontal: 30,
     marginBottom: 40,
@@ -893,18 +1197,21 @@ const styles = StyleSheet.create({
     paddingVertical: 18,
     marginBottom: 15,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
+    shadowRadius: 12,
+    elevation: 12,
   },
   primaryActionGradient: {
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   primaryActionText: {
     color: colors.white,
     fontSize: 18,
     fontWeight: 'bold',
+    marginRight: 10,
   },
   secondaryActionButton: {
     borderWidth: 2,
@@ -929,28 +1236,78 @@ const styles = StyleSheet.create({
     opacity: 0.8,
     textDecorationLine: 'underline',
   },
+
+  // Enhanced Stats Section
   statsSection: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    paddingHorizontal: 40,
-    marginTop: 20,
+    paddingHorizontal: 30,
+    marginBottom: 40,
   },
-  statItem: {
+  statCard: {
     alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 15,
+    padding: 20,
+    minWidth: 90,
   },
   statNumber: {
     fontSize: 24,
     fontWeight: 'bold',
     color: colors.white,
+    marginTop: 8,
   },
   statLabel: {
     fontSize: 12,
     color: colors.white,
     opacity: 0.8,
     marginTop: 4,
+    textAlign: 'center',
   },
 
-  // Sidebar Styles
+  // Testimonials Section
+  testimonialsSection: {
+    paddingHorizontal: 30,
+    marginBottom: 30,
+  },
+  sectionTitleWhite: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: colors.white,
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  testimonialCard: {
+    flexDirection: 'row',
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 15,
+    padding: 20,
+    alignItems: 'center',
+  },
+  testimonialAvatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 15,
+  },
+  testimonialContent: {
+    flex: 1,
+  },
+  testimonialText: {
+    fontSize: 14,
+    color: colors.white,
+    fontStyle: 'italic',
+    lineHeight: 20,
+    marginBottom: 8,
+  },
+  testimonialAuthor: {
+    fontSize: 12,
+    color: colors.white,
+    opacity: 0.8,
+    fontWeight: 'bold',
+  },
+
+  // Enhanced Sidebar Styles
   sidebarOverlay: {
     flex: 1,
     flexDirection: 'row',
@@ -960,35 +1317,35 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
   sidebar: {
-    width: screenWidth * 0.8,
+    width: screenWidth * 0.85,
     backgroundColor: colors.white,
     shadowColor: '#000',
-    shadowOffset: { width: 2, height: 0 },
+    shadowOffset: { width: 4, height: 0 },
     shadowOpacity: 0.3,
-    shadowRadius: 10,
-    elevation: 10,
+    shadowRadius: 15,
+    elevation: 15,
   },
   sidebarHeader: {
     backgroundColor: colors.primary,
-    paddingTop: 40,
-    paddingBottom: 20,
-    paddingHorizontal: 20,
+    paddingTop: 50,
+    paddingBottom: 25,
+    paddingHorizontal: 25,
   },
   sidebarUserInfo: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   sidebarAvatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
     backgroundColor: colors.primaryLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 15,
   },
   sidebarAvatarText: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
     color: colors.white,
   },
@@ -999,30 +1356,40 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: colors.white,
-    marginBottom: 2,
+    marginBottom: 4,
   },
   sidebarUserEmail: {
     fontSize: 14,
     color: colors.white,
     opacity: 0.8,
-    marginBottom: 4,
+    marginBottom: 8,
+  },
+  pointsBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    borderRadius: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    alignSelf: 'flex-start',
   },
   sidebarUserPoints: {
     fontSize: 12,
-    color: colors.primaryLight,
+    color: colors.accent,
     fontWeight: 'bold',
+    marginLeft: 4,
   },
   sidebarGuestInfo: {
     alignItems: 'center',
   },
   sidebarGuestAvatar: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 70,
+    height: 70,
+    borderRadius: 35,
     backgroundColor: colors.primaryLight,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 15,
   },
   sidebarGuestText: {
     fontSize: 18,
@@ -1031,9 +1398,9 @@ const styles = StyleSheet.create({
   },
   sidebarLoginBtn: {
     backgroundColor: colors.primaryLight,
-    paddingHorizontal: 20,
-    paddingVertical: 8,
-    borderRadius: 15,
+    paddingHorizontal: 25,
+    paddingVertical: 10,
+    borderRadius: 20,
   },
   sidebarLoginText: {
     color: colors.white,
@@ -1046,8 +1413,8 @@ const styles = StyleSheet.create({
   menuItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
+    paddingHorizontal: 25,
+    paddingVertical: 18,
     borderBottomWidth: 0.5,
     borderBottomColor: colors.lightGray,
   },
@@ -1056,25 +1423,42 @@ const styles = StyleSheet.create({
     color: colors.black,
     marginLeft: 15,
     flex: 1,
+    fontWeight: '500',
+  },
+  menuItemBadge: {
+    fontSize: 12,
+    color: colors.blue,
+    fontWeight: 'bold',
   },
   menuDivider: {
     height: 1,
     backgroundColor: colors.lightGray,
-    marginVertical: 10,
+    marginVertical: 15,
   },
   liveBadge: {
     backgroundColor: colors.red,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 10,
   },
   liveBadgeText: {
     color: colors.white,
     fontSize: 10,
     fontWeight: 'bold',
   },
+  newsBadge: {
+    backgroundColor: colors.orange,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 10,
+  },
+  newsBadgeText: {
+    color: colors.white,
+    fontSize: 10,
+    fontWeight: 'bold',
+  },
 
-  // Header Styles
+  // Enhanced Header Styles
   header: {
     backgroundColor: colors.primary,
     flexDirection: 'row',
@@ -1082,9 +1466,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 15,
     justifyContent: 'space-between',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 4,
   },
   menuButton: {
-    padding: 5,
+    padding: 8,
+    borderRadius: 8,
   },
   logoContainer: {
     flexDirection: 'row',
@@ -1097,41 +1487,131 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   logoCircle: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
     backgroundColor: colors.blue,
     justifyContent: 'center',
     alignItems: 'center',
   },
   logoSubText: {
-    fontSize: 10,
+    fontSize: 12,
     fontWeight: 'bold',
     color: colors.white,
   },
-  notificationButton: {
-    padding: 5,
+  headerActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  headerActionButton: {
+    padding: 8,
+    marginLeft: 8,
     position: 'relative',
   },
   notificationDot: {
     position: 'absolute',
-    top: 2,
-    right: 2,
+    top: 4,
+    right: 4,
     width: 8,
     height: 8,
     borderRadius: 4,
     backgroundColor: colors.red,
   },
 
-  // Common Styles
-  pageContainer: {
-    flex: 1,
-  },
+  // Enhanced Home Page Styles
   content: {
     flex: 1,
+    backgroundColor: colors.white,
   },
+  
+  // Hero Live Section
+  heroLiveSection: {
+    height: 250,
+    position: 'relative',
+    marginBottom: 20,
+  },
+  heroLiveBackground: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+  heroLiveOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  liveIndicatorLarge: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    backgroundColor: colors.red,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 15,
+  },
+  liveTextLarge: {
+    color: colors.white,
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+  heroLiveTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: colors.white,
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  heroLiveSubtitle: {
+    fontSize: 16,
+    color: colors.white,
+    opacity: 0.9,
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  heroPlayButton: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: 'rgba(255,255,255,0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  viewerCount: {
+    fontSize: 14,
+    color: colors.white,
+    fontWeight: 'bold',
+  },
+
+  // Quick Actions Bar
+  quickActionsBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    backgroundColor: colors.lightGray,
+    marginBottom: 20,
+  },
+  quickAction: {
+    alignItems: 'center',
+    padding: 10,
+  },
+  quickActionText: {
+    fontSize: 12,
+    color: colors.darkGray,
+    fontWeight: '600',
+    marginTop: 5,
+  },
+
+  // Enhanced Section Styles
   section: {
-    marginVertical: 15,
+    marginVertical: 10,
     paddingHorizontal: 20,
   },
   sectionHeader: {
@@ -1140,10 +1620,10 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
     color: colors.black,
-    marginLeft: 10,
+    marginLeft: 12,
     flex: 1,
   },
   seeAllText: {
@@ -1151,91 +1631,194 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
   },
-  liveContainer: {
-    height: 200,
-    borderRadius: 15,
-    overflow: 'hidden',
-    position: 'relative',
-  },
-  liveImage: {
-    width: '100%',
-    height: '100%',
-  },
-  liveOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.3)',
-  },
-  liveTitle: {
-    color: colors.white,
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginTop: 10,
-  },
-  liveIndicator: {
-    backgroundColor: colors.red,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 10,
-    marginLeft: 10,
-  },
-  liveText: {
-    color: colors.white,
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-  videoCard: {
-    width: 200,
+
+  // Enhanced Video Cards
+  enhancedVideoCard: {
+    width: 220,
     marginRight: 15,
     backgroundColor: colors.white,
-    borderRadius: 12,
+    borderRadius: 15,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 6,
+    overflow: 'hidden',
   },
-  videoThumbnail: {
+  enhancedVideoThumbnail: {
     width: '100%',
-    height: 120,
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
+    height: 130,
+    resizeMode: 'cover',
   },
-  videoInfo: {
-    padding: 10,
+  videoPlayOverlay: {
+    position: 'absolute',
+    top: 50,
+    left: 90,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  videoTitle: {
+  videoCategoryBadge: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    backgroundColor: colors.primaryLight,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  videoCategoryText: {
+    fontSize: 10,
+    color: colors.white,
+    fontWeight: 'bold',
+  },
+  enhancedVideoInfo: {
+    padding: 12,
+  },
+  enhancedVideoTitle: {
     fontSize: 14,
     fontWeight: 'bold',
     color: colors.black,
-    marginBottom: 5,
+    marginBottom: 8,
+    lineHeight: 18,
+  },
+  videoMetaRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   videoStats: {
     fontSize: 12,
     color: colors.gray,
   },
-  publicityBanner: {
+  videoDuration: {
+    fontSize: 12,
+    color: colors.darkGray,
+    fontWeight: '600',
+  },
+
+  // Categories Grid
+  categoriesGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  categoryCard: {
+    width: (screenWidth - 60) / 4,
+    alignItems: 'center',
+    backgroundColor: colors.lightGray,
     borderRadius: 15,
-    backgroundColor: colors.blue,
+    padding: 15,
+    marginBottom: 15,
+  },
+  categoryIcon: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: colors.primaryLight,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  categoryEmoji: {
+    fontSize: 24,
+  },
+  categoryName: {
+    fontSize: 11,
+    color: colors.darkGray,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+
+  // Enhanced News Cards
+  newsCard: {
+    flexDirection: 'row',
+    backgroundColor: colors.white,
+    borderRadius: 15,
+    marginBottom: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 3,
     overflow: 'hidden',
-    marginTop: 10,
+  },
+  newsImage: {
+    width: 100,
+    height: 100,
+    resizeMode: 'cover',
+  },
+  newsContent: {
+    flex: 1,
+    padding: 15,
+  },
+  newsHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  newsCategory: {
+    fontSize: 10,
+    color: colors.orange,
+    fontWeight: 'bold',
+    backgroundColor: colors.lightGray,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 8,
+  },
+  newsTime: {
+    fontSize: 10,
+    color: colors.gray,
+  },
+  newsTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: colors.black,
+    marginBottom: 5,
+    lineHeight: 18,
+  },
+  newsExcerpt: {
+    fontSize: 12,
+    color: colors.gray,
+    lineHeight: 16,
+  },
+
+  // Enhanced Publicity Banner
+  enhancedPublicityBanner: {
+    borderRadius: 20,
+    overflow: 'hidden',
+    height: 140,
+    position: 'relative',
+  },
+  publicityBackgroundImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+  publicityContentOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(59,130,246,0.9)',
   },
   publicityContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 20,
+    padding: 25,
+    height: '100%',
   },
   publicityText: {
     flex: 1,
     marginLeft: 15,
   },
   publicityTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
     color: colors.white,
     marginBottom: 5,
@@ -1243,25 +1826,83 @@ const styles = StyleSheet.create({
   publicitySubtitle: {
     fontSize: 14,
     color: colors.white,
+    marginBottom: 5,
+  },
+  publicityDescription: {
+    fontSize: 12,
+    color: colors.white,
     opacity: 0.9,
   },
 
-  // Auth Styles
-  authContainer: {
+  // Statistics Grid
+  statsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  statItem: {
+    width: (screenWidth - 60) / 2,
+    alignItems: 'center',
+    backgroundColor: colors.lightGray,
+    borderRadius: 15,
     padding: 20,
+    marginBottom: 15,
+  },
+  statValue: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: colors.primary,
+    marginTop: 10,
+  },
+
+  // Footer Section
+  footerSection: {
+    backgroundColor: colors.lightGray,
+    padding: 30,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  footerTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: colors.primary,
+    marginBottom: 5,
+  },
+  footerSubtitle: {
+    fontSize: 16,
+    color: colors.gray,
+    marginBottom: 15,
+  },
+  footerDescription: {
+    fontSize: 14,
+    color: colors.gray,
+    textAlign: 'center',
+    lineHeight: 20,
+  },
+
+  // Enhanced Auth Styles
+  authContainer: {
+    padding: 25,
+  },
+  authHeader: {
+    alignItems: 'center',
+    marginBottom: 30,
   },
   backButton: {
     flexDirection: 'row',
     alignItems: 'center',
+    alignSelf: 'flex-start',
     marginBottom: 20,
+    padding: 5,
   },
   backText: {
     fontSize: 16,
     color: colors.primary,
     marginLeft: 8,
+    fontWeight: '600',
   },
   authTitle: {
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: 'bold',
     color: colors.black,
     textAlign: 'center',
@@ -1271,56 +1912,66 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.gray,
     textAlign: 'center',
-    marginBottom: 30,
+    lineHeight: 22,
   },
   inputContainer: {
-    marginBottom: 15,
+    marginBottom: 20,
   },
   input: {
     backgroundColor: colors.lightGray,
-    borderRadius: 12,
-    paddingHorizontal: 15,
-    paddingVertical: 15,
+    borderRadius: 15,
+    paddingHorizontal: 20,
+    paddingVertical: 18,
     fontSize: 16,
     color: colors.black,
+    borderWidth: 1,
+    borderColor: 'transparent',
   },
   authButton: {
     backgroundColor: colors.primary,
-    borderRadius: 15,
+    borderRadius: 20,
     paddingVertical: 18,
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     marginTop: 20,
-    marginBottom: 15,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 6,
   },
   authButtonText: {
     color: colors.white,
     fontSize: 18,
     fontWeight: 'bold',
+    marginRight: 10,
   },
   linkText: {
     textAlign: 'center',
     color: colors.primaryLight,
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: '600',
   },
 
-  // Live Page Styles
+  // Enhanced Live Page Styles
   livePageContainer: {
     padding: 20,
   },
   pageTitle: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
     color: colors.black,
     textAlign: 'center',
     marginBottom: 20,
   },
-  livePlayerContainer: {
+  enhancedLivePlayerContainer: {
     height: 250,
-    borderRadius: 15,
+    borderRadius: 20,
     overflow: 'hidden',
     position: 'relative',
-    marginBottom: 20,
+    marginBottom: 25,
   },
   livePlayerImage: {
     width: '100%',
@@ -1334,101 +1985,225 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.3)',
+    backgroundColor: 'rgba(0,0,0,0.4)',
+  },
+  livePlayButton: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: 'rgba(255,255,255,0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 15,
   },
   livePlayerText: {
     color: colors.white,
     fontSize: 20,
     fontWeight: 'bold',
-    marginTop: 10,
-  },
-  liveIndicatorLarge: {
-    position: 'absolute',
-    top: 15,
-    right: 15,
-    backgroundColor: colors.red,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 15,
-  },
-  liveTextLarge: {
-    color: colors.white,
-    fontSize: 14,
-    fontWeight: 'bold',
   },
   liveInfo: {
     backgroundColor: colors.lightGray,
-    padding: 20,
-    borderRadius: 15,
+    padding: 25,
+    borderRadius: 20,
+    marginBottom: 25,
   },
   liveInfoTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
     color: colors.black,
-    marginBottom: 10,
+    marginBottom: 12,
   },
   liveInfoDescription: {
     fontSize: 16,
     color: colors.gray,
-    lineHeight: 22,
+    lineHeight: 24,
     marginBottom: 15,
   },
-  viewerCount: {
+  liveMetrics: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  liveMetricItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  liveMetricText: {
     fontSize: 14,
-    color: colors.primaryLight,
-    fontWeight: 'bold',
+    color: colors.darkGray,
+    fontWeight: '600',
+    marginLeft: 5,
   },
 
-  // Profile Styles
-  profileContainer: {
-    padding: 20,
+  // Schedule Section
+  scheduleSection: {
+    backgroundColor: colors.white,
+    borderRadius: 20,
+    padding: 25,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 3,
   },
-  userInfo: {
+  scheduleSectionTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: colors.black,
+    marginBottom: 20,
+  },
+  scheduleItem: {
+    flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 30,
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.lightGray,
   },
-  avatar: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+  scheduleTime: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: colors.primary,
+    width: 60,
+  },
+  scheduleTitle: {
+    fontSize: 16,
+    color: colors.black,
+    flex: 1,
+    marginLeft: 15,
+  },
+  scheduleStatus: {
+    fontSize: 12,
+    color: colors.red,
+    fontWeight: 'bold',
+  },
+  scheduleStatusNext: {
+    fontSize: 12,
+    color: colors.gray,
+  },
+
+  // Enhanced Profile Styles
+  profileContainer: {
+    padding: 25,
+  },
+  profileHeader: {
+    alignItems: 'center',
+    backgroundColor: colors.lightGray,
+    borderRadius: 25,
+    padding: 30,
+    marginBottom: 25,
+  },
+  profileAvatar: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
     backgroundColor: colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 15,
   },
-  avatarText: {
-    fontSize: 24,
+  profileAvatarText: {
+    fontSize: 32,
     fontWeight: 'bold',
     color: colors.white,
   },
-  userName: {
+  profileName: {
     fontSize: 24,
     fontWeight: 'bold',
     color: colors.black,
     marginBottom: 5,
   },
-  userEmail: {
+  profileEmail: {
     fontSize: 16,
     color: colors.gray,
+    marginBottom: 15,
   },
-  statsContainer: {
+  profilePointsBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.primary,
+    borderRadius: 20,
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+  },
+  profilePoints: {
+    fontSize: 16,
+    color: colors.white,
+    fontWeight: 'bold',
+    marginLeft: 5,
+  },
+  profileStats: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginBottom: 30,
   },
-  statValue: {
-    fontSize: 28,
+  profileStatItem: {
+    alignItems: 'center',
+    backgroundColor: colors.white,
+    borderRadius: 15,
+    padding: 20,
+    minWidth: 90,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  profileStatValue: {
+    fontSize: 24,
     fontWeight: 'bold',
     color: colors.primary,
+    marginTop: 8,
   },
-  authPrompt: {
-    padding: 40,
+  profileStatLabel: {
+    fontSize: 12,
+    color: colors.gray,
+    marginTop: 4,
+  },
+  profileActions: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  profileActionButton: {
+    flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: colors.lightGray,
+    borderRadius: 15,
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    minWidth: 140,
+    justifyContent: 'center',
+  },
+  profileActionText: {
+    fontSize: 16,
+    color: colors.primary,
+    fontWeight: '600',
+    marginLeft: 8,
+  },
+
+  // Enhanced Auth Prompt
+  authPrompt: {
+    padding: 50,
+    alignItems: 'center',
+    backgroundColor: colors.lightGray,
+    margin: 20,
+    borderRadius: 25,
+  },
+  authPromptTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: colors.black,
+    marginTop: 20,
+    marginBottom: 10,
   },
   authPromptText: {
-    fontSize: 18,
+    fontSize: 16,
     color: colors.gray,
     textAlign: 'center',
     marginBottom: 30,
+    lineHeight: 22,
+  },
+
+  // Common Styles
+  pageContainer: {
+    flex: 1,
   },
 });
