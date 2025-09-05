@@ -326,10 +326,62 @@ def fetch_youtube_videos(max_results: int = 20) -> List[Dict]:
                 'duration': '28:15'
             }
         ]
-        return fallback_videos[:max_results]
-    except Exception as e:
-        print(f"Error fetching YouTube videos: {e}")
-        return []
+    return fallback_videos[:max_results]
+
+def parse_youtube_duration(duration: str) -> str:
+    """Convert YouTube ISO 8601 duration to readable format"""
+    import re
+    if not duration or duration == 'PT0S':
+        return '0:00'
+    
+    # Parse PT4M13S -> 4:13
+    match = re.match(r'PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?', duration)
+    if not match:
+        return '0:00'
+    
+    hours, minutes, seconds = match.groups()
+    hours = int(hours) if hours else 0
+    minutes = int(minutes) if minutes else 0
+    seconds = int(seconds) if seconds else 0
+    
+    if hours > 0:
+        return f"{hours}:{minutes:02d}:{seconds:02d}"
+    else:
+        return f"{minutes}:{seconds:02d}"
+
+def format_count(count_str: str) -> str:
+    """Format view/like counts for display"""
+    try:
+        count = int(count_str)
+        if count >= 1000000:
+            return f"{count/1000000:.1f}M"
+        elif count >= 1000:
+            return f"{count/1000:.1f}K"
+        else:
+            return str(count)
+    except (ValueError, TypeError):
+        return "0"
+
+def categorize_video(title: str) -> str:
+    """Categorize video based on title keywords"""
+    title_lower = title.lower()
+    
+    if any(word in title_lower for word in ['journal', 'info', 'actualité', 'news']):
+        return 'actualites'
+    elif any(word in title_lower for word in ['franc-parler', 'débat', 'discussion']):
+        return 'debats'
+    elif any(word in title_lower for word in ['questions de femmes', 'femme']):
+        return 'femmes'
+    elif any(word in title_lower for word in ['sport', 'étalons', 'football', 'match']):
+        return 'sport'
+    elif any(word in title_lower for word in ['culture', 'tradition', 'masque', 'danse']):
+        return 'culture'
+    elif any(word in title_lower for word in ['jeunesse', 'avenir', 'jeune']):
+        return 'jeunesse'
+    elif any(word in title_lower for word in ['burkina', 'faso', 'national']):
+        return 'national'
+    else:
+        return 'general'
 
 # Initialize database collections
 def init_db():
