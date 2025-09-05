@@ -151,8 +151,107 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(securit
 def fetch_youtube_videos(max_results: int = 20) -> List[Dict]:
     """Fetch videos from LCA TV YouTube channel"""
     try:
-        # Fallback videos for demo
-        fallback_videos = [
+        from googleapiclient.discovery import build
+        from googleapiclient.errors import HttpError
+        
+        # Initialize YouTube API client
+        youtube = build('youtube', 'v3', developerKey=YOUTUBE_API_KEY)
+        
+        # First, get the channel ID from the handle @LCATV
+        try:
+            # Search for the channel using the handle
+            search_response = youtube.search().list(
+                q="@LCATV OR LCA TV",
+                type='channel',
+                part='snippet',
+                maxResults=5
+            ).execute()
+            
+            # Look for LCA TV channel
+            channel_id = None
+            for item in search_response.get('items', []):
+                if 'LCA' in item['snippet']['title'] or 'LCATV' in item['snippet']['title']:
+                    channel_id = item['snippet']['channelId']
+                    break
+            
+            # If no channel found by search, use the default ID
+            if not channel_id:
+                channel_id = YOUTUBE_CHANNEL_ID
+                
+        except Exception as e:
+            print(f"Error searching for channel: {e}")
+            channel_id = YOUTUBE_CHANNEL_ID
+        
+        # Get videos from the channel
+        try:
+            videos_response = youtube.search().list(
+                channelId=channel_id,
+                type='video',
+                order='date',
+                part='snippet',
+                maxResults=max_results,
+                regionCode='BF'  # Burkina Faso
+            ).execute()
+            
+            videos = []
+            video_ids = []
+            
+            # Collect video IDs for detailed stats
+            for item in videos_response.get('items', []):
+                video_ids.append(item['id']['videoId'])
+            
+            # Get detailed video statistics
+            if video_ids:
+                stats_response = youtube.videos().list(
+                    id=','.join(video_ids),
+                    part='statistics,contentDetails'
+                ).execute()
+                
+                stats_by_id = {}
+                for item in stats_response.get('items', []):
+                    stats_by_id[item['id']] = item
+            
+            # Process videos with real data
+            for item in videos_response.get('items', []):
+                video_id = item['id']['videoId']
+                snippet = item['snippet']
+                stats_item = stats_by_id.get(video_id, {})
+                stats = stats_item.get('statistics', {})
+                content_details = stats_item.get('contentDetails', {})
+                
+                # Parse duration from ISO 8601 format (PT4M13S -> 4:13)
+                duration = content_details.get('duration', 'PT0S')
+                duration_formatted = parse_youtube_duration(duration)
+                
+                video_data = {
+                    'id': video_id,
+                    'title': snippet.get('title', 'Titre non disponible'),
+                    'description': snippet.get('description', '')[:200] + '...',
+                    'thumbnail': snippet.get('thumbnails', {}).get('high', {}).get('url', 
+                               snippet.get('thumbnails', {}).get('medium', {}).get('url', 
+                               snippet.get('thumbnails', {}).get('default', {}).get('url', ''))),
+                    'published_at': snippet.get('publishedAt', ''),
+                    'category': categorize_video(snippet.get('title', '')),
+                    'channel_title': snippet.get('channelTitle', 'LCA TV'),
+                    'view_count': format_count(stats.get('viewCount', '0')),
+                    'like_count': format_count(stats.get('likeCount', '0')),
+                    'duration': duration_formatted
+                }
+                videos.append(video_data)
+            
+            print(f"Successfully fetched {len(videos)} videos from YouTube API")
+            return videos
+            
+        except HttpError as e:
+            print(f"YouTube API error: {e}")
+            # Fall back to demo videos if API fails
+            pass
+            
+    except Exception as e:
+        print(f"Error initializing YouTube API: {e}")
+    
+    # Fallback videos for demo/testing
+    fallback_videos = [
             {
                 'id': 'eSApphrRKWg',
                 'title': 'Journal LCA TV - Édition du Soir',
