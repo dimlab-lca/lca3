@@ -149,188 +149,8 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(securit
         )
     return user
 
-def fetch_youtube_videos(max_results: int = 20) -> List[Dict]:
-    """Fetch videos from LCA TV YouTube channel"""
-    try:
-        from googleapiclient.discovery import build
-        from googleapiclient.errors import HttpError
-        
-        # Initialize YouTube API client
-        youtube = build('youtube', 'v3', developerKey=YOUTUBE_API_KEY)
-        
-        # First, get the channel ID from the handle @LCATV
-        try:
-            # Search for the channel using the handle
-            search_response = youtube.search().list(
-                q="@LCATV OR LCA TV",
-                type='channel',
-                part='snippet',
-                maxResults=5
-            ).execute()
-            
-            # Look for LCA TV channel
-            channel_id = None
-            for item in search_response.get('items', []):
-                if 'LCA' in item['snippet']['title'] or 'LCATV' in item['snippet']['title']:
-                    channel_id = item['snippet']['channelId']
-                    break
-            
-            # If no channel found by search, use the default ID
-            if not channel_id:
-                channel_id = YOUTUBE_CHANNEL_ID
-                
-        except Exception as e:
-            print(f"Error searching for channel: {e}")
-            channel_id = YOUTUBE_CHANNEL_ID
-        
-        # Get videos from the channel
-        try:
-            videos_response = youtube.search().list(
-                channelId=channel_id,
-                type='video',
-                order='date',
-                part='snippet',
-                maxResults=max_results,
-                regionCode='BF'  # Burkina Faso
-            ).execute()
-            
-            videos = []
-            video_ids = []
-            
-            # Collect video IDs for detailed stats
-            for item in videos_response.get('items', []):
-                video_ids.append(item['id']['videoId'])
-            
-            # Get detailed video statistics
-            if video_ids:
-                stats_response = youtube.videos().list(
-                    id=','.join(video_ids),
-                    part='statistics,contentDetails'
-                ).execute()
-                
-                stats_by_id = {}
-                for item in stats_response.get('items', []):
-                    stats_by_id[item['id']] = item
-            
-            # Process videos with real data
-            for item in videos_response.get('items', []):
-                video_id = item['id']['videoId']
-                snippet = item['snippet']
-                stats_item = stats_by_id.get(video_id, {})
-                stats = stats_item.get('statistics', {})
-                content_details = stats_item.get('contentDetails', {})
-                
-                # Parse duration from ISO 8601 format (PT4M13S -> 4:13)
-                duration = content_details.get('duration', 'PT0S')
-                duration_formatted = parse_youtube_duration(duration)
-                
-                video_data = {
-                    'id': video_id,
-                    'title': snippet.get('title', 'Titre non disponible'),
-                    'description': snippet.get('description', '')[:200] + '...',
-                    'thumbnail': snippet.get('thumbnails', {}).get('high', {}).get('url', 
-                               snippet.get('thumbnails', {}).get('medium', {}).get('url', 
-                               snippet.get('thumbnails', {}).get('default', {}).get('url', ''))),
-                    'published_at': snippet.get('publishedAt', ''),
-                    'category': categorize_video(snippet.get('title', '')),
-                    'channel_title': snippet.get('channelTitle', 'LCA TV'),
-                    'view_count': format_count(stats.get('viewCount', '0')),
-                    'like_count': format_count(stats.get('likeCount', '0')),
-                    'duration': duration_formatted
-                }
-                videos.append(video_data)
-            
-            print(f"Successfully fetched {len(videos)} videos from YouTube API")
-            return videos
-            
-        except HttpError as e:
-            print(f"YouTube API error: {e}")
-            # Fall back to demo videos if API fails
-            pass
-            
-    except Exception as e:
-        print(f"Error initializing YouTube API: {e}")
-    
-    # Fallback videos for demo/testing
-    fallback_videos = [
-            {
-                'id': 'eSApphrRKWg',
-                'title': 'Journal LCA TV - Édition du Soir',
-                'description': 'Retrouvez l\'actualité nationale et internationale du Burkina Faso.',
-                'thumbnail': 'https://i.ytimg.com/vi/eSApphrRKWg/hqdefault.jpg',
-                'published_at': '2024-12-15T19:00:00Z',
-                'category': 'actualites',
-                'channel_title': 'LCA TV',
-                'view_count': '15420',
-                'like_count': '234',
-                'duration': '25:30'
-            },
-            {
-                'id': 'xJatmbxIaIM',
-                'title': 'Franc-Parler - Débat Économie',
-                'description': 'Débat sur les enjeux économiques du Burkina Faso.',
-                'thumbnail': 'https://i.ytimg.com/vi/xJatmbxIaIM/hqdefault.jpg',
-                'published_at': '2024-12-14T20:30:00Z',
-                'category': 'debats',
-                'channel_title': 'LCA TV',
-                'view_count': '8750',
-                'like_count': '156',
-                'duration': '45:12'
-            },
-            {
-                'id': '8aIAKRe4Spo',
-                'title': 'Festival des Masques - Culture Burkinabè',
-                'description': 'Découvrez la richesse culturelle du Burkina Faso à travers le festival des masques.',
-                'thumbnail': 'https://i.ytimg.com/vi/8aIAKRe4Spo/hqdefault.jpg',
-                'published_at': '2024-12-13T18:00:00Z',
-                'category': 'culture',
-                'channel_title': 'LCA TV',
-                'view_count': '12300',
-                'like_count': '298',
-                'duration': '35:45'
-            },
-            {
-                'id': 'R2EocmxeJ5Q',
-                'title': 'Étalons du Burkina - Match Analysis',
-                'description': 'Analyse du dernier match des Étalons du Burkina Faso.',
-                'thumbnail': 'https://i.ytimg.com/vi/R2EocmxeJ5Q/hqdefault.jpg',
-                'published_at': '2024-12-12T21:00:00Z',
-                'category': 'sport',
-                'channel_title': 'LCA TV',
-                'view_count': '25600',
-                'like_count': '567',
-                'duration': '52:18'
-            },
-            {
-                'id': 'pMlWnB5Wj3Q',
-                'title': 'Jeunesse Avenir - Entrepreneuriat',
-                'description': 'Émission dédiée aux jeunes entrepreneurs du Burkina Faso.',
-                'thumbnail': 'https://i.ytimg.com/vi/pMlWnB5Wj3Q/hqdefault.jpg',
-                'published_at': '2024-12-11T17:30:00Z',
-                'category': 'jeunesse',
-                'channel_title': 'LCA TV',
-                'view_count': '6890',
-                'like_count': '134',
-                'duration': '30:22'
-            },
-            {
-                'id': 'ixQEmhTbvTI',
-                'title': 'Questions de Femmes - Édition Spéciale',
-                'description': 'Émission spéciale dédiée aux femmes entrepreneures.',
-                'thumbnail': 'https://i.ytimg.com/vi/ixQEmhTbvTI/hqdefault.jpg',
-                'published_at': '2024-12-10T16:00:00Z',
-                'category': 'femmes',
-                'channel_title': 'LCA TV',
-                'view_count': '9450',
-                'like_count': '187',
-                'duration': '28:15'
-            }
-        ]
-        return fallback_videos[:max_results]
-
 def parse_youtube_duration(duration: str) -> str:
     """Convert YouTube ISO 8601 duration to readable format"""
-    import re
     if not duration or duration == 'PT0S':
         return '0:00'
     
@@ -382,6 +202,180 @@ def categorize_video(title: str) -> str:
         return 'national'
     else:
         return 'general'
+
+def fetch_youtube_videos(max_results: int = 20) -> List[Dict]:
+    """Fetch videos from LCA TV YouTube channel"""
+    try:
+        from googleapiclient.discovery import build
+        from googleapiclient.errors import HttpError
+        
+        # Initialize YouTube API client
+        youtube = build('youtube', 'v3', developerKey=YOUTUBE_API_KEY)
+        
+        # First, search for the LCA TV channel
+        try:
+            search_response = youtube.search().list(
+                q="@LCATV OR LCA TV Burkina",
+                type='channel',
+                part='snippet',
+                maxResults=5
+            ).execute()
+            
+            channel_id = YOUTUBE_CHANNEL_ID  # Default fallback
+            for item in search_response.get('items', []):
+                if 'LCA' in item['snippet']['title'] or 'LCATV' in item['snippet']['title']:
+                    channel_id = item['snippet']['channelId']
+                    print(f"Found LCA TV channel: {item['snippet']['title']} ({channel_id})")
+                    break
+                    
+        except Exception as e:
+            print(f"Error searching for channel: {e}")
+            channel_id = YOUTUBE_CHANNEL_ID
+        
+        # Get videos from the channel
+        try:
+            videos_response = youtube.search().list(
+                channelId=channel_id,
+                type='video',
+                order='date',
+                part='snippet',
+                maxResults=max_results,
+                regionCode='BF'
+            ).execute()
+            
+            videos = []
+            video_ids = []
+            
+            # Collect video IDs for detailed stats
+            for item in videos_response.get('items', []):
+                video_ids.append(item['id']['videoId'])
+            
+            # Get detailed video statistics
+            stats_by_id = {}
+            if video_ids:
+                stats_response = youtube.videos().list(
+                    id=','.join(video_ids),
+                    part='statistics,contentDetails'
+                ).execute()
+                
+                for item in stats_response.get('items', []):
+                    stats_by_id[item['id']] = item
+            
+            # Process videos with real data
+            for item in videos_response.get('items', []):
+                video_id = item['id']['videoId']
+                snippet = item['snippet']
+                stats_item = stats_by_id.get(video_id, {})
+                stats = stats_item.get('statistics', {})
+                content_details = stats_item.get('contentDetails', {})
+                
+                duration = content_details.get('duration', 'PT0S')
+                duration_formatted = parse_youtube_duration(duration)
+                
+                video_data = {
+                    'id': video_id,
+                    'title': snippet.get('title', 'Titre non disponible'),
+                    'description': snippet.get('description', '')[:200] + '...',
+                    'thumbnail': snippet.get('thumbnails', {}).get('high', {}).get('url', 
+                               snippet.get('thumbnails', {}).get('medium', {}).get('url', 
+                               snippet.get('thumbnails', {}).get('default', {}).get('url', ''))),
+                    'published_at': snippet.get('publishedAt', ''),
+                    'category': categorize_video(snippet.get('title', '')),
+                    'channel_title': snippet.get('channelTitle', 'LCA TV'),
+                    'view_count': format_count(stats.get('viewCount', '0')),
+                    'like_count': format_count(stats.get('likeCount', '0')),
+                    'duration': duration_formatted
+                }
+                videos.append(video_data)
+            
+            if videos:
+                print(f"Successfully fetched {len(videos)} videos from YouTube API")
+                return videos
+            else:
+                print("No videos found, falling back to demo content")
+                
+        except HttpError as e:
+            print(f"YouTube API error: {e}")
+            
+    except Exception as e:
+        print(f"Error initializing YouTube API: {e}")
+    
+    # Fallback videos for demo/testing
+    fallback_videos = [
+        {
+            'id': 'eSApphrRKWg',
+            'title': 'Journal LCA TV - Édition du Soir',
+            'description': 'Retrouvez l\'actualité nationale et internationale du Burkina Faso.',
+            'thumbnail': 'https://i.ytimg.com/vi/eSApphrRKWg/hqdefault.jpg',
+            'published_at': '2024-12-15T19:00:00Z',
+            'category': 'actualites',
+            'channel_title': 'LCA TV',
+            'view_count': '15420',
+            'like_count': '234',
+            'duration': '25:30'
+        },
+        {
+            'id': 'xJatmbxIaIM',
+            'title': 'Franc-Parler - Débat Économie',
+            'description': 'Débat sur les enjeux économiques du Burkina Faso.',
+            'thumbnail': 'https://i.ytimg.com/vi/xJatmbxIaIM/hqdefault.jpg',
+            'published_at': '2024-12-14T20:30:00Z',
+            'category': 'debats',
+            'channel_title': 'LCA TV',
+            'view_count': '8750',
+            'like_count': '156',
+            'duration': '45:12'
+        },
+        {
+            'id': '8aIAKRe4Spo',
+            'title': 'Festival des Masques - Culture Burkinabè',
+            'description': 'Découvrez la richesse culturelle du Burkina Faso à travers le festival des masques.',
+            'thumbnail': 'https://i.ytimg.com/vi/8aIAKRe4Spo/hqdefault.jpg',
+            'published_at': '2024-12-13T18:00:00Z',
+            'category': 'culture',
+            'channel_title': 'LCA TV',
+            'view_count': '12300',
+            'like_count': '298',
+            'duration': '35:45'
+        },
+        {
+            'id': 'R2EocmxeJ5Q',
+            'title': 'Étalons du Burkina - Match Analysis',
+            'description': 'Analyse du dernier match des Étalons du Burkina Faso.',
+            'thumbnail': 'https://i.ytimg.com/vi/R2EocmxeJ5Q/hqdefault.jpg',
+            'published_at': '2024-12-12T21:00:00Z',
+            'category': 'sport',
+            'channel_title': 'LCA TV',
+            'view_count': '25600',
+            'like_count': '567',
+            'duration': '52:18'
+        },
+        {
+            'id': 'pMlWnB5Wj3Q',
+            'title': 'Jeunesse Avenir - Entrepreneuriat',
+            'description': 'Émission dédiée aux jeunes entrepreneurs du Burkina Faso.',
+            'thumbnail': 'https://i.ytimg.com/vi/pMlWnB5Wj3Q/hqdefault.jpg',
+            'published_at': '2024-12-11T17:30:00Z',
+            'category': 'jeunesse',
+            'channel_title': 'LCA TV',
+            'view_count': '6890',
+            'like_count': '134',
+            'duration': '30:22'
+        },
+        {
+            'id': 'ixQEmhTbvTI',
+            'title': 'Questions de Femmes - Édition Spéciale',
+            'description': 'Émission spéciale dédiée aux femmes entrepreneures.',
+            'thumbnail': 'https://i.ytimg.com/vi/ixQEmhTbvTI/hqdefault.jpg',
+            'published_at': '2024-12-10T16:00:00Z',
+            'category': 'femmes',
+            'channel_title': 'LCA TV',
+            'view_count': '9450',
+            'like_count': '187',
+            'duration': '28:15'
+        }
+    ]
+    return fallback_videos[:max_results]
 
 # Initialize database collections
 def init_db():
