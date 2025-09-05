@@ -19,20 +19,27 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
-// LCA TV Colors
+// LCA TV Colors - Modern Style
 const colors = {
   primary: '#2d5016',
   primaryLight: '#22c55e',
   secondary: '#16a34a',
   blue: '#3b82f6',
+  darkBlue: '#1e40af',
+  purple: '#8b5cf6',
+  pink: '#ec4899',
+  orange: '#f97316',
+  yellow: '#eab308',
+  cyan: '#06b6d4',
+  red: '#ef4444',
+  emerald: '#10b981',
+  indigo: '#6366f1',
   white: '#ffffff',
   gray: '#6b7280',
   lightGray: '#f3f4f6',
+  darkGray: '#374151',
   black: '#111827',
-  red: '#ef4444',
-  darkBlue: '#1e40af',
-  purple: '#8b5cf6',
-  orange: '#f97316',
+  cardShadow: 'rgba(0, 0, 0, 0.1)',
 };
 
 export default function App() {
