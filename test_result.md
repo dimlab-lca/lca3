@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Test backend LCA TV mobile API avec les fonctionnalités suivantes: endpoints d'authentification, gestion des vidéos, actualités, catégories, favoris et système de points de fidélité"
+user_problem_statement: "Test backend LCA TV mobile API with YouTube integration using API key AIzaSyDrCcAWodOImhiWs9R8Uo1aIuhzcopAoXE, focusing on real video data from @LCATV channel, authentication, news, categories, favorites and loyalty system"
 
 backend:
   - task: "Root endpoint (GET /)"
