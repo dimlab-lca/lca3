@@ -1,94 +1,95 @@
 {
   "summary": {
     "total_tests": 12,
-    "passed": 10,
-    "failed": 2,
-    "success_rate": 83.33333333333334
+    "passed": 9,
+    "failed": 3,
+    "success_rate": 75.0
   },
   "results": [
     {
       "test": "Root Endpoint",
       "success": false,
-      "details": "Connection error: HTTPSConnectionPool(host='replay-fidelity.preview.emergentagent.com', port=443): Read timed out. (read timeout=10)",
-      "timestamp": "2025-09-04T21:20:00.298031"
+      "details": "HTTP 502",
+      "timestamp": "2025-09-05T00:57:24.997218"
     },
     {
       "test": "User Registration",
-      "success": true,
-      "details": "User created with ID: a05c71e5-bd9a-4812-9e72-064caab2e801, Points: 100",
-      "timestamp": "2025-09-04T21:20:01.055877"
+      "success": false,
+      "details": "HTTP 400",
+      "timestamp": "2025-09-05T00:57:25.130106",
+      "response": "{\"detail\":\"Un utilisateur avec cet email existe d\u00e9j\u00e0\"}"
     },
     {
       "test": "User Login",
       "success": true,
       "details": "Login successful for user: jean.dupont@test.bf, Last login updated",
-      "timestamp": "2025-09-04T21:20:01.665450"
+      "timestamp": "2025-09-05T00:57:25.420206"
     },
     {
       "test": "User Profile",
       "success": true,
-      "details": "Profile retrieved for: Jean Dupont, Points: 100",
-      "timestamp": "2025-09-04T21:20:01.832850"
+      "details": "Profile retrieved for: Jean Dupont, Points: 107",
+      "timestamp": "2025-09-05T00:57:25.496128"
     },
     {
       "test": "Videos List",
       "success": true,
-      "details": "Retrieved 6 videos, Sample: Journal LCA TV - \u00c9dition du Soir",
-      "timestamp": "2025-09-04T21:20:02.034325"
+      "details": "Retrieved 20 videos, Sample: Reconstitution de la Haute Volta 1947",
+      "timestamp": "2025-09-05T00:57:26.330336"
     },
     {
       "test": "Featured Videos",
       "success": true,
       "details": "Retrieved 6 featured videos",
-      "timestamp": "2025-09-04T21:20:02.134373"
+      "timestamp": "2025-09-05T00:57:27.076427"
     },
     {
       "test": "News List",
       "success": true,
       "details": "Retrieved 3 articles, Sample: Actualit\u00e9s nationales - Flash info du jour",
-      "timestamp": "2025-09-04T21:20:02.187152"
+      "timestamp": "2025-09-05T00:57:27.132394"
     },
     {
       "test": "Categories",
       "success": true,
       "details": "Retrieved 8 categories",
-      "timestamp": "2025-09-04T21:20:02.280962"
+      "timestamp": "2025-09-05T00:57:27.187867"
     },
     {
       "test": "Live Status",
       "success": true,
       "details": "Live status: True, Title: LCA TV - Direct",
-      "timestamp": "2025-09-04T21:20:02.435161"
+      "timestamp": "2025-09-05T00:57:27.240212"
     },
     {
       "test": "Add Favorite",
       "success": true,
-      "details": "Added video eSApphrRKWg to favorites, Points earned: 5",
-      "timestamp": "2025-09-04T21:20:02.633592"
+      "details": "Added video HdXT2K-CExs to favorites, Points earned: 5",
+      "timestamp": "2025-09-05T00:57:28.177933"
     },
     {
       "test": "Get Favorites",
       "success": true,
       "details": "Retrieved 1 favorite videos",
-      "timestamp": "2025-09-04T21:20:02.748957"
+      "timestamp": "2025-09-05T00:57:29.147298"
     },
     {
       "test": "401 Error Handling",
       "success": false,
       "details": "Expected 401, got 403",
-      "timestamp": "2025-09-04T21:20:02.865117"
+      "timestamp": "2025-09-05T00:57:29.197937"
     },
     {
       "test": "404 Error Handling",
       "success": true,
       "details": "Correctly returns 404 for non-existent video",
-      "timestamp": "2025-09-04T21:20:02.964938"
+      "timestamp": "2025-09-05T00:57:30.030450"
     },
     {
       "test": "400 Error Handling",
       "success": true,
       "details": "Correctly validates registration data",
-      "timestamp": "2025-09-04T21:20:03.070106"
+      "timestamp": "2025-09-05T00:57:30.107287"
     }
   ]
 }
