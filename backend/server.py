@@ -44,8 +44,9 @@ JWT_ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30 * 24 * 60  # 30 days
 
 # YouTube API settings
-YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY", "AIzaSyC-9RCCz6mRrNWbUBhmrp37l3uXN09vXo0")
+YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY", "AIzaSyDrCcAWodOImhiWs9R8Uo1aIuhzcopAoXE")
 YOUTUBE_CHANNEL_ID = os.getenv("YOUTUBE_CHANNEL_ID", "UCkquZjmd6ubRQh2W2YpbSLQ")
+YOUTUBE_CHANNEL_HANDLE = "@LCATV"
 
 # Security
 security = HTTPBearer()
