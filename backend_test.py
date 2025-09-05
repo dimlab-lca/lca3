@@ -10,7 +10,7 @@ import os
 from datetime import datetime
 
 # Get backend URL from environment
-BACKEND_URL = os.getenv('EXPO_PUBLIC_BACKEND_URL', 'https://replay-fidelity.preview.emergentagent.com')
+BACKEND_URL = os.getenv('EXPO_PUBLIC_BACKEND_URL', 'https://lcatv-mobile.preview.emergentagent.com')
 API_BASE = f"{BACKEND_URL}/api"
 
 # Test data as specified in the review request

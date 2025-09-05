@@ -80,7 +80,7 @@ export default function App() {
 
   const loadVideos = async () => {
     try {
-      const response = await fetch('https://replay-fidelity.preview.emergentagent.com/api/videos');
+      const response = await fetch('https://lcatv-mobile.preview.emergentagent.com/api/videos');
       const data = await response.json();
       setVideos(data.videos || []);
     } catch (error) {
@@ -116,7 +116,7 @@ export default function App() {
 
   const loadNews = async () => {
     try {
-      const response = await fetch('https://replay-fidelity.preview.emergentagent.com/api/news');
+      const response = await fetch('https://lcatv-mobile.preview.emergentagent.com/api/news');
       const data = await response.json();
       setNews(data.news || []);
     } catch (error) {
@@ -153,7 +153,7 @@ export default function App() {
   const handleLogin = async (email, password) => {
     setLoading(true);
     try {
-      const response = await fetch('https://replay-fidelity.preview.emergentagent.com/api/auth/login', {
+      const response = await fetch('https://lcatv-mobile.preview.emergentagent.com/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -181,7 +181,7 @@ export default function App() {
   const handleRegister = async (userData) => {
     setLoading(true);
     try {
-      const response = await fetch('https://replay-fidelity.preview.emergentagent.com/api/auth/register', {
+      const response = await fetch('https://lcatv-mobile.preview.emergentagent.com/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
