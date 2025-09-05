@@ -599,13 +599,9 @@ export default function App() {
           </TouchableOpacity>
         </View>
         
-        <FlatList
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          data={featuredVideos.slice(0, 6)}
-          keyExtractor={(item, index) => `featured-${index}`}
-          renderItem={({ item }) => (
-            <TouchableOpacity style={styles.enhancedVideoCard}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {featuredVideos.slice(0, 6).map((item, index) => (
+            <TouchableOpacity key={index} style={styles.enhancedVideoCard}>
               <Image source={{ uri: item.thumbnail }} style={styles.enhancedVideoThumbnail} />
               <View style={styles.videoPlayOverlay}>
                 <Icon name="play" size={20} color={colors.white} />
@@ -621,8 +617,8 @@ export default function App() {
                 </View>
               </View>
             </TouchableOpacity>
-          )}
-        />
+          ))}
+        </ScrollView>
       </View>
 
       {/* Categories Section Enhanced */}
