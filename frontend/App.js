@@ -19,7 +19,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
-// LCA TV Colors - Ultra Modern Style
+// LCA TV Colors - Modern & Vibrant
 const colors = {
   primary: '#2d5016',
   primaryLight: '#22c55e',
@@ -40,21 +40,7 @@ const colors = {
   darkGray: '#374151',
   black: '#111827',
   cardShadow: 'rgba(0, 0, 0, 0.1)',
-  gradient1: '#2d5016',
-  gradient2: '#22c55e',
   accent: '#fbbf24',
-};
-
-// Modern LCA TV Images for enhanced UI
-const images = {
-  hero: 'https://images.unsplash.com/photo-1590339726068-24fe9cb82787?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzl8MHwxfHNlYXJjaHwxfHxhZnJpY2FuJTIwdGVsZXZpc2lvbnxlbnwwfHx8fDE3NTcwMzQyMjN8MA&ixlib=rb-4.1.0&q=85',
-  personality: 'https://images.pexels.com/photos/14916179/pexels-photo-14916179.jpeg',
-  studio: 'https://images.unsplash.com/photo-1693328394659-e0782c606d25?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzR8MHwxfHNlYXJjaHwyfHxicm9hZGNhc3R8ZW58MHx8fHwxNzU3MDM0MjI5fDA&ixlib=rb-4.1.0&q=85',
-  broadcast: 'https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzR8MHwxfHNlYXJjaHw0fHxicm9hZGNhc3R8ZW58MHx8fHwxNzU3MDM0MjI5fDA&ixlib=rb-4.1.0&q=85',
-  equipment: 'https://images.unsplash.com/photo-1613031729579-ace1feefda4c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzR8MHwxfHNlYXJjaHwxfHxicm9hZGNhc3R8ZW58MHx8fHwxNzU3MDM0MjI5fDA&ixlib=rb-4.1.0&q=85',
-  colorful: 'https://images.pexels.com/photos/668296/pexels-photo-668296.jpeg',
-  news: 'https://images.unsplash.com/photo-1478737270239-2f02b77fc618?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzR8MHwxfHNlYXJjaHwzfHxicm9hZGNhc3R8ZW58MHx8fHwxNzU3MDM0MjI5fDA&ixlib=rb-4.1.0&q=85',
-  viewer: 'https://images.unsplash.com/photo-1676989634369-b891237d6011?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzl8MHwxfHNlYXJjaHwzfHxhZnJpY2FuJTIwdGVsZXZpc2lvbnxlbnwwfHx8fDE3NTcwMzQyMjN8MA&ixlib=rb-4.1.0&q=85'
 };
 
 export default function App() {
@@ -66,7 +52,6 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [slideAnim] = useState(new Animated.Value(-screenWidth));
-  const [featuredVideos, setFeaturedVideos] = useState([]);
 
   useEffect(() => {
     checkExistingUser();
@@ -87,12 +72,9 @@ export default function App() {
 
   const loadInitialData = async () => {
     try {
-      await Promise.all([
-        loadVideos(),
-        loadNews(),
-        loadCategories(),
-        loadFeaturedVideos()
-      ]);
+      await loadVideos();
+      await loadNews();
+      await loadCategories();
     } catch (error) {
       console.error('Error loading initial data:', error);
     }
@@ -105,6 +87,16 @@ export default function App() {
       setVideos(data.videos || []);
     } catch (error) {
       console.error('Error loading videos:', error);
+      // Fallback data
+      setVideos([
+        {
+          id: 'eSApphrRKWg',
+          title: 'Journal LCA TV - Édition du Soir',
+          thumbnail: 'https://i.ytimg.com/vi/eSApphrRKWg/hqdefault.jpg',
+          view_count: '15K',
+          duration: '25:30'
+        }
+      ]);
     }
   };
 
@@ -115,6 +107,14 @@ export default function App() {
       setNews(data.news || []);
     } catch (error) {
       console.error('Error loading news:', error);
+      setNews([
+        {
+          _id: '1',
+          title: 'Flash Info - Burkina Faso',
+          excerpt: 'Les dernières nouvelles du pays des hommes intègres...',
+          category: 'national'
+        }
+      ]);
     }
   };
 
@@ -125,16 +125,12 @@ export default function App() {
       setCategories(data.categories || []);
     } catch (error) {
       console.error('Error loading categories:', error);
-    }
-  };
-
-  const loadFeaturedVideos = async () => {
-    try {
-      const response = await fetch('https://lcatv-mobile.preview.emergentagent.com/api/videos/featured');
-      const data = await response.json();
-      setFeaturedVideos(data.videos || []);
-    } catch (error) {
-      console.error('Error loading featured videos:', error);
+      setCategories([
+        { id: 'actualites', name: '📰 Actualités' },
+        { id: 'sport', name: '⚽ Sports' },
+        { id: 'culture', name: '🌍 Culture' },
+        { id: 'debats', name: '🗣️ Débats' }
+      ]);
     }
   };
 
@@ -224,37 +220,14 @@ export default function App() {
     toggleSidebar();
   };
 
-  // Enhanced Icon Component
+  // Icon Component
   const Icon = ({ name, size = 24, color = colors.gray }) => {
     const icons = {
-      home: '🏠',
-      radio: '📡',
-      play: '▶️',
-      star: '⭐',
-      grid: '⚏',
-      newspaper: '📰',
-      person: '👤',
-      heart: '❤️',
-      megaphone: '📢',
-      arrow: '→',
-      back: '←',
-      live: '🔴',
-      tv: '📺',
-      video: '🎥',
-      news: '📰',
-      menu: '☰',
-      close: '✕',
-      logout: '🚪',
-      settings: '⚙️',
-      info: 'ℹ️',
-      help: '❓',
-      notification: '🔔',
-      fire: '🔥',
-      trending: '📈',
-      africa: '🌍',
-      microphone: '🎤',
-      camera: '📷',
-      broadcast: '📡',
+      home: '🏠', radio: '📡', play: '▶️', star: '⭐', grid: '⚏',
+      newspaper: '📰', person: '👤', heart: '❤️', megaphone: '📢',
+      arrow: '→', back: '←', live: '🔴', tv: '📺', video: '🎥',
+      news: '📰', menu: '☰', close: '✕', logout: '🚪', settings: '⚙️',
+      info: 'ℹ️', help: '❓', notification: '🔔', fire: '🔥', africa: '🌍'
     };
     
     return (
@@ -267,12 +240,10 @@ export default function App() {
     <View style={styles.welcomeContainer}>
       <StatusBar barStyle="light-content" backgroundColor={colors.primary} />
       
-      {/* Enhanced Background with Gradient Overlay */}
       <View style={styles.welcomeBackground}>
-        <Image source={{ uri: images.hero }} style={styles.welcomeBackgroundImage} />
         <View style={styles.gradientOverlay} />
         
-        {/* Hero Section Enhanced */}
+        {/* Hero Section */}
         <ScrollView contentContainerStyle={styles.welcomeContent}>
           <View style={styles.heroSection}>
             <View style={styles.logoHero}>
@@ -286,59 +257,53 @@ export default function App() {
             <Text style={styles.welcomeSubtitle}>La Chaîne Africaine de télévision</Text>
             <Text style={styles.welcomeDescription}>
               Découvrez l'actualité, le divertissement et la culture du Burkina Faso 
-              en direct et en replay avec une qualité exceptionnelle
+              en direct et en replay avec une qualité exceptionnelle 📺✨
             </Text>
           </View>
 
-          {/* Enhanced Features Preview Grid */}
+          {/* Enhanced Features Preview */}
           <View style={styles.featuresGrid}>
             <View style={styles.featureCard}>
-              <Image source={{ uri: images.colorful }} style={styles.featureImage} />
-              <View style={styles.featureOverlay}>
-                <Icon name="live" size={32} color={colors.white} />
-                <Text style={styles.featureTitle}>Direct 24/7</Text>
-                <Text style={styles.featureDescription}>Suivez nos programmes en temps réel</Text>
+              <View style={styles.featureIcon}>
+                <Icon name="live" size={32} color={colors.red} />
               </View>
+              <Text style={styles.featureTitle}>Direct 24/7</Text>
+              <Text style={styles.featureDescription}>Suivez nos programmes en temps réel</Text>
             </View>
 
             <View style={styles.featureCard}>
-              <Image source={{ uri: images.studio }} style={styles.featureImage} />
-              <View style={styles.featureOverlay}>
-                <Icon name="play" size={32} color={colors.white} />
-                <Text style={styles.featureTitle}>Replays HD</Text>
-                <Text style={styles.featureDescription}>Rattrapage de toutes vos émissions</Text>
+              <View style={styles.featureIcon}>
+                <Icon name="play" size={32} color={colors.blue} />
               </View>
+              <Text style={styles.featureTitle}>Replays HD</Text>
+              <Text style={styles.featureDescription}>Rattrapage de toutes vos émissions</Text>
             </View>
 
             <View style={styles.featureCard}>
-              <Image source={{ uri: images.news }} style={styles.featureImage} />
-              <View style={styles.featureOverlay}>
-                <Icon name="newspaper" size={32} color={colors.white} />
-                <Text style={styles.featureTitle}>Actualités</Text>
-                <Text style={styles.featureDescription}>Info nationale et internationale</Text>
+              <View style={styles.featureIcon}>
+                <Icon name="newspaper" size={32} color={colors.orange} />
               </View>
+              <Text style={styles.featureTitle}>Actualités</Text>
+              <Text style={styles.featureDescription}>Info nationale et internationale</Text>
             </View>
 
             <View style={styles.featureCard}>
-              <Image source={{ uri: images.broadcast }} style={styles.featureImage} />
-              <View style={styles.featureOverlay}>
-                <Icon name="africa" size={32} color={colors.white} />
-                <Text style={styles.featureTitle}>Culture</Text>
-                <Text style={styles.featureDescription}>Patrimoine burkinabè authentique</Text>
+              <View style={styles.featureIcon}>
+                <Icon name="africa" size={32} color={colors.emerald} />
               </View>
+              <Text style={styles.featureTitle}>Culture</Text>
+              <Text style={styles.featureDescription}>Patrimoine burkinabè authentique</Text>
             </View>
           </View>
 
-          {/* Action Buttons Enhanced */}
+          {/* Action Buttons */}
           <View style={styles.welcomeActions}>
             <TouchableOpacity 
               style={styles.primaryActionButton}
               onPress={() => setCurrentPage('login')}
             >
-              <View style={styles.primaryActionGradient}>
-                <Text style={styles.primaryActionText}>Se connecter</Text>
-                <Icon name="arrow" size={20} color={colors.white} />
-              </View>
+              <Text style={styles.primaryActionText}>Se connecter</Text>
+              <Icon name="arrow" size={20} color={colors.white} />
             </TouchableOpacity>
             
             <TouchableOpacity 
@@ -356,7 +321,7 @@ export default function App() {
             </TouchableOpacity>
           </View>
 
-          {/* Enhanced Stats Section */}
+          {/* Stats Section */}
           <View style={styles.statsSection}>
             <View style={styles.statCard}>
               <Icon name="fire" size={28} color={colors.accent} />
@@ -374,26 +339,12 @@ export default function App() {
               <Text style={styles.statLabel}>Burkinabè</Text>
             </View>
           </View>
-
-          {/* Testimonials/Reviews */}
-          <View style={styles.testimonialsSection}>
-            <Text style={styles.sectionTitleWhite}>Ce que disent nos téléspectateurs</Text>
-            <View style={styles.testimonialCard}>
-              <Image source={{ uri: images.personality }} style={styles.testimonialAvatar} />
-              <View style={styles.testimonialContent}>
-                <Text style={styles.testimonialText}>
-                  "LCA TV est devenue ma source d'information principale. Contenu de qualité et très professionnel !"
-                </Text>
-                <Text style={styles.testimonialAuthor}>- Aminata, Ouagadougou</Text>
-              </View>
-            </View>
-          </View>
         </ScrollView>
       </View>
     </View>
   );
 
-  // Enhanced Sidebar Component
+  // Enhanced Sidebar
   const Sidebar = () => (
     <Modal
       transparent={true}
@@ -408,7 +359,6 @@ export default function App() {
         />
         
         <Animated.View style={[styles.sidebar, { transform: [{ translateX: slideAnim }] }]}>
-          {/* Enhanced Sidebar Header */}
           <View style={styles.sidebarHeader}>
             {user ? (
               <View style={styles.sidebarUserInfo}>
@@ -442,12 +392,10 @@ export default function App() {
             )}
           </View>
 
-          {/* Enhanced Navigation Menu */}
           <ScrollView style={styles.sidebarMenu}>
             <TouchableOpacity style={styles.menuItem} onPress={() => navigateTo('home')}>
               <Icon name="home" size={24} color={colors.primaryLight} />
               <Text style={styles.menuItemText}>Accueil</Text>
-              <Icon name="arrow" size={16} color={colors.gray} />
             </TouchableOpacity>
             
             <TouchableOpacity style={styles.menuItem} onPress={() => navigateTo('live')}>
@@ -458,18 +406,14 @@ export default function App() {
               </View>
             </TouchableOpacity>
             
-            <TouchableOpacity style={styles.menuItem} onPress={() => navigateTo('replays')}>
+            <TouchableOpacity style={styles.menuItem} onPress={() => Alert.alert('Replays', 'Accédez aux replays')}>
               <Icon name="play" size={24} color={colors.blue} />
               <Text style={styles.menuItemText}>Replays</Text>
-              <Text style={styles.menuItemBadge}>HD</Text>
             </TouchableOpacity>
             
-            <TouchableOpacity style={styles.menuItem} onPress={() => navigateTo('news')}>
+            <TouchableOpacity style={styles.menuItem} onPress={() => Alert.alert('Actualités', 'Toute l\'info')}>
               <Icon name="news" size={24} color={colors.orange} />
               <Text style={styles.menuItemText}>Actualités</Text>
-              <View style={styles.newsBadge}>
-                <Text style={styles.newsBadgeText}>FLASH</Text>
-              </View>
             </TouchableOpacity>
             
             <TouchableOpacity style={styles.menuItem} onPress={() => navigateTo('profile')}>
@@ -489,26 +433,6 @@ export default function App() {
               <Text style={styles.menuItemText}>Programme Pub</Text>
             </TouchableOpacity>
             
-            <TouchableOpacity style={styles.menuItem} onPress={() => Alert.alert('Notifications', 'Paramètres de notifications')}>
-              <Icon name="notification" size={24} color={colors.gray} />
-              <Text style={styles.menuItemText}>Notifications</Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity style={styles.menuItem} onPress={() => Alert.alert('Paramètres', 'Paramètres de l\'application')}>
-              <Icon name="settings" size={24} color={colors.gray} />
-              <Text style={styles.menuItemText}>Paramètres</Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity style={styles.menuItem} onPress={() => Alert.alert('À propos', 'LCA TV Mobile v2.0\nApplication officielle LCA TV')}>
-              <Icon name="info" size={24} color={colors.gray} />
-              <Text style={styles.menuItemText}>À propos</Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity style={styles.menuItem} onPress={() => Alert.alert('Aide & Support', 'Contactez-nous :\nsupport@lcatv.bf\n+226 25 XX XX XX')}>
-              <Icon name="help" size={24} color={colors.gray} />
-              <Text style={styles.menuItemText}>Aide & Support</Text>
-            </TouchableOpacity>
-            
             {user && (
               <>
                 <View style={styles.menuDivider} />
@@ -524,7 +448,7 @@ export default function App() {
     </Modal>
   );
 
-  // Enhanced Header Component
+  // Enhanced Header
   const Header = () => (
     <View style={styles.header}>
       <TouchableOpacity style={styles.menuButton} onPress={toggleSidebar}>
@@ -538,27 +462,21 @@ export default function App() {
         </View>
       </View>
       
-      <View style={styles.headerActions}>
-        <TouchableOpacity style={styles.headerActionButton}>
-          <Icon name="trending" size={20} color={colors.white} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.headerActionButton}>
-          <Icon name="notification" size={20} color={colors.white} />
-          <View style={styles.notificationDot} />
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity style={styles.notificationButton}>
+        <Icon name="notification" size={24} color={colors.white} />
+        <View style={styles.notificationDot} />
+      </TouchableOpacity>
     </View>
   );
 
-  // Ultra Enhanced Home Page with Rich Content
+  // Ultra Enhanced Home Page
   const HomePage = () => (
     <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-      {/* Hero Live Section Enhanced */}
+      {/* Hero Live Section */}
       <View style={styles.heroLiveSection}>
-        <Image source={{ uri: images.studio }} style={styles.heroLiveBackground} />
         <View style={styles.heroLiveOverlay}>
-          <View style={styles.liveIndicatorLarge}>
-            <Text style={styles.liveTextLarge}>🔴 EN DIRECT</Text>
+          <View style={styles.liveIndicator}>
+            <Text style={styles.liveText}>🔴 EN DIRECT</Text>
           </View>
           <Text style={styles.heroLiveTitle}>LCA TV - Direct</Text>
           <Text style={styles.heroLiveSubtitle}>Journal du soir - Édition spéciale</Text>
@@ -569,51 +487,48 @@ export default function App() {
         </View>
       </View>
 
-      {/* Quick Actions Bar */}
+      {/* Quick Actions */}
       <View style={styles.quickActionsBar}>
         <TouchableOpacity style={styles.quickAction} onPress={() => setCurrentPage('live')}>
           <Icon name="live" size={24} color={colors.red} />
           <Text style={styles.quickActionText}>Direct</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.quickAction} onPress={() => Alert.alert('Replays', 'Accédez aux replays')}>
+        <TouchableOpacity style={styles.quickAction}>
           <Icon name="play" size={24} color={colors.blue} />
           <Text style={styles.quickActionText}>Replays</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.quickAction} onPress={() => Alert.alert('Actualités', 'Toute l\'info')}>
+        <TouchableOpacity style={styles.quickAction}>
           <Icon name="news" size={24} color={colors.orange} />
           <Text style={styles.quickActionText}>Actualités</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.quickAction} onPress={() => Alert.alert('Programmes', 'Nos émissions')}>
+        <TouchableOpacity style={styles.quickAction}>
           <Icon name="tv" size={24} color={colors.purple} />
           <Text style={styles.quickActionText}>Programmes</Text>
         </TouchableOpacity>
       </View>
 
-      {/* Featured Videos Section Enhanced */}
+      {/* Featured Videos */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <Icon name="star" size={24} color={colors.accent} />
           <Text style={styles.sectionTitle}>Programmes populaires</Text>
-          <TouchableOpacity onPress={() => Alert.alert('Replays', 'Accédez aux replays')}>
+          <TouchableOpacity>
             <Text style={styles.seeAllText}>Voir tout</Text>
           </TouchableOpacity>
         </View>
         
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {featuredVideos.slice(0, 6).map((item, index) => (
-            <TouchableOpacity key={index} style={styles.enhancedVideoCard}>
-              <Image source={{ uri: item.thumbnail }} style={styles.enhancedVideoThumbnail} />
+          {videos.slice(0, 6).map((video, index) => (
+            <TouchableOpacity key={index} style={styles.modernVideoCard}>
+              <Image source={{ uri: video.thumbnail }} style={styles.modernVideoThumbnail} />
               <View style={styles.videoPlayOverlay}>
                 <Icon name="play" size={20} color={colors.white} />
               </View>
-              <View style={styles.videoCategoryBadge}>
-                <Text style={styles.videoCategoryText}>{item.category}</Text>
-              </View>
-              <View style={styles.enhancedVideoInfo}>
-                <Text style={styles.enhancedVideoTitle} numberOfLines={2}>{item.title}</Text>
+              <View style={styles.modernVideoInfo}>
+                <Text style={styles.modernVideoTitle} numberOfLines={2}>{video.title}</Text>
                 <View style={styles.videoMetaRow}>
-                  <Text style={styles.videoStats}>{item.view_count} vues</Text>
-                  <Text style={styles.videoDuration}>{item.duration}</Text>
+                  <Text style={styles.videoStats}>{video.view_count} vues</Text>
+                  <Text style={styles.videoDuration}>{video.duration}</Text>
                 </View>
               </View>
             </TouchableOpacity>
@@ -621,7 +536,7 @@ export default function App() {
         </ScrollView>
       </View>
 
-      {/* Categories Section Enhanced */}
+      {/* Categories Grid */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <Icon name="grid" size={24} color={colors.primaryLight} />
@@ -639,19 +554,18 @@ export default function App() {
         </View>
       </View>
 
-      {/* News Section Enhanced */}
+      {/* News Section */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <Icon name="newspaper" size={24} color={colors.orange} />
           <Text style={styles.sectionTitle}>Actualités Flash</Text>
-          <TouchableOpacity onPress={() => Alert.alert('Actualités', 'Toutes les actualités')}>
+          <TouchableOpacity>
             <Text style={styles.seeAllText}>Voir tout</Text>
           </TouchableOpacity>
         </View>
         
         {news.slice(0, 3).map((article, index) => (
           <TouchableOpacity key={index} style={styles.newsCard}>
-            <Image source={{ uri: images.news }} style={styles.newsImage} />
             <View style={styles.newsContent}>
               <View style={styles.newsHeader}>
                 <Text style={styles.newsCategory}>{article.category?.toUpperCase()}</Text>
@@ -664,25 +578,22 @@ export default function App() {
         ))}
       </View>
 
-      {/* Advertising Program Section Enhanced */}
+      {/* Enhanced Publicity Banner */}
       <View style={styles.section}>
-        <TouchableOpacity style={styles.enhancedPublicityBanner} onPress={() => Alert.alert('Programme Publicitaire', 'Boostez votre visibilité avec LCA TV')}>
-          <Image source={{ uri: images.equipment }} style={styles.publicityBackgroundImage} />
-          <View style={styles.publicityContentOverlay}>
-            <View style={styles.publicityContent}>
-              <Icon name="megaphone" size={32} color={colors.white} />
-              <View style={styles.publicityText}>
-                <Text style={styles.publicityTitle}>Programme Publicitaire</Text>
-                <Text style={styles.publicitySubtitle}>Développez votre business avec LCA TV</Text>
-                <Text style={styles.publicityDescription}>Spots TV • Sponsoring • Digital</Text>
-              </View>
-              <Icon name="arrow" size={24} color={colors.white} />
+        <TouchableOpacity style={styles.modernPublicityBanner}>
+          <View style={styles.publicityContent}>
+            <Icon name="megaphone" size={32} color={colors.white} />
+            <View style={styles.publicityText}>
+              <Text style={styles.publicityTitle}>Programme Publicitaire</Text>
+              <Text style={styles.publicitySubtitle}>Développez votre business avec LCA TV</Text>
+              <Text style={styles.publicityDescription}>Spots TV • Sponsoring • Digital</Text>
             </View>
+            <Icon name="arrow" size={24} color={colors.white} />
           </View>
         </TouchableOpacity>
       </View>
 
-      {/* Statistics Section */}
+      {/* Statistics Grid */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>LCA TV en chiffres</Text>
         <View style={styles.statsGrid}>
@@ -708,20 +619,10 @@ export default function App() {
           </View>
         </View>
       </View>
-
-      {/* Footer Info */}
-      <View style={styles.footerSection}>
-        <Text style={styles.footerTitle}>LCA TV</Text>
-        <Text style={styles.footerSubtitle}>La Chaîne Africaine de télévision</Text>
-        <Text style={styles.footerDescription}>
-          Votre média de référence au Burkina Faso depuis 2018. 
-          Information, culture, sport et divertissement de qualité.
-        </Text>
-      </View>
     </ScrollView>
   );
 
-  // Login and Register pages remain the same but with enhanced styling
+  // Auth pages remain the same but simplified
   const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -785,12 +686,7 @@ export default function App() {
 
   const RegisterPage = () => {
     const [formData, setFormData] = useState({
-      nom: '',
-      prenom: '',
-      email: '',
-      telephone: '',
-      password: '',
-      confirm_password: '',
+      nom: '', prenom: '', email: '', telephone: '', password: '', confirm_password: '',
     });
 
     const updateFormData = (field, value) => {
@@ -811,62 +707,22 @@ export default function App() {
           </View>
           
           <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Nom de famille"
-              value={formData.nom}
-              onChangeText={(text) => updateFormData('nom', text)}
-            />
+            <TextInput style={styles.input} placeholder="Nom de famille" value={formData.nom} onChangeText={(text) => updateFormData('nom', text)} />
           </View>
-          
           <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Prénom"
-              value={formData.prenom}
-              onChangeText={(text) => updateFormData('prenom', text)}
-            />
+            <TextInput style={styles.input} placeholder="Prénom" value={formData.prenom} onChangeText={(text) => updateFormData('prenom', text)} />
           </View>
-          
           <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Adresse email"
-              value={formData.email}
-              onChangeText={(text) => updateFormData('email', text)}
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
+            <TextInput style={styles.input} placeholder="Adresse email" value={formData.email} onChangeText={(text) => updateFormData('email', text)} keyboardType="email-address" autoCapitalize="none" />
           </View>
-          
           <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Téléphone (+226XXXXXXXX)"
-              value={formData.telephone}
-              onChangeText={(text) => updateFormData('telephone', text)}
-              keyboardType="phone-pad"
-            />
+            <TextInput style={styles.input} placeholder="Téléphone (+226XXXXXXXX)" value={formData.telephone} onChangeText={(text) => updateFormData('telephone', text)} keyboardType="phone-pad" />
           </View>
-          
           <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Mot de passe"
-              value={formData.password}
-              onChangeText={(text) => updateFormData('password', text)}
-              secureTextEntry
-            />
+            <TextInput style={styles.input} placeholder="Mot de passe" value={formData.password} onChangeText={(text) => updateFormData('password', text)} secureTextEntry />
           </View>
-          
           <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Confirmer le mot de passe"
-              value={formData.confirm_password}
-              onChangeText={(text) => updateFormData('confirm_password', text)}
-              secureTextEntry
-            />
+            <TextInput style={styles.input} placeholder="Confirmer le mot de passe" value={formData.confirm_password} onChangeText={(text) => updateFormData('confirm_password', text)} secureTextEntry />
           </View>
           
           <TouchableOpacity 
@@ -874,9 +730,7 @@ export default function App() {
             onPress={() => handleRegister({ ...formData, accept_cgu: true, newsletter: false })}
             disabled={loading}
           >
-            {loading ? (
-              <ActivityIndicator color={colors.white} />
-            ) : (
+            {loading ? <ActivityIndicator color={colors.white} /> : (
               <>
                 <Text style={styles.authButtonText}>Créer mon compte</Text>
                 <Icon name="arrow" size={20} color={colors.white} />
@@ -898,12 +752,7 @@ export default function App() {
       <View style={styles.livePageContainer}>
         <Text style={styles.pageTitle}>LCA TV - Direct</Text>
         
-        <View style={styles.enhancedLivePlayerContainer}>
-          <Image
-            source={{ uri: images.studio }}
-            style={styles.livePlayerImage}
-            resizeMode="cover"
-          />
+        <View style={styles.livePlayerContainer}>
           <View style={styles.livePlayerOverlay}>
             <TouchableOpacity style={styles.livePlayButton}>
               <Icon name="play" size={60} color={colors.white} />
@@ -921,36 +770,7 @@ export default function App() {
             Suivez en direct l'actualité du Burkina Faso et de l'Afrique de l'Ouest. 
             Au programme ce soir : politique, économie, sport et culture.
           </Text>
-          <View style={styles.liveMetrics}>
-            <View style={styles.liveMetricItem}>
-              <Icon name="live" size={20} color={colors.red} />
-              <Text style={styles.liveMetricText}>1,247 spectateurs</Text>
-            </View>
-            <View style={styles.liveMetricItem}>
-              <Icon name="heart" size={20} color={colors.red} />
-              <Text style={styles.liveMetricText}>238 likes</Text>
-            </View>
-          </View>
-        </View>
-
-        {/* Program Schedule */}
-        <View style={styles.scheduleSection}>
-          <Text style={styles.scheduleSectionTitle}>Programme du jour</Text>
-          <View style={styles.scheduleItem}>
-            <Text style={styles.scheduleTime}>20:00</Text>
-            <Text style={styles.scheduleTitle}>Journal du soir</Text>
-            <Text style={styles.scheduleStatus}>🔴 En cours</Text>
-          </View>
-          <View style={styles.scheduleItem}>
-            <Text style={styles.scheduleTime}>21:00</Text>
-            <Text style={styles.scheduleTitle}>Franc-Parler</Text>
-            <Text style={styles.scheduleStatusNext}>À suivre</Text>
-          </View>
-          <View style={styles.scheduleItem}>
-            <Text style={styles.scheduleTime}>22:00</Text>
-            <Text style={styles.scheduleTitle}>Culture & Tradition</Text>
-            <Text style={styles.scheduleStatusNext}>À suivre</Text>
-          </View>
+          <Text style={styles.viewerCount}>🔴 1,247 spectateurs connectés</Text>
         </View>
       </View>
     </ScrollView>
@@ -990,17 +810,6 @@ export default function App() {
               <Text style={styles.profileStatLabel}>Points</Text>
             </View>
           </View>
-
-          <View style={styles.profileActions}>
-            <TouchableOpacity style={styles.profileActionButton}>
-              <Icon name="settings" size={20} color={colors.primary} />
-              <Text style={styles.profileActionText}>Paramètres</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.profileActionButton}>
-              <Icon name="notification" size={20} color={colors.primary} />
-              <Text style={styles.profileActionText}>Notifications</Text>
-            </TouchableOpacity>
-          </View>
         </View>
       ) : (
         <View style={styles.authPrompt}>
@@ -1020,20 +829,13 @@ export default function App() {
 
   const renderCurrentPage = () => {
     switch (currentPage) {
-      case 'welcome':
-        return <WelcomePage />;
-      case 'home':
-        return <HomePage />;
-      case 'login':
-        return <LoginPage />;
-      case 'register':
-        return <RegisterPage />;
-      case 'live':
-        return <LivePage />;
-      case 'profile':
-        return <ProfilePage />;
-      default:
-        return <WelcomePage />;
+      case 'welcome': return <WelcomePage />;
+      case 'home': return <HomePage />;
+      case 'login': return <LoginPage />;
+      case 'register': return <RegisterPage />;
+      case 'live': return <LivePage />;
+      case 'profile': return <ProfilePage />;
+      default: return <WelcomePage />;
     }
   };
 
@@ -1048,33 +850,23 @@ export default function App() {
   );
 }
 
-// Ultra Modern Styles with Rich Content Support
+// Ultra Modern Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
   },
   
-  // Enhanced Welcome Page Styles
-  welcomeContainer: {
-    flex: 1,
-  },
+  // Welcome Page Styles
+  welcomeContainer: { flex: 1 },
   welcomeBackground: {
     flex: 1,
+    backgroundColor: colors.primary,
     position: 'relative',
-  },
-  welcomeBackgroundImage: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
   },
   gradientOverlay: {
     position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    top: 0, left: 0, right: 0, bottom: 0,
     backgroundColor: 'rgba(45,80,22,0.95)',
   },
   welcomeContent: {
@@ -1099,12 +891,9 @@ const styles = StyleSheet.create({
     marginRight: 15,
   },
   logoHeroCircle: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: 50, height: 50, borderRadius: 25,
     backgroundColor: colors.blue,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'center', alignItems: 'center',
   },
   logoHeroSubText: {
     fontSize: 20,
@@ -1112,1093 +901,466 @@ const styles = StyleSheet.create({
     color: colors.white,
   },
   welcomeTitle: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: colors.white,
-    textAlign: 'center',
-    marginBottom: 10,
+    fontSize: 32, fontWeight: 'bold', color: colors.white,
+    textAlign: 'center', marginBottom: 10,
   },
   welcomeSubtitle: {
-    fontSize: 18,
-    color: colors.white,
-    opacity: 0.9,
-    textAlign: 'center',
-    marginBottom: 20,
+    fontSize: 18, color: colors.white, opacity: 0.9,
+    textAlign: 'center', marginBottom: 20,
   },
   welcomeDescription: {
-    fontSize: 16,
-    color: colors.white,
-    opacity: 0.8,
-    textAlign: 'center',
-    lineHeight: 24,
-    paddingHorizontal: 20,
+    fontSize: 16, color: colors.white, opacity: 0.8,
+    textAlign: 'center', lineHeight: 24, paddingHorizontal: 20,
   },
 
-  // Enhanced Features Grid
+  // Features Grid
   featuresGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: 'row', flexWrap: 'wrap',
     justifyContent: 'space-between',
-    paddingHorizontal: 30,
-    marginBottom: 40,
+    paddingHorizontal: 30, marginBottom: 40,
   },
   featureCard: {
     width: (screenWidth - 80) / 2,
-    height: 120,
-    borderRadius: 15,
-    marginBottom: 15,
-    overflow: 'hidden',
-    position: 'relative',
-  },
-  featureImage: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
-  },
-  featureOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0,0,0,0.6)',
-    justifyContent: 'center',
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 15, padding: 20, marginBottom: 15,
     alignItems: 'center',
-    padding: 10,
+  },
+  featureIcon: {
+    width: 60, height: 60, borderRadius: 30,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    justifyContent: 'center', alignItems: 'center',
+    marginBottom: 10,
   },
   featureTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: colors.white,
-    marginTop: 8,
-    textAlign: 'center',
+    fontSize: 16, fontWeight: 'bold', color: colors.white,
+    textAlign: 'center', marginBottom: 5,
   },
   featureDescription: {
-    fontSize: 12,
-    color: colors.white,
-    opacity: 0.9,
+    fontSize: 12, color: colors.white, opacity: 0.9,
     textAlign: 'center',
-    marginTop: 4,
   },
 
-  // Enhanced Action Buttons
+  // Action Buttons
   welcomeActions: {
-    paddingHorizontal: 30,
-    marginBottom: 40,
+    paddingHorizontal: 30, marginBottom: 40,
   },
   primaryActionButton: {
     backgroundColor: colors.primaryLight,
-    borderRadius: 25,
-    paddingVertical: 18,
-    marginBottom: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 12,
-    elevation: 12,
-  },
-  primaryActionGradient: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    borderRadius: 25, paddingVertical: 18, marginBottom: 15,
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+    shadowColor: '#000', shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.3, shadowRadius: 12, elevation: 12,
   },
   primaryActionText: {
-    color: colors.white,
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginRight: 10,
+    color: colors.white, fontSize: 18, fontWeight: 'bold', marginRight: 10,
   },
   secondaryActionButton: {
-    borderWidth: 2,
-    borderColor: colors.white,
-    borderRadius: 25,
-    paddingVertical: 16,
-    marginBottom: 15,
+    borderWidth: 2, borderColor: colors.white,
+    borderRadius: 25, paddingVertical: 16, marginBottom: 15,
     alignItems: 'center',
   },
   secondaryActionText: {
-    color: colors.white,
-    fontSize: 16,
-    fontWeight: 'bold',
+    color: colors.white, fontSize: 16, fontWeight: 'bold',
   },
   ghostActionButton: {
-    alignItems: 'center',
-    paddingVertical: 12,
+    alignItems: 'center', paddingVertical: 12,
   },
   ghostActionText: {
-    color: colors.white,
-    fontSize: 16,
-    opacity: 0.8,
+    color: colors.white, fontSize: 16, opacity: 0.8,
     textDecorationLine: 'underline',
   },
 
-  // Enhanced Stats Section
+  // Stats Section
   statsSection: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingHorizontal: 30,
-    marginBottom: 40,
+    flexDirection: 'row', justifyContent: 'space-around',
+    paddingHorizontal: 30, marginBottom: 40,
   },
   statCard: {
     alignItems: 'center',
     backgroundColor: 'rgba(255,255,255,0.1)',
-    borderRadius: 15,
-    padding: 20,
-    minWidth: 90,
+    borderRadius: 15, padding: 20, minWidth: 90,
   },
   statNumber: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: colors.white,
-    marginTop: 8,
+    fontSize: 24, fontWeight: 'bold', color: colors.white, marginTop: 8,
   },
   statLabel: {
-    fontSize: 12,
-    color: colors.white,
-    opacity: 0.8,
-    marginTop: 4,
-    textAlign: 'center',
+    fontSize: 12, color: colors.white, opacity: 0.8,
+    marginTop: 4, textAlign: 'center',
   },
 
-  // Testimonials Section
-  testimonialsSection: {
-    paddingHorizontal: 30,
-    marginBottom: 30,
-  },
-  sectionTitleWhite: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: colors.white,
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  testimonialCard: {
-    flexDirection: 'row',
-    backgroundColor: 'rgba(255,255,255,0.1)',
-    borderRadius: 15,
-    padding: 20,
-    alignItems: 'center',
-  },
-  testimonialAvatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    marginRight: 15,
-  },
-  testimonialContent: {
-    flex: 1,
-  },
-  testimonialText: {
-    fontSize: 14,
-    color: colors.white,
-    fontStyle: 'italic',
-    lineHeight: 20,
-    marginBottom: 8,
-  },
-  testimonialAuthor: {
-    fontSize: 12,
-    color: colors.white,
-    opacity: 0.8,
-    fontWeight: 'bold',
-  },
-
-  // Enhanced Sidebar Styles
-  sidebarOverlay: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  sidebarBackdrop: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-  },
+  // Sidebar Styles
+  sidebarOverlay: { flex: 1, flexDirection: 'row' },
+  sidebarBackdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)' },
   sidebar: {
-    width: screenWidth * 0.85,
-    backgroundColor: colors.white,
-    shadowColor: '#000',
-    shadowOffset: { width: 4, height: 0 },
-    shadowOpacity: 0.3,
-    shadowRadius: 15,
-    elevation: 15,
+    width: screenWidth * 0.85, backgroundColor: colors.white,
+    shadowColor: '#000', shadowOffset: { width: 4, height: 0 },
+    shadowOpacity: 0.3, shadowRadius: 15, elevation: 15,
   },
   sidebarHeader: {
     backgroundColor: colors.primary,
-    paddingTop: 50,
-    paddingBottom: 25,
-    paddingHorizontal: 25,
+    paddingTop: 50, paddingBottom: 25, paddingHorizontal: 25,
   },
-  sidebarUserInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
+  sidebarUserInfo: { flexDirection: 'row', alignItems: 'center' },
   sidebarAvatar: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 60, height: 60, borderRadius: 30,
     backgroundColor: colors.primaryLight,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 15,
+    justifyContent: 'center', alignItems: 'center', marginRight: 15,
   },
-  sidebarAvatarText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: colors.white,
-  },
-  sidebarUserDetails: {
-    flex: 1,
-  },
+  sidebarAvatarText: { fontSize: 20, fontWeight: 'bold', color: colors.white },
+  sidebarUserDetails: { flex: 1 },
   sidebarUserName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: colors.white,
-    marginBottom: 4,
+    fontSize: 18, fontWeight: 'bold', color: colors.white, marginBottom: 4,
   },
   sidebarUserEmail: {
-    fontSize: 14,
-    color: colors.white,
-    opacity: 0.8,
-    marginBottom: 8,
+    fontSize: 14, color: colors.white, opacity: 0.8, marginBottom: 8,
   },
   pointsBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: 'row', alignItems: 'center',
     backgroundColor: 'rgba(255,255,255,0.2)',
-    borderRadius: 12,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    borderRadius: 12, paddingHorizontal: 8, paddingVertical: 4,
     alignSelf: 'flex-start',
   },
   sidebarUserPoints: {
-    fontSize: 12,
-    color: colors.accent,
-    fontWeight: 'bold',
-    marginLeft: 4,
+    fontSize: 12, color: colors.accent, fontWeight: 'bold', marginLeft: 4,
   },
-  sidebarGuestInfo: {
-    alignItems: 'center',
-  },
+  sidebarGuestInfo: { alignItems: 'center' },
   sidebarGuestAvatar: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
+    width: 70, height: 70, borderRadius: 35,
     backgroundColor: colors.primaryLight,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 15,
+    justifyContent: 'center', alignItems: 'center', marginBottom: 15,
   },
-  sidebarGuestText: {
-    fontSize: 18,
-    color: colors.white,
-    marginBottom: 15,
-  },
+  sidebarGuestText: { fontSize: 18, color: colors.white, marginBottom: 15 },
   sidebarLoginBtn: {
     backgroundColor: colors.primaryLight,
-    paddingHorizontal: 25,
-    paddingVertical: 10,
-    borderRadius: 20,
+    paddingHorizontal: 25, paddingVertical: 10, borderRadius: 20,
   },
-  sidebarLoginText: {
-    color: colors.white,
-    fontWeight: 'bold',
-  },
-  sidebarMenu: {
-    flex: 1,
-    paddingTop: 20,
-  },
+  sidebarLoginText: { color: colors.white, fontWeight: 'bold' },
+  sidebarMenu: { flex: 1, paddingTop: 20 },
   menuItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 25,
-    paddingVertical: 18,
-    borderBottomWidth: 0.5,
-    borderBottomColor: colors.lightGray,
+    flexDirection: 'row', alignItems: 'center',
+    paddingHorizontal: 25, paddingVertical: 18,
+    borderBottomWidth: 0.5, borderBottomColor: colors.lightGray,
   },
   menuItemText: {
-    fontSize: 16,
-    color: colors.black,
-    marginLeft: 15,
-    flex: 1,
-    fontWeight: '500',
+    fontSize: 16, color: colors.black, marginLeft: 15,
+    flex: 1, fontWeight: '500',
   },
-  menuItemBadge: {
-    fontSize: 12,
-    color: colors.blue,
-    fontWeight: 'bold',
-  },
-  menuDivider: {
-    height: 1,
-    backgroundColor: colors.lightGray,
-    marginVertical: 15,
-  },
+  menuDivider: { height: 1, backgroundColor: colors.lightGray, marginVertical: 15 },
   liveBadge: {
     backgroundColor: colors.red,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 10,
+    paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10,
   },
-  liveBadgeText: {
-    color: colors.white,
-    fontSize: 10,
-    fontWeight: 'bold',
-  },
-  newsBadge: {
-    backgroundColor: colors.orange,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 10,
-  },
-  newsBadgeText: {
-    color: colors.white,
-    fontSize: 10,
-    fontWeight: 'bold',
-  },
+  liveBadgeText: { color: colors.white, fontSize: 10, fontWeight: 'bold' },
 
-  // Enhanced Header Styles
+  // Header Styles
   header: {
-    backgroundColor: colors.primary,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
+    backgroundColor: colors.primary, flexDirection: 'row',
+    alignItems: 'center', paddingHorizontal: 20, paddingVertical: 15,
     justifyContent: 'space-between',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 4,
+    shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2, shadowRadius: 4, elevation: 4,
   },
-  menuButton: {
-    padding: 8,
-    borderRadius: 8,
-  },
-  logoContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  logoText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: colors.white,
-    marginRight: 8,
-  },
+  menuButton: { padding: 8, borderRadius: 8 },
+  logoContainer: { flexDirection: 'row', alignItems: 'center' },
+  logoText: { fontSize: 24, fontWeight: 'bold', color: colors.white, marginRight: 8 },
   logoCircle: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
+    width: 28, height: 28, borderRadius: 14,
     backgroundColor: colors.blue,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'center', alignItems: 'center',
   },
-  logoSubText: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    color: colors.white,
-  },
-  headerActions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  headerActionButton: {
-    padding: 8,
-    marginLeft: 8,
-    position: 'relative',
-  },
+  logoSubText: { fontSize: 12, fontWeight: 'bold', color: colors.white },
+  notificationButton: { padding: 8, position: 'relative' },
   notificationDot: {
-    position: 'absolute',
-    top: 4,
-    right: 4,
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: colors.red,
+    position: 'absolute', top: 4, right: 4,
+    width: 8, height: 8, borderRadius: 4, backgroundColor: colors.red,
   },
 
-  // Enhanced Home Page Styles
-  content: {
-    flex: 1,
-    backgroundColor: colors.white,
-  },
-  
-  // Hero Live Section
+  // Content Styles
+  content: { flex: 1, backgroundColor: colors.white },
+  pageContainer: { flex: 1 },
+
+  // Home Page Styles
   heroLiveSection: {
-    height: 250,
-    position: 'relative',
-    marginBottom: 20,
-  },
-  heroLiveBackground: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
+    height: 200, backgroundColor: colors.primary,
+    justifyContent: 'center', alignItems: 'center',
+    marginBottom: 20, position: 'relative',
   },
   heroLiveOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
+    justifyContent: 'center', alignItems: 'center', padding: 20,
   },
-  liveIndicatorLarge: {
-    position: 'absolute',
-    top: 20,
-    right: 20,
+  liveIndicator: {
+    position: 'absolute', top: 15, right: 15,
     backgroundColor: colors.red,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 15,
+    paddingHorizontal: 8, paddingVertical: 4, borderRadius: 10,
   },
-  liveTextLarge: {
-    color: colors.white,
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
+  liveText: { color: colors.white, fontSize: 10, fontWeight: 'bold' },
   heroLiveTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: colors.white,
-    textAlign: 'center',
-    marginBottom: 8,
+    fontSize: 24, fontWeight: 'bold', color: colors.white,
+    textAlign: 'center', marginBottom: 8,
   },
   heroLiveSubtitle: {
-    fontSize: 16,
-    color: colors.white,
-    opacity: 0.9,
-    textAlign: 'center',
-    marginBottom: 20,
+    fontSize: 16, color: colors.white, opacity: 0.9,
+    textAlign: 'center', marginBottom: 20,
   },
   heroPlayButton: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 70, height: 70, borderRadius: 35,
     backgroundColor: 'rgba(255,255,255,0.3)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 15,
+    justifyContent: 'center', alignItems: 'center', marginBottom: 10,
   },
-  viewerCount: {
-    fontSize: 14,
-    color: colors.white,
-    fontWeight: 'bold',
-  },
+  viewerCount: { fontSize: 14, color: colors.white, fontWeight: 'bold' },
 
-  // Quick Actions Bar
+  // Quick Actions
   quickActionsBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    backgroundColor: colors.lightGray,
-    marginBottom: 20,
+    flexDirection: 'row', justifyContent: 'space-around',
+    paddingHorizontal: 20, paddingVertical: 15,
+    backgroundColor: colors.lightGray, marginBottom: 20,
   },
-  quickAction: {
-    alignItems: 'center',
-    padding: 10,
-  },
+  quickAction: { alignItems: 'center', padding: 10 },
   quickActionText: {
-    fontSize: 12,
-    color: colors.darkGray,
-    fontWeight: '600',
-    marginTop: 5,
+    fontSize: 12, color: colors.darkGray,
+    fontWeight: '600', marginTop: 5,
   },
 
-  // Enhanced Section Styles
-  section: {
-    marginVertical: 10,
-    paddingHorizontal: 20,
-  },
+  // Section Styles
+  section: { marginVertical: 10, paddingHorizontal: 20 },
   sectionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 15,
+    flexDirection: 'row', alignItems: 'center', marginBottom: 15,
   },
   sectionTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: colors.black,
-    marginLeft: 12,
-    flex: 1,
+    fontSize: 20, fontWeight: 'bold', color: colors.black,
+    marginLeft: 12, flex: 1,
   },
-  seeAllText: {
-    color: colors.primaryLight,
-    fontWeight: 'bold',
-    fontSize: 14,
-  },
+  seeAllText: { color: colors.primaryLight, fontWeight: 'bold', fontSize: 14 },
 
-  // Enhanced Video Cards
-  enhancedVideoCard: {
-    width: 220,
-    marginRight: 15,
-    backgroundColor: colors.white,
-    borderRadius: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 6,
-    overflow: 'hidden',
+  // Modern Video Cards
+  modernVideoCard: {
+    width: 200, marginRight: 15, backgroundColor: colors.white,
+    borderRadius: 15, shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.15,
+    shadowRadius: 8, elevation: 6, overflow: 'hidden',
   },
-  enhancedVideoThumbnail: {
-    width: '100%',
-    height: 130,
-    resizeMode: 'cover',
-  },
+  modernVideoThumbnail: { width: '100%', height: 120, resizeMode: 'cover' },
   videoPlayOverlay: {
-    position: 'absolute',
-    top: 50,
-    left: 90,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    position: 'absolute', top: 40, left: 80,
+    width: 40, height: 40, borderRadius: 20,
     backgroundColor: 'rgba(0,0,0,0.7)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'center', alignItems: 'center',
   },
-  videoCategoryBadge: {
-    position: 'absolute',
-    top: 10,
-    left: 10,
-    backgroundColor: colors.primaryLight,
-    borderRadius: 8,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-  },
-  videoCategoryText: {
-    fontSize: 10,
-    color: colors.white,
-    fontWeight: 'bold',
-  },
-  enhancedVideoInfo: {
-    padding: 12,
-  },
-  enhancedVideoTitle: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: colors.black,
-    marginBottom: 8,
-    lineHeight: 18,
+  modernVideoInfo: { padding: 12 },
+  modernVideoTitle: {
+    fontSize: 14, fontWeight: 'bold', color: colors.black,
+    marginBottom: 8, lineHeight: 18,
   },
   videoMetaRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: 'row', justifyContent: 'space-between',
     alignItems: 'center',
   },
-  videoStats: {
-    fontSize: 12,
-    color: colors.gray,
-  },
-  videoDuration: {
-    fontSize: 12,
-    color: colors.darkGray,
-    fontWeight: '600',
-  },
+  videoStats: { fontSize: 12, color: colors.gray },
+  videoDuration: { fontSize: 12, color: colors.darkGray, fontWeight: '600' },
 
   // Categories Grid
   categoriesGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between',
   },
   categoryCard: {
-    width: (screenWidth - 60) / 4,
-    alignItems: 'center',
-    backgroundColor: colors.lightGray,
-    borderRadius: 15,
-    padding: 15,
-    marginBottom: 15,
+    width: (screenWidth - 60) / 4, alignItems: 'center',
+    backgroundColor: colors.lightGray, borderRadius: 15,
+    padding: 15, marginBottom: 15,
   },
   categoryIcon: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: 50, height: 50, borderRadius: 25,
     backgroundColor: colors.primaryLight,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 8,
+    justifyContent: 'center', alignItems: 'center', marginBottom: 8,
   },
-  categoryEmoji: {
-    fontSize: 24,
-  },
+  categoryEmoji: { fontSize: 24 },
   categoryName: {
-    fontSize: 11,
-    color: colors.darkGray,
-    fontWeight: '600',
-    textAlign: 'center',
+    fontSize: 11, color: colors.darkGray,
+    fontWeight: '600', textAlign: 'center',
   },
 
-  // Enhanced News Cards
+  // News Cards
   newsCard: {
-    flexDirection: 'row',
-    backgroundColor: colors.white,
-    borderRadius: 15,
-    marginBottom: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 3,
-    overflow: 'hidden',
+    backgroundColor: colors.white, borderRadius: 15, marginBottom: 15,
+    shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1, shadowRadius: 6, elevation: 3,
+    overflow: 'hidden', padding: 15,
   },
-  newsImage: {
-    width: 100,
-    height: 100,
-    resizeMode: 'cover',
-  },
-  newsContent: {
-    flex: 1,
-    padding: 15,
-  },
+  newsContent: { flex: 1 },
   newsHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
+    flexDirection: 'row', justifyContent: 'space-between',
+    alignItems: 'center', marginBottom: 8,
   },
   newsCategory: {
-    fontSize: 10,
-    color: colors.orange,
-    fontWeight: 'bold',
+    fontSize: 10, color: colors.orange, fontWeight: 'bold',
     backgroundColor: colors.lightGray,
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 8,
+    paddingHorizontal: 8, paddingVertical: 2, borderRadius: 8,
   },
-  newsTime: {
-    fontSize: 10,
-    color: colors.gray,
-  },
+  newsTime: { fontSize: 10, color: colors.gray },
   newsTitle: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: colors.black,
-    marginBottom: 5,
-    lineHeight: 18,
+    fontSize: 14, fontWeight: 'bold', color: colors.black,
+    marginBottom: 5, lineHeight: 18,
   },
-  newsExcerpt: {
-    fontSize: 12,
-    color: colors.gray,
-    lineHeight: 16,
-  },
+  newsExcerpt: { fontSize: 12, color: colors.gray, lineHeight: 16 },
 
-  // Enhanced Publicity Banner
-  enhancedPublicityBanner: {
-    borderRadius: 20,
-    overflow: 'hidden',
-    height: 140,
-    position: 'relative',
-  },
-  publicityBackgroundImage: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
-  },
-  publicityContentOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(59,130,246,0.9)',
+  // Modern Publicity Banner
+  modernPublicityBanner: {
+    borderRadius: 20, backgroundColor: colors.blue,
+    overflow: 'hidden', height: 120,
   },
   publicityContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 25,
-    height: '100%',
+    flexDirection: 'row', alignItems: 'center',
+    padding: 20, height: '100%',
   },
-  publicityText: {
-    flex: 1,
-    marginLeft: 15,
-  },
+  publicityText: { flex: 1, marginLeft: 15 },
   publicityTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: colors.white,
-    marginBottom: 5,
+    fontSize: 18, fontWeight: 'bold', color: colors.white, marginBottom: 5,
   },
   publicitySubtitle: {
-    fontSize: 14,
-    color: colors.white,
-    marginBottom: 5,
+    fontSize: 14, color: colors.white, marginBottom: 5,
   },
-  publicityDescription: {
-    fontSize: 12,
-    color: colors.white,
-    opacity: 0.9,
-  },
+  publicityDescription: { fontSize: 12, color: colors.white, opacity: 0.9 },
 
   // Statistics Grid
   statsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between',
   },
   statItem: {
-    width: (screenWidth - 60) / 2,
-    alignItems: 'center',
-    backgroundColor: colors.lightGray,
-    borderRadius: 15,
-    padding: 20,
-    marginBottom: 15,
+    width: (screenWidth - 60) / 2, alignItems: 'center',
+    backgroundColor: colors.lightGray, borderRadius: 15,
+    padding: 20, marginBottom: 15,
   },
   statValue: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: colors.primary,
-    marginTop: 10,
+    fontSize: 24, fontWeight: 'bold', color: colors.primary, marginTop: 10,
   },
+  statLabel: { fontSize: 12, color: colors.gray, marginTop: 4 },
 
-  // Footer Section
-  footerSection: {
-    backgroundColor: colors.lightGray,
-    padding: 30,
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  footerTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: colors.primary,
-    marginBottom: 5,
-  },
-  footerSubtitle: {
-    fontSize: 16,
-    color: colors.gray,
-    marginBottom: 15,
-  },
-  footerDescription: {
-    fontSize: 14,
-    color: colors.gray,
-    textAlign: 'center',
-    lineHeight: 20,
-  },
-
-  // Enhanced Auth Styles
-  authContainer: {
-    padding: 25,
-  },
-  authHeader: {
-    alignItems: 'center',
-    marginBottom: 30,
-  },
+  // Auth Styles
+  authContainer: { padding: 25 },
+  authHeader: { alignItems: 'center', marginBottom: 30 },
   backButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'flex-start',
-    marginBottom: 20,
-    padding: 5,
+    flexDirection: 'row', alignItems: 'center',
+    alignSelf: 'flex-start', marginBottom: 20, padding: 5,
   },
   backText: {
-    fontSize: 16,
-    color: colors.primary,
-    marginLeft: 8,
-    fontWeight: '600',
+    fontSize: 16, color: colors.primary, marginLeft: 8, fontWeight: '600',
   },
   authTitle: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: colors.black,
-    textAlign: 'center',
-    marginBottom: 10,
+    fontSize: 32, fontWeight: 'bold', color: colors.black,
+    textAlign: 'center', marginBottom: 10,
   },
   authSubtitle: {
-    fontSize: 16,
-    color: colors.gray,
-    textAlign: 'center',
-    lineHeight: 22,
+    fontSize: 16, color: colors.gray, textAlign: 'center', lineHeight: 22,
   },
-  inputContainer: {
-    marginBottom: 20,
-  },
+  inputContainer: { marginBottom: 20 },
   input: {
-    backgroundColor: colors.lightGray,
-    borderRadius: 15,
-    paddingHorizontal: 20,
-    paddingVertical: 18,
-    fontSize: 16,
-    color: colors.black,
-    borderWidth: 1,
-    borderColor: 'transparent',
+    backgroundColor: colors.lightGray, borderRadius: 15,
+    paddingHorizontal: 20, paddingVertical: 18,
+    fontSize: 16, color: colors.black,
+    borderWidth: 1, borderColor: 'transparent',
   },
   authButton: {
-    backgroundColor: colors.primary,
-    borderRadius: 20,
-    paddingVertical: 18,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 20,
-    marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 6,
+    backgroundColor: colors.primary, borderRadius: 20, paddingVertical: 18,
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+    marginTop: 20, marginBottom: 20,
+    shadowColor: '#000', shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2, shadowRadius: 8, elevation: 6,
   },
   authButtonText: {
-    color: colors.white,
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginRight: 10,
+    color: colors.white, fontSize: 18, fontWeight: 'bold', marginRight: 10,
   },
   linkText: {
-    textAlign: 'center',
-    color: colors.primaryLight,
-    fontSize: 16,
-    fontWeight: '600',
+    textAlign: 'center', color: colors.primaryLight,
+    fontSize: 16, fontWeight: '600',
   },
 
-  // Enhanced Live Page Styles
-  livePageContainer: {
-    padding: 20,
-  },
+  // Live Page Styles
+  livePageContainer: { padding: 20 },
   pageTitle: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: colors.black,
-    textAlign: 'center',
-    marginBottom: 20,
+    fontSize: 28, fontWeight: 'bold', color: colors.black,
+    textAlign: 'center', marginBottom: 20,
   },
-  enhancedLivePlayerContainer: {
-    height: 250,
-    borderRadius: 20,
-    overflow: 'hidden',
-    position: 'relative',
-    marginBottom: 25,
-  },
-  livePlayerImage: {
-    width: '100%',
-    height: '100%',
+  livePlayerContainer: {
+    height: 250, borderRadius: 20, backgroundColor: colors.primary,
+    justifyContent: 'center', alignItems: 'center',
+    marginBottom: 25, position: 'relative',
   },
   livePlayerOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'center', alignItems: 'center',
+    padding: 20,
   },
   livePlayButton: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 80, height: 80, borderRadius: 40,
     backgroundColor: 'rgba(255,255,255,0.3)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 15,
+    justifyContent: 'center', alignItems: 'center', marginBottom: 15,
   },
   livePlayerText: {
-    color: colors.white,
-    fontSize: 20,
-    fontWeight: 'bold',
+    color: colors.white, fontSize: 20, fontWeight: 'bold',
   },
+  liveIndicatorLarge: {
+    position: 'absolute', top: 20, right: 20,
+    backgroundColor: colors.red,
+    paddingHorizontal: 12, paddingVertical: 6, borderRadius: 15,
+  },
+  liveTextLarge: { color: colors.white, fontSize: 12, fontWeight: 'bold' },
   liveInfo: {
-    backgroundColor: colors.lightGray,
-    padding: 25,
-    borderRadius: 20,
-    marginBottom: 25,
+    backgroundColor: colors.lightGray, padding: 25, borderRadius: 20,
   },
   liveInfoTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: colors.black,
-    marginBottom: 12,
+    fontSize: 20, fontWeight: 'bold', color: colors.black, marginBottom: 12,
   },
   liveInfoDescription: {
-    fontSize: 16,
-    color: colors.gray,
-    lineHeight: 24,
-    marginBottom: 15,
-  },
-  liveMetrics: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-  liveMetricItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  liveMetricText: {
-    fontSize: 14,
-    color: colors.darkGray,
-    fontWeight: '600',
-    marginLeft: 5,
+    fontSize: 16, color: colors.gray, lineHeight: 24, marginBottom: 15,
   },
 
-  // Schedule Section
-  scheduleSection: {
-    backgroundColor: colors.white,
-    borderRadius: 20,
-    padding: 25,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 3,
-  },
-  scheduleSectionTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: colors.black,
-    marginBottom: 20,
-  },
-  scheduleItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.lightGray,
-  },
-  scheduleTime: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: colors.primary,
-    width: 60,
-  },
-  scheduleTitle: {
-    fontSize: 16,
-    color: colors.black,
-    flex: 1,
-    marginLeft: 15,
-  },
-  scheduleStatus: {
-    fontSize: 12,
-    color: colors.red,
-    fontWeight: 'bold',
-  },
-  scheduleStatusNext: {
-    fontSize: 12,
-    color: colors.gray,
-  },
-
-  // Enhanced Profile Styles
-  profileContainer: {
-    padding: 25,
-  },
+  // Profile Styles
+  profileContainer: { padding: 25 },
   profileHeader: {
-    alignItems: 'center',
-    backgroundColor: colors.lightGray,
-    borderRadius: 25,
-    padding: 30,
-    marginBottom: 25,
+    alignItems: 'center', backgroundColor: colors.lightGray,
+    borderRadius: 25, padding: 30, marginBottom: 25,
   },
   profileAvatar: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 100, height: 100, borderRadius: 50,
     backgroundColor: colors.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 15,
+    justifyContent: 'center', alignItems: 'center', marginBottom: 15,
   },
-  profileAvatarText: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: colors.white,
-  },
+  profileAvatarText: { fontSize: 32, fontWeight: 'bold', color: colors.white },
   profileName: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: colors.black,
-    marginBottom: 5,
+    fontSize: 24, fontWeight: 'bold', color: colors.black, marginBottom: 5,
   },
-  profileEmail: {
-    fontSize: 16,
-    color: colors.gray,
-    marginBottom: 15,
-  },
+  profileEmail: { fontSize: 16, color: colors.gray, marginBottom: 15 },
   profilePointsBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.primary,
-    borderRadius: 20,
-    paddingHorizontal: 15,
-    paddingVertical: 8,
+    flexDirection: 'row', alignItems: 'center',
+    backgroundColor: colors.primary, borderRadius: 20,
+    paddingHorizontal: 15, paddingVertical: 8,
   },
   profilePoints: {
-    fontSize: 16,
-    color: colors.white,
-    fontWeight: 'bold',
-    marginLeft: 5,
+    fontSize: 16, color: colors.white, fontWeight: 'bold', marginLeft: 5,
   },
   profileStats: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 30,
+    flexDirection: 'row', justifyContent: 'space-around', marginBottom: 30,
   },
   profileStatItem: {
-    alignItems: 'center',
-    backgroundColor: colors.white,
-    borderRadius: 15,
-    padding: 20,
-    minWidth: 90,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
+    alignItems: 'center', backgroundColor: colors.white,
+    borderRadius: 15, padding: 20, minWidth: 90,
+    shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1, shadowRadius: 4, elevation: 2,
   },
   profileStatValue: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: colors.primary,
-    marginTop: 8,
+    fontSize: 24, fontWeight: 'bold', color: colors.primary, marginTop: 8,
   },
-  profileStatLabel: {
-    fontSize: 12,
-    color: colors.gray,
-    marginTop: 4,
-  },
-  profileActions: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-  profileActionButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.lightGray,
-    borderRadius: 15,
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    minWidth: 140,
-    justifyContent: 'center',
-  },
-  profileActionText: {
-    fontSize: 16,
-    color: colors.primary,
-    fontWeight: '600',
-    marginLeft: 8,
-  },
+  profileStatLabel: { fontSize: 12, color: colors.gray, marginTop: 4 },
 
-  // Enhanced Auth Prompt
+  // Auth Prompt
   authPrompt: {
-    padding: 50,
-    alignItems: 'center',
-    backgroundColor: colors.lightGray,
-    margin: 20,
-    borderRadius: 25,
+    padding: 50, alignItems: 'center',
+    backgroundColor: colors.lightGray, margin: 20, borderRadius: 25,
   },
   authPromptTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: colors.black,
-    marginTop: 20,
-    marginBottom: 10,
+    fontSize: 24, fontWeight: 'bold', color: colors.black,
+    marginTop: 20, marginBottom: 10,
   },
   authPromptText: {
-    fontSize: 16,
-    color: colors.gray,
-    textAlign: 'center',
-    marginBottom: 30,
-    lineHeight: 22,
-  },
-
-  // Common Styles
-  pageContainer: {
-    flex: 1,
+    fontSize: 16, color: colors.gray, textAlign: 'center',
+    marginBottom: 30, lineHeight: 22,
   },
 });
